@@ -1,0 +1,42 @@
+---
+title: "Meta-analysis Workshop"
+bibliography: "`r filor::fil()$bib`"
+csl: "`r filor::fil()$csl`"
+---
+
+```{r}
+#| label: packages
+#| include: false
+devtools::load_all()
+```
+
+# Slides
+
+- **About us** [[pdf](slides/00-intro/Psicostat_at_CSA_2024.pdf)]
+- **Introduction to the workshop** [[html](slides/00-intro/workshop-intro.qmd)]
+- **Monte Carlo Simulations** [[html](slides/01-monte-carlo-simulations/monte-carlo-simulations.qmd)]
+- **Introduction to Meta-Analysis** [[html](slides/02-intro-meta-analysis/intro-meta-analysis.qmd)]
+- **Meta-analysis Models** [[html](slides/03-meta-analysis-models/meta-analysis-models.qmd)]
+- **Meta-regression** [[html](slides/04-meta-regression/meta-regression.qmd)]
+- **Publication Bias** [[html](slides/05-publication-bias/publication-bias.qmd)]
+- **Power analysis** [[html](slides/06-power-analysis/power-analysis.qmd)]
+
+# Resources
+
+## Books
+
+- @Borenstein2009-mo
+- @Schmid2022-xe
+- @Harrer2021-go
+- Cooper, Hedges, and Valentine ([2009](https://www.russellsage.org/publications/handbook-research-synthesis-and-meta-analysis-second-edition)) - The Handbook of Research Synthesis and Meta-Analysis
+
+## Papers
+
+## Websites
+
+- [`metafor`](https://www.metafor-project.org/doku.php/metafor): the website contains an amazing documentation along with analysis examples, articles about very specific topics. Furthermore the author reproduced the analyses presented in famous textbooks with the `metafor` package.
+- https://www.jepusto.com/alternative-formulas-for-the-smd/
+
+## R
+
+- [`metafor`](https://www.metafor-project.org/doku.php/metafor): the main R package to conduct meta-analysis. It implements equal and random-effects model with extensions to multilevel and multivariate models.

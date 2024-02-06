@@ -1,0 +1,15 @@
+{
+  "hash": "3e31ed651396c5e2f9bfc239e1297cec",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Meta-analysis Workshop\"\nbibliography: \"https://raw.githubusercontent.com/filippogambarota/bib-database/main/references.bib\"\ncsl: \"https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl\"\n---\n\n\n\n\n# Slides\n\n- **About us** [[pdf](slides/00-intro/Psicostat_at_CSA_2024.pdf)]\n- **Introduction to the workshop** [[html](slides/00-intro/workshop-intro.qmd)]\n- **Monte Carlo Simulations** [[html](slides/01-monte-carlo-simulations/monte-carlo-simulations.qmd)]\n- **Introduction to Meta-Analysis** [[html](slides/02-intro-meta-analysis/intro-meta-analysis.qmd)]\n- **Meta-analysis Models** [[html](slides/03-meta-analysis-models/meta-analysis-models.qmd)]\n- **Meta-regression** [[html](slides/04-meta-regression/meta-regression.qmd)]\n- **Publication Bias** [[html](slides/05-publication-bias/publication-bias.qmd)]\n- **Power analysis** [[html](slides/06-power-analysis/power-analysis.qmd)]\n\n# Resources\n\n## Books\n\n- @Borenstein2009-mo\n- @Schmid2022-xe\n- @Harrer2021-go\n- Cooper, Hedges, and Valentine ([2009](https://www.russellsage.org/publications/handbook-research-synthesis-and-meta-analysis-second-edition)) - The Handbook of Research Synthesis and Meta-Analysis\n\n## Papers\n\n## Websites\n\n- [`metafor`](https://www.metafor-project.org/doku.php/metafor): the website contains an amazing documentation along with analysis examples, articles about very specific topics. Furthermore the author reproduced the analyses presented in famous textbooks with the `metafor` package.\n- https://www.jepusto.com/alternative-formulas-for-the-smd/\n\n## R\n\n- [`metafor`](https://www.metafor-project.org/doku.php/metafor): the main R package to conduct meta-analysis. It implements equal and random-effects model with extensions to multilevel and multivariate models.",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

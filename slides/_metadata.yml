@@ -1,0 +1,19 @@
+format:
+  quarto-slides-revealjs:
+    code-fold: false
+    incremental: false
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    collapse: true
+    filters:
+      - nutshell
+      - code-fullscreen
+    number-sections: true
+    number-depth: 0  
+from: markdown+emoji
+date: last-modified
+date-format: "[08 February] YYYY"
+crossref:
+  sec-prefix: "Slide"
+bibliography: "https://raw.githubusercontent.com/filippogambarota/bib-database/main/references.bib"
