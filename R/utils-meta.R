@@ -42,11 +42,15 @@ sim_studies <- function(k, es, tau2 = 0, n1, n2 = NULL, add = NULL){
   return(sim)
 }
 
+# simulate sampling variances for a two-independent UMD effect size
+
 sim_vi <- function(k, v1 = 1, v2 = NULL, n1, n2 = NULL){
   if(is.null(v2)) v2 <- v1
   if(is.null(n2)) n2 <- n1
   (rchisq(k, n1 + n2 - 2) / (n1 + n2 - 2)) * (v1/n1 + v2/n2)
 }
+
+# quick forest plot
 
 qforest <- function(data, interval = TRUE, wi = FALSE, size = 20){
   xlim <- with(data, c(min(ci.lb) - 0.5, max(ci.ub) + 0.5))
@@ -77,88 +81,7 @@ qforest <- function(data, interval = TRUE, wi = FALSE, size = 20){
 }
 
 
-# parse_pb_criteria <- function(data, expression){
-#   with(data, eval(parse(text = expression)))
-# }
-
-# sim_pub_bias <- function(ps, 
-#                          pns,
-#                          criteria,
-#                          k, 
-#                          theta, 
-#                          tau2, 
-#                          min_n, 
-#                          max_n){
-#   
-#   criteria <- deparse(substitute(criteria))
-#   res <- vector(mode = "list", length = k)
-#   i <- 1
-#   
-#   while(i <= k){
-#     n <- round(runif(1, min_n, max_n))
-#     dat_i <- sim_studies(k = 1, theta = 0.5, tau2 = tau2, n0 = n, n1 = n)
-#     dat_i$n <- n
-#     dat_i <- escalc(yi = yi, vi = vi, sei = sei, data = dat_i)
-#     dat_i <- data.frame(summary(dat_i))
-#     pub_criteria <- parse_pb_criteria(dat_i, criteria)
-#     
-#     if(pub_criteria){
-#       if(rbinom(1, 1, ps) == 1){
-#         res[[i]] <- dat_i
-#         i <- i + 1
-#       }
-#     }else{
-#       if(rbinom(1, 1, pns) == 1){
-#         res[[i]] <- dat_i
-#         i <- i + 1
-#       }
-#     }
-#   }
-#   
-#   dat <- do.call(rbind, res)
-#   return(dat)
-# }
-
-sim_pub_bias <- function(selmodel,
-                         k, 
-                         theta, 
-                         tau2, 
-                         nmin, 
-                         nmax){
-  selmodel$method <- match.arg(selmodel$method, choices = c("custom", "2step", "beta"))
-  res <- vector(mode = "list", length = k)
-  i <- 1
-  while(i <= k){
-    n <- round(runif(1, nmin, nmax))
-    dat_i <- sim_studies(k = 1, es = theta, tau2 = tau2, n1 = n, n2 = n)
-    dat_i$n <- n
-    dat_i <- summary(dat_i)
-    
-    if(selmodel$method == "2step"){
-      ppub <- weigth_2step(x = dat_i[[selmodel$param]], th = selmodel$th, side = selmodel$side)
-    }else if(selmodel$method == "beta"){
-      ppub <- weigth_beta(x = dat_i$pval, a = selmodel$a, b = selmodel$b)
-    }else{
-      ppub <- with(dat_i, eval(parse(text = selmodel$operation)))
-    }
-    
-    if(rbinom(1, 1, ppub) == 1){
-      res[[i]] <- dat_i
-      i <- i + 1
-    }
-  }
-  
-  dat <- do.call(rbind, res)
-  return(dat)
-}
-
-weigth_beta <- function(x, a, b){
-  x^(a - 1) * (1 - x)^(b - 1)
-}
-
-weigth_2step <- function(x, th, side = "<="){
-  ifelse(eval(call(side, x, th)), 1, 0)
-}
+# re-fit a meta-analysis using all tau2 estimators
 
 all_rma <- function(fit){
   methods <- c("DL", "HE", "HS", "HSk", "SJ", "ML", "REML",
