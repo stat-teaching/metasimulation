@@ -1,0 +1,18 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# metasimulation
+
+R project supporting the workshop for understanding meta-analysis using data simulation. Once loaded the `metasimulation.Rproj` the functions (within `R` folder) can be used with `devtools::load_all()`.
