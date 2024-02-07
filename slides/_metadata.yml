@@ -17,3 +17,11 @@ date-format: "[08 February] YYYY"
 crossref:
   sec-prefix: "Slide"
 bibliography: "https://raw.githubusercontent.com/filippogambarota/bib-database/main/references.bib"
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
+    fig-align: center
+    dev: svg
+    warning: false
+    message: false

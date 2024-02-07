@@ -6,9 +6,23 @@ subtitle: "CSA 2024"
 ```{r}
 #| label: setup
 #| include: false
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.align = "center")
+
+# packages
+library(tidyverse)
+devtools::load_all()
+
+# ggplot theme
+theme_set(mtheme)
+
+# bibtex file
+filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
+```
+
+```{r}
+#| label: functions
+#| include: false
+
+funs <- read_all_funs()
 ```
 
 # About us {.section}
@@ -23,7 +37,7 @@ knitr::opts_chunk$set(echo = TRUE,
 ![](img/fg.jpg){width=200 fig-align="center"}
 
 - **Postdoctoral Researcher**: Department of Developmental and Social Psychology
-- **Research interests**: meta-analysis, psychometrics, data simulation, programming
+- **Research interests**: meta-analysis, data simulation, R programming, multiverse analysis
 
 :::
 ::: {.column width='20%'}
@@ -35,7 +49,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ![](img/ga.png){width=200 fig-align="center"}
 
 - **Associate Professor**: Department of Developmental and Social Psychology
-- **Research interests**: psychological testing, Bayesian statistics, Power and design analysis
+- **Research interests**: Power and design analysis, meta-research, multiverse analysis and psychological testing
+
 
 :::
 ::::

@@ -421,7 +421,7 @@
 <section id="title-slide" class="center"><h1 class="title">Publication Bias</h1>
   <p class="author">Filippo Gambarota</p>
   <p class="author">Gianmarco Altoè</p>
-  <p class="institute">Department of Developmental Psychology and Socialization, University of Padova</p>
+  <p class="institute">University of Padova</p>
   <p class="date">08 February 2024</p>
 </section><section id="publication-bias-pb" class="title-slide slide level1 section center"><h1>Publication Bias (PB)</h1>
 
@@ -430,7 +430,7 @@
 </section><section id="publication-bias-pb-1" class="slide level2"><h2>Publication Bias (PB)</h2>
 <p>The PB is a very critical <strong>most problematic aspects</strong> of meta-analysis. Essentially <strong>the probability of publishing a paper</strong> (~and thus including into the meta-analysis) <span class="imp">is not the same regardless of the result</span>.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section><section id="publication-bias-disclaimer" class="slide level2"><h2>Publication Bias Disclaimer!</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="publication-bias-disclaimer" class="slide level2"><h2>Publication Bias Disclaimer!</h2>
 <p><strong>We cannot (completely) solve the PB using statistical tools</strong>. The PB is a problem related to the publishing process and publishing incentives</p>
 <div class="fragment">
 <ul>
@@ -445,17 +445,17 @@
 </div>
 </section><section id="publication-bias-pb---the-big-picture" class="slide level2"><h2>Publication Bias (PB) - The Big Picture<sup>1</sup>
 </h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
-<figure><p><img data-src="img/big-picture.svg"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="img/big-picture.svg" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Thanks to the Wolfgang Viechtbauer’s course <a href="https://www.wvbauer.com/doku.php/course_ma">https://www.wvbauer.com/doku.php/course_ma</a></p></li></ol></aside></section><section id="pb-under-an-ee-model" class="slide level2"><h2>PB under an EE model</h2>
 <p>The easiest way to understand the PB is by simulating what happen without the PB. Let’s simulate a lot of studies (under a EE model) keeping all the results without selection (the ideal world).</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
@@ -464,62 +464,52 @@
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co"># compute 1 tail pvalue</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">pval1</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">zi</span><span class="op">)</span></span>
-<span><span class="fu">ht</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-       id      yi     vi n1 n2    sei      zi   pval   ci.lb  ci.ub       pval1 
-1       1  0.3483 0.0406 52 52 0.2015  1.7287 0.0839 -0.0466 0.7431 0.041927744 
-2       2  0.3762 0.0605 40 40 0.2460  1.5291 0.1262 -0.1060 0.8585 0.063119366 
-3       3  0.0634 0.0911 25 25 0.3018  0.2101 0.8336 -0.5281 0.6549 0.416800171 
-4       4  0.4101 0.0487 46 46 0.2206  1.8588 0.0631 -0.0223 0.8426 0.031530757 
-5       5 -0.0476 0.1160 13 13 0.3405 -0.1398 0.8888 -0.7151 0.6199 0.555581669 
-995   995  0.3584 0.0950 24 24 0.3083  1.1625 0.2450 -0.2458 0.9625 0.122511729 
-996   996  0.3939 0.1697 17 17 0.4120  0.9562 0.3390 -0.4135 1.2014 0.169484321 
-997   997  0.5205 0.0486 35 35 0.2204  2.3610 0.0182  0.0884 0.9525 0.009112230 
-998   998  0.4206 0.0815 29 29 0.2854  1.4737 0.1406 -0.1388 0.9801 0.070283435 
-999   999  0.0625 0.0244 83 83 0.1562  0.3999 0.6893 -0.2438 0.3687 0.344631179 
-1000 1000  0.5547 0.0416 37 37 0.2039  2.7201 0.0065  0.1550 0.9544 0.003263493 </code></pre>
-</div>
+<span><span class="fu">ht</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        id      yi     vi n1 n2    sei      zi   pval   ci.lb  ci.ub       pval1 </span></span>
+<span><span class="co">#&gt; 1       1  0.3483 0.0406 52 52 0.2015  1.7287 0.0839 -0.0466 0.7431 0.041927744 </span></span>
+<span><span class="co">#&gt; 2       2  0.3762 0.0605 40 40 0.2460  1.5291 0.1262 -0.1060 0.8585 0.063119366 </span></span>
+<span><span class="co">#&gt; 3       3  0.0634 0.0911 25 25 0.3018  0.2101 0.8336 -0.5281 0.6549 0.416800171 </span></span>
+<span><span class="co">#&gt; 4       4  0.4101 0.0487 46 46 0.2206  1.8588 0.0631 -0.0223 0.8426 0.031530757 </span></span>
+<span><span class="co">#&gt; 5       5 -0.0476 0.1160 13 13 0.3405 -0.1398 0.8888 -0.7151 0.6199 0.555581669 </span></span>
+<span><span class="co">#&gt; 995   995  0.3584 0.0950 24 24 0.3083  1.1625 0.2450 -0.2458 0.9625 0.122511729 </span></span>
+<span><span class="co">#&gt; 996   996  0.3939 0.1697 17 17 0.4120  0.9562 0.3390 -0.4135 1.2014 0.169484321 </span></span>
+<span><span class="co">#&gt; 997   997  0.5205 0.0486 35 35 0.2204  2.3610 0.0182  0.0884 0.9525 0.009112230 </span></span>
+<span><span class="co">#&gt; 998   998  0.4206 0.0815 29 29 0.2854  1.4737 0.1406 -0.1388 0.9801 0.070283435 </span></span>
+<span><span class="co">#&gt; 999   999  0.0625 0.0244 83 83 0.1562  0.3999 0.6893 -0.2438 0.3687 0.344631179 </span></span>
+<span><span class="co">#&gt; 1000 1000  0.5547 0.0416 37 37 0.2039  2.7201 0.0065  0.1550 0.9544 0.003263493</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="pb-under-an-ee-model-1" class="slide level2"><h2>PB under an EE model</h2>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section><section id="pb-under-an-ee-model-2" class="slide level2"><h2>PB under an EE model</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="pb-under-an-ee-model-2" class="slide level2"><h2>PB under an EE model</h2>
 <p>Then, let’s assume that our publishing system is very strict (extreme). You can publish only if <span class="math inline">\(p \leq 0.05\)</span> on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that <span class="math inline">\(P(1|p \leq 0.05) = 1\)</span> and <span class="math inline">\(P(1|p \leq 0.05) = 0\)</span>.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>fit: rma(yi = yi, vi = vi, data = dat_un, method = "EE")
-fit_pb: rma(yi = yi, vi = vi, data = dat_pb, method = "EE")</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>               fit fit_pb
-b (intrcpt)  0.289  0.436
-se           0.009  0.008
-zval        32.003 51.811
-pval         0.000  0.000
-ci.lb        0.271  0.420
-ci.ub        0.307  0.453
-I2           0.955  0.000
-tau2         0.000  0.000</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; fit: rma(yi = yi, vi = vi, data = dat_un, method = "EE")
+#&gt; fit_pb: rma(yi = yi, vi = vi, data = dat_pb, method = "EE")
+#&gt;                fit fit_pb
+#&gt; b (intrcpt)  0.289  0.436
+#&gt; se           0.009  0.008
+#&gt; zval        32.003 51.811
+#&gt; pval         0.000  0.000
+#&gt; ci.lb        0.271  0.420
+#&gt; ci.ub        0.307  0.453
+#&gt; I2           0.955  0.000
+#&gt; tau2         0.000  0.000</code></pre>
 </div>
 </section><section id="pb-under-an-ee-model-3" class="slide level2"><h2>PB under an EE model</h2>
 <p>The situation is even worse when we simulate a null effect. This strict selection results in committing type-1 error:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>fit0: rma(yi = yi, vi = vi, data = dat_un0, method = "EE")
-fit_pb0: rma(yi = yi, vi = vi, data = dat_pb0, method = "EE")</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>              fit0 fit_pb0
-b (intrcpt) -0.006   0.363
-se           0.027   0.026
-zval        -0.220  14.015
-pval         0.826   0.000
-ci.lb       -0.059   0.312
-ci.ub        0.047   0.414
-I2           0.000   0.000
-tau2         0.000   0.000</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; fit0: rma(yi = yi, vi = vi, data = dat_un0, method = "EE")
+#&gt; fit_pb0: rma(yi = yi, vi = vi, data = dat_pb0, method = "EE")
+#&gt;               fit0 fit_pb0
+#&gt; b (intrcpt) -0.006   0.363
+#&gt; se           0.027   0.026
+#&gt; zval        -0.220  14.015
+#&gt; pval         0.826   0.000
+#&gt; ci.lb       -0.059   0.312
+#&gt; ci.ub        0.047   0.414
+#&gt; I2           0.000   0.000
+#&gt; tau2         0.000   0.000</code></pre>
 </div>
 </section><section id="pb-under-an-ee-model-4" class="slide level2"><h2>PB under an EE model</h2>
 <p>Assuming to pick a very precise (<span class="math inline">\(n = 1000\)</span>) and a very unprecise (<span class="math inline">\(n = 20\)</span>) study, which one is more likely to have an effect size close to the true value?</p>
@@ -531,7 +521,7 @@ tau2         0.000   0.000</code></pre>
 </div>
 </section><section id="pb-under-an-ee-model-5" class="slide level2"><h2>PB under an EE model</h2>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section><section id="publication-bias-pb---funnel-plot" class="slide level2"><h2>Publication Bias (PB) - Funnel Plot</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="publication-bias-pb---funnel-plot" class="slide level2"><h2>Publication Bias (PB) - Funnel Plot</h2>
 <p>We created a <strong>funnel plot</strong>. This is a <strong>visual tool</strong> to check the presence of asymmetry that could be caused by publication bias. If meta-analysis assumptions are respected, and there is no publication bias:</p>
 <ul>
 <li>effects should be normally distributed around the average effect</li>
@@ -540,22 +530,20 @@ tau2         0.000   0.000</code></pre>
 </ul></section><section id="publication-bias-pb---funnel-plot-1" class="slide level2"><h2>Publication Bias (PB) - Funnel Plot</h2>
 <p>The plot assume the typical funnel shape and there are not missing spots on the at the bottom. The presence of missing spots is a potential index of publication bias.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section><section id="publication-bias-pb---funnel-plot-2" class="slide level2"><h2>Publication Bias (PB) - Funnel Plot</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="publication-bias-pb---funnel-plot-2" class="slide level2"><h2>Publication Bias (PB) - Funnel Plot</h2>
 <p>The plot assume the typical funnel shape and there are not missing spots on the at the bottom. The presence of missing spots is a potential index of publication bias.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section><section id="robustness-to-pb---fail-safe-n" class="slide level2"><h2>Robustness to PB - Fail-safe N</h2>
-<p>The Fail-safe N <span class="citation" data-cites="Rosenthal1979-yx">(<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">Rosenthal 1979</a>)</span> idea is very simple. Given a meta-analysis with a significant result (i.e., <span class="math inline">\(p \leq \alpha\)</span>). How many null studies (i.e., <span class="math inline">\(\hat \theta = 0\)</span>) do I need to obtain <span class="math inline">\(p &gt; \alpha\)</span>?</p>
-<div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">metafor</span><span class="fu">::</span><span class="fu"><a href="https://wviechtb.github.io/metafor/reference/fsn.html">fsn</a></span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Fail-safe N Calculation Using the Rosenthal Approach
-
-Observed Significance Level: &lt;.0001
-Target Significance Level:   0.05
-
-Fail-safe N: 832741</code></pre>
-</div>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="robustness-to-pb---fail-safe-n" class="slide level2"><h2>Robustness to PB - Fail-safe N</h2>
+<p>The Fail-safe N <span class="citation" data-cites="Rosenthal1979-yx">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Rosenthal 1979</a>)</span> idea is very simple. Given a meta-analysis with a significant result (i.e., <span class="math inline">\(p \leq \alpha\)</span>). How many null studies (i.e., <span class="math inline">\(\hat \theta = 0\)</span>) do I need to obtain <span class="math inline">\(p &gt; \alpha\)</span>?</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">metafor</span><span class="fu">::</span><span class="fu"><a href="https://wviechtb.github.io/metafor/reference/fsn.html">fsn</a></span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fail-safe N Calculation Using the Rosenthal Approach</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Observed Significance Level: &lt;.0001</span></span>
+<span><span class="co">#&gt; Target Significance Level:   0.05</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fail-safe N: 832741</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="robustness-to-pb---fail-safe-n-1" class="slide level2"><h2>Robustness to PB - Fail-safe N</h2>
 <p>There are several criticism to the Fail-safe N procedure:</p>
@@ -567,40 +555,38 @@ Fail-safe N: 832741</code></pre>
 <div class="fragment">
 <ul>
 <li>
-<span class="citation" data-cites="Orwin1983-vu">Orwin (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">1983</a>)</span> proposed a new method calculating the number of studies required to reduce the effect size to a given target</li>
+<span class="citation" data-cites="Orwin1983-vu">Orwin (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">1983</a>)</span> proposed a new method calculating the number of studies required to reduce the effect size to a given target</li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
 <li>
-<span class="citation" data-cites="Rosenberg2005-ie">Rosenberg (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2005</a>)</span> proposed a method similar to Rosenthal <span class="citation" data-cites="Rosenthal1979-yx">(<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">1979</a>)</span> but combining the (weighted) effect sizes and not the p-values.</li>
+<span class="citation" data-cites="Rosenberg2005-ie">Rosenberg (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2005</a>)</span> proposed a method similar to Rosenthal <span class="citation" data-cites="Rosenthal1979-yx">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">1979</a>)</span> but combining the (weighted) effect sizes and not the p-values.</li>
 </ul>
 </div>
 </section><section id="detecting-pb---egger-regression" class="slide level2"><h2>Detecting PB - Egger Regression</h2>
 <p>A basic method to test the funnel plot asymmetry is using an the <strong>Egger regression test</strong>. Basically we calculate the relationship between <span class="math inline">\(y_i\)</span> and <span class="math inline">\(\sqrt{\sigma^2_i}\)</span>. In the absence of asimmetry, the line slope should be not different from 0.</p>
 <p>We can use the <code><a href="https://wviechtb.github.io/metafor/reference/regtest.html">metafor::regtest()</a></code> function:</p>
-<div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">egger</span> <span class="op">&lt;-</span> <span class="fu">regtest</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="va">egger</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Regression Test for Funnel Plot Asymmetry
-
-Model:     fixed-effects meta-regression model
-Predictor: standard error
-
-Test for Funnel Plot Asymmetry: z = -0.3621, p = 0.7173
-Limit Estimate (as sei -&gt; 0):   b =  0.3061 (CI: 0.2601, 0.3520)</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">egger</span> <span class="op">&lt;-</span> <span class="fu">regtest</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="va">egger</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regression Test for Funnel Plot Asymmetry</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model:     fixed-effects meta-regression model</span></span>
+<span><span class="co">#&gt; Predictor: standard error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Funnel Plot Asymmetry: z = -0.3621, p = 0.7173</span></span>
+<span><span class="co">#&gt; Limit Estimate (as sei -&gt; 0):   b =  0.3061 (CI: 0.2601, 0.3520)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="publication-bias-pb---egger-regression" class="slide level2"><h2>Publication Bias (PB) - Egger Regression</h2>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"><p>This is a standard (meta) regression thus the number of studies, the precision of each study and heterogeneity influence the reliability (power, type-1 error rate, etc.) of the procedure.</p>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>This is a standard (meta) regression thus the number of studies, the precision of each study and heterogeneity influence the reliability (power, type-1 error rate, etc.) of the procedure.</p>
 </section><section id="correcting-pb---trim-and-fill" class="slide level2"><h2>Correcting PB - Trim and Fill</h2>
-<p>The Trim and Fill method <span class="citation" data-cites="Duval2000-ym">(<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">Duval and Tweedie 2000</a>)</span> is used to impute the hypothetical missing studies according to the funnel plot and recomputing the meta-analysis effect. Shi and Lin <span class="citation" data-cites="Shi2019-pj">(<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">Shi and Lin 2019</a>)</span> provide an updated overview of the method with some criticisms.</p>
+<p>The Trim and Fill method <span class="citation" data-cites="Duval2000-ym">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Duval and Tweedie 2000</a>)</span> is used to impute the hypothetical missing studies according to the funnel plot and recomputing the meta-analysis effect. Shi and Lin <span class="citation" data-cites="Shi2019-pj">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Shi and Lin 2019</a>)</span> provide an updated overview of the method with some criticisms.</p>
 <div class="fragment">
-<div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="co"># we increased k to better show the effect</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
@@ -613,41 +599,39 @@ Limit Estimate (as sei -&gt; 0):   b =  0.3061 (CI: 0.2601, 0.3520)</code></pre>
 </div>
 </section><section id="correcting-pb---trim-and-fill-1" class="slide level2"><h2>Correcting PB - Trim and Fill</h2>
 <p>Now we can use the <code><a href="https://wviechtb.github.io/metafor/reference/trimfill.html">metafor::trimfill()</a></code> function:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Estimated number of missing studies on the left side: 15 (SE = 5.4670)
-
-Random-Effects Model (k = 84; tau^2 estimator: REML)
-
-tau^2 (estimated amount of total heterogeneity): 0.0562 (SE = 0.0146)
-tau (square root of estimated tau^2 value):      0.2371
-I^2 (total heterogeneity / total variability):   61.61%
-H^2 (total variability / sampling variability):  2.60
-
-Test for Heterogeneity:
-Q(df = 83) = 210.3501, p-val &lt; .0001
-
-Model Results:
-
-estimate      se     zval    pval   ci.lb   ci.ub      
-  0.5934  0.0339  17.5084  &lt;.0001  0.5270  0.6598  *** 
-
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt; Estimated number of missing studies on the left side: 15 (SE = 5.4670)
+#&gt; 
+#&gt; Random-Effects Model (k = 84; tau^2 estimator: REML)
+#&gt; 
+#&gt; tau^2 (estimated amount of total heterogeneity): 0.0562 (SE = 0.0146)
+#&gt; tau (square root of estimated tau^2 value):      0.2371
+#&gt; I^2 (total heterogeneity / total variability):   61.61%
+#&gt; H^2 (total variability / sampling variability):  2.60
+#&gt; 
+#&gt; Test for Heterogeneity:
+#&gt; Q(df = 83) = 210.3501, p-val &lt; .0001
+#&gt; 
+#&gt; Model Results:
+#&gt; 
+#&gt; estimate      se     zval    pval   ci.lb   ci.ub      
+#&gt;   0.5934  0.0339  17.5084  &lt;.0001  0.5270  0.6598  *** 
+#&gt; 
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <p>The trim-and-fill estimates that 15 are missing. The new effect size after including the studies is reduced and closer to the simulated value (but in this case still significant).</p>
 </section><section id="correcting-pb---trim-and-fill-2" class="slide level2"><h2>Correcting PB - Trim and Fill</h2>
 <p>We can also visualize the funnel plot highligting the points that are included by the method.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section><section id="why-the-funnel-plot-can-be-misleading" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="why-the-funnel-plot-can-be-misleading" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>This funnel plot show an evident asymmetry on the left side. Is there evidence of publication bias? What do you think?</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section><section id="why-the-funnel-plot-can-be-misleading-1" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="why-the-funnel-plot-can-be-misleading-1" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>The data are of course simulated and this is the code. What do you think now?</p>
-<div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">10</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">n2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
@@ -660,65 +644,59 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section><section id="why-the-funnel-plot-can-be-misleading-2" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>In fact, these are two <strong>unbiased</strong> population of effect sizes. Extra source of heterogeneity could create asymmetry not related to PB.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section><section id="why-the-funnel-plot-can-be-misleading-3" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-21-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="why-the-funnel-plot-can-be-misleading-3" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>Also the methods to detect/correct for PB are committing a false alarm:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Regression Test for Funnel Plot Asymmetry
-
-Model:     mixed-effects meta-regression model
-Predictor: standard error
-
-Test for Funnel Plot Asymmetry: z =  6.2569, p &lt; .0001
-Limit Estimate (as sei -&gt; 0):   b = -0.2067 (CI: -0.3460, -0.0675)</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt; Regression Test for Funnel Plot Asymmetry
+#&gt; 
+#&gt; Model:     mixed-effects meta-regression model
+#&gt; Predictor: standard error
+#&gt; 
+#&gt; Test for Funnel Plot Asymmetry: z =  6.2569, p &lt; .0001
+#&gt; Limit Estimate (as sei -&gt; 0):   b = -0.2067 (CI: -0.3460, -0.0675)</code></pre>
 </div>
 </section><section id="why-the-funnel-plot-can-be-misleading-4" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>Also the methods to detect/correct for PB are committing a false alarm:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Estimated number of missing studies on the left side: 32 (SE = 6.3553)
-
-Random-Effects Model (k = 132; tau^2 estimator: REML)
-
-tau^2 (estimated amount of total heterogeneity): 0.2183 (SE = 0.0337)
-tau (square root of estimated tau^2 value):      0.4672
-I^2 (total heterogeneity / total variability):   86.77%
-H^2 (total variability / sampling variability):  7.56
-
-Test for Heterogeneity:
-Q(df = 131) = 639.7238, p-val &lt; .0001
-
-Model Results:
-
-estimate      se    zval    pval    ci.lb   ci.ub    
-  0.0281  0.0457  0.6142  0.5391  -0.0615  0.1177    
-
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt; Estimated number of missing studies on the left side: 32 (SE = 6.3553)
+#&gt; 
+#&gt; Random-Effects Model (k = 132; tau^2 estimator: REML)
+#&gt; 
+#&gt; tau^2 (estimated amount of total heterogeneity): 0.2183 (SE = 0.0337)
+#&gt; tau (square root of estimated tau^2 value):      0.4672
+#&gt; I^2 (total heterogeneity / total variability):   86.77%
+#&gt; H^2 (total variability / sampling variability):  7.56
+#&gt; 
+#&gt; Test for Heterogeneity:
+#&gt; Q(df = 131) = 639.7238, p-val &lt; .0001
+#&gt; 
+#&gt; Model Results:
+#&gt; 
+#&gt; estimate      se    zval    pval    ci.lb   ci.ub    
+#&gt;   0.0281  0.0457  0.6142  0.5391  -0.0615  0.1177    
+#&gt; 
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </section><section id="why-the-funnel-plot-can-be-misleading-5" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>The <code>regtest</code> can be applied also with moderators. The idea should be to take into account the moderators effects and then check for asymmetry.</p>
-<div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fitm</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, mods <span class="op">=</span> <span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="fu">regtest</span><span class="op">(</span><span class="va">fitm</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Regression Test for Funnel Plot Asymmetry
-
-Model:     mixed-effects meta-regression model
-Predictor: standard error
-
-Test for Funnel Plot Asymmetry: z = -1.0277, p = 0.3041</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fitm</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, mods <span class="op">=</span> <span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu">regtest</span><span class="op">(</span><span class="va">fitm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regression Test for Funnel Plot Asymmetry</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model:     mixed-effects meta-regression model</span></span>
+<span><span class="co">#&gt; Predictor: standard error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Funnel Plot Asymmetry: z = -1.0277, p = 0.3041</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="why-the-funnel-plot-can-be-misleading-6" class="slide level2"><h2>Why the funnel plot can be misleading?</h2>
 <p>In fact, the funnel plot on the raw dataset and on residuals looks quite different because the asymmetry was caused by the moderator.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section><section id="correcting-pb---selection-models-sm" class="slide level2"><h2>Correcting PB - Selection Models (SM)</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="correcting-pb---selection-models-sm" class="slide level2"><h2>Correcting PB - Selection Models (SM)</h2>
 <p>SM are more than a tool for correcting for the PB. SM are formal models of PB that can help us understanding and simulating the PB.</p>
 <p>The SM are composed by two parts:</p>
 <ol type="1">
@@ -729,7 +707,7 @@ Test for Funnel Plot Asymmetry: z = -1.0277, p = 0.3041</code></pre>
 </ol>
 <p><strong>Selection models</strong> can be based on the p-value (e.g., <em>p-curve</em> or <em>p-uniform</em>) and/or the effect size and variance (<em>Copas</em> model). We will see only models based on the p-value.</p>
 </section><section id="correcting-pb---selection-models-sm-1" class="slide level2"><h2>Correcting PB - Selection Models (SM)</h2>
-<p>Formally, the random-effect meta-analysis probability density function (PDF) can be written as <span class="citation" data-cites="Citkowicz2017-ox">(e.g., <a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">Citkowicz and Vevea 2017</a>)</span>:</p>
+<p>Formally, the random-effect meta-analysis probability density function (PDF) can be written as <span class="citation" data-cites="Citkowicz2017-ox">(e.g., <a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Citkowicz and Vevea 2017</a>)</span>:</p>
 <p><span class="math display">\[
 f\left(y_i \mid \beta, \tau^2 ; \sigma_i^2\right)=\frac{\phi\left(\frac{y_i-\Delta_i}{\sqrt{\sigma_i^2+\tau^2}}\right)}{\int_{-\infty}^{\infty}  \phi\left(\frac{Y_i-\Delta_i}{\sqrt{\sigma_i^2+\tau^2}}\right) d y_i}
 \]</span></p>
@@ -743,13 +721,13 @@ f\left(y_i \mid \beta, \tau^2 ; \sigma_i^2\right)=\frac{\mathrm{w}\left(p_i\righ
 </section><section id="sm---weigth-function" class="slide level2"><h2>SM - Weigth function</h2>
 <p>The weigth function is a simple function that links the p-value with the probability of publishing. The simple example at the beginning (publishing only significant p-values) is a step weigth function.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section><section id="sm---weigth-function-1" class="slide level2"><h2>SM - Weigth function</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-26-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="sm---weigth-function-1" class="slide level2"><h2>SM - Weigth function</h2>
 <p>We can add more steps to express a more complex selection process:</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section><section id="sm---weigth-function-2" class="slide level2"><h2>SM - Weigth function</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-27-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="sm---weigth-function-2" class="slide level2"><h2>SM - Weigth function</h2>
 <p>Or we can draw a smooth function assuming certain parameters:</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section><section id="sm---weigth-function-3" class="slide level2"><h2>SM - Weigth function</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="sm---weigth-function-3" class="slide level2"><h2>SM - Weigth function</h2>
 <p>Whatever the function, the SM estimate the parameters of the function and the meta-analysis parameters taking into account the weigths.</p>
 <p>Clearly, in the presence of no bias the two models (with and without weights) are the same while with PB the estimation is different, probably reducing the effect size.</p>
 <p>If the SM is correct (not possible in reality), the SM estimate the true effect even in the presence of bias. This is the strenght and elegance of the SM.</p>
@@ -765,13 +743,13 @@ f\left(y_i \mid \beta, \tau^2 ; \sigma_i^2\right)=\frac{\mathrm{w}\left(p_i\righ
 </section><section id="sm---step-model" class="slide level2"><h2>SM - Step model</h2>
 <p>The step model approximate the selection process with thresholds <span class="math inline">\(\alpha\)</span> and the associated weight <span class="math inline">\(w(p_i)\)</span>. For example:</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section><section id="sm---negative-exponential" class="slide level2"><h2>SM - Negative-Exponential</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-29-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="sm---negative-exponential" class="slide level2"><h2>SM - Negative-Exponential</h2>
 <p>The Negative-Exponential model is very simple and intuitive. The weight function is <span class="math inline">\(e^{-\delta p_i}\)</span> thus the single parameter <span class="math inline">\(\delta\)</span> is the amount of bias. When <span class="math inline">\(\delta = 0\)</span> there is no bias.</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section><section id="simulating-data-with-pb" class="slide level2"><h2>Simulating data with PB</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-31-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-data-with-pb" class="slide level2"><h2>Simulating data with PB</h2>
 <p>The strategy to simulate biased data is to sample from the <code>sim_studies()</code> function but to keep the studies using a probabilistic sampling based on the weight function.</p>
-<div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">500</span> <span class="co"># high number to check the results</span></span>
 <span><span class="va">es</span> <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># H0 true</span></span>
@@ -801,124 +779,123 @@ f\left(y_i \mid \beta, \tau^2 ; \sigma_i^2\right)=\frac{\mathrm{w}\left(p_i\righ
 </section><section id="simulating-data-with-pb-1" class="slide level2"><h2>Simulating data with PB</h2>
 <p>Let’s see some plots:</p>
 
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section><section id="simulating-data-with-pb-2" class="slide level2"><h2>Simulating data with PB</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-33-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-data-with-pb-2" class="slide level2"><h2>Simulating data with PB</h2>
 <p>Let’s see the model result:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Random-Effects Model (k = 500; tau^2 estimator: REML)
-
-tau^2 (estimated amount of total heterogeneity): 0.0196 (SE = 0.0034)
-tau (square root of estimated tau^2 value):      0.1399
-I^2 (total heterogeneity / total variability):   36.21%
-H^2 (total variability / sampling variability):  1.57
-
-Test for Heterogeneity:
-Q(df = 499) = 763.8133, p-val &lt; .0001
-
-Model Results:
-
-estimate      se     zval    pval   ci.lb   ci.ub      
-  0.3742  0.0107  35.0279  &lt;.0001  0.3533  0.3951  *** 
-
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt; Random-Effects Model (k = 500; tau^2 estimator: REML)
+#&gt; 
+#&gt; tau^2 (estimated amount of total heterogeneity): 0.0196 (SE = 0.0034)
+#&gt; tau (square root of estimated tau^2 value):      0.1399
+#&gt; I^2 (total heterogeneity / total variability):   36.21%
+#&gt; H^2 (total variability / sampling variability):  1.57
+#&gt; 
+#&gt; Test for Heterogeneity:
+#&gt; Q(df = 499) = 763.8133, p-val &lt; .0001
+#&gt; 
+#&gt; Model Results:
+#&gt; 
+#&gt; estimate      se     zval    pval   ci.lb   ci.ub      
+#&gt;   0.3742  0.0107  35.0279  &lt;.0001  0.3533  0.3951  *** 
+#&gt; 
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </section><section id="simulating-data-with-pb-3" class="slide level2"><h2>Simulating data with PB</h2>
 <p>Let’s see the Egger regression test and the trim-and-fill procedure:</p>
-<div class="cell">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">regtest</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Regression Test for Funnel Plot Asymmetry</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Model:     mixed-effects meta-regression model</span></span>
-<span><span class="co">## Predictor: standard error</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Test for Funnel Plot Asymmetry: z = 4.4739, p &lt; .0001</span></span>
-<span><span class="co">## Limit Estimate (as sei -&gt; 0):   b = 0.2017 (CI: 0.1235, 0.2799)</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">regtest</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regression Test for Funnel Plot Asymmetry</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model:     mixed-effects meta-regression model</span></span>
+<span><span class="co">#&gt; Predictor: standard error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Funnel Plot Asymmetry: z = 4.4739, p &lt; .0001</span></span>
+<span><span class="co">#&gt; Limit Estimate (as sei -&gt; 0):   b = 0.2017 (CI: 0.1235, 0.2799)</span></span>
 <span><span class="fu">trimfill</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Estimated number of missing studies on the left side: 106 (SE = 14.6182)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Random-Effects Model (k = 606; tau^2 estimator: REML)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## tau^2 (estimated amount of total heterogeneity): 0.0474 (SE = 0.0049)</span></span>
-<span><span class="co">## tau (square root of estimated tau^2 value):      0.2176</span></span>
-<span><span class="co">## I^2 (total heterogeneity / total variability):   56.94%</span></span>
-<span><span class="co">## H^2 (total variability / sampling variability):  2.32</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Test for Heterogeneity:</span></span>
-<span><span class="co">## Q(df = 605) = 1399.3991, p-val &lt; .0001</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Model Results:</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## estimate      se     zval    pval   ci.lb   ci.ub      </span></span>
-<span><span class="co">##   0.2927  0.0121  24.1497  &lt;.0001  0.2689  0.3164  *** </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## ---</span></span>
-<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Estimated number of missing studies on the left side: 106 (SE = 14.6182)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Random-Effects Model (k = 606; tau^2 estimator: REML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of total heterogeneity): 0.0474 (SE = 0.0049)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):      0.2176</span></span>
+<span><span class="co">#&gt; I^2 (total heterogeneity / total variability):   56.94%</span></span>
+<span><span class="co">#&gt; H^2 (total variability / sampling variability):  2.32</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Heterogeneity:</span></span>
+<span><span class="co">#&gt; Q(df = 605) = 1399.3991, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; estimate      se     zval    pval   ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt;   0.2927  0.0121  24.1497  &lt;.0001  0.2689  0.3164  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-data-with-pb-4" class="slide level2"><h2>Simulating data with PB</h2>
 <p>The two methods are detecting the PB but not correcting it appropriately. Let’s see the SM using a <code>negexp</code> method:</p>
-<div class="cell">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu">selmodel</span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"negexp"</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span>
-<span><span class="va">sel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Random-Effects Model (k = 500; tau^2 estimator: ML)
-
-tau^2 (estimated amount of total heterogeneity): 0.0800 (SE = 0.0118)
-tau (square root of estimated tau^2 value):      0.2828
-
-Test for Heterogeneity:
-LRT(df = 1) = 115.9867, p-val &lt; .0001
-
-Model Results:
-
-estimate      se    zval    pval    ci.lb   ci.ub    
-  0.0519  0.0381  1.3609  0.1735  -0.0228  0.1266    
-
-Test for Selection Model Parameters:
-LRT(df = 1) = 46.6783, p-val &lt; .0001
-
-Selection Model Results:
-
-estimate      se     zval    pval   ci.lb   ci.ub      
-  4.7526  0.3818  12.4494  &lt;.0001  4.0044  5.5008  *** 
-
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu">selmodel</span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"negexp"</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span>
+<span><span class="va">sel</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Random-Effects Model (k = 500; tau^2 estimator: ML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of total heterogeneity): 0.0800 (SE = 0.0118)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):      0.2828</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Heterogeneity:</span></span>
+<span><span class="co">#&gt; LRT(df = 1) = 115.9867, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; estimate      se    zval    pval    ci.lb   ci.ub    </span></span>
+<span><span class="co">#&gt;   0.0519  0.0381  1.3609  0.1735  -0.0228  0.1266    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Selection Model Parameters:</span></span>
+<span><span class="co">#&gt; LRT(df = 1) = 46.6783, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Selection Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; estimate      se     zval    pval   ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt;   4.7526  0.3818  12.4494  &lt;.0001  4.0044  5.5008  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-data-with-pb-5" class="slide level2"><h2>Simulating data with PB</h2>
 <p>We can also plot the results:</p>
-<div class="cell">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sel</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sel</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section><section id="pb-sensitivity-analysis" class="slide level2"><h2>PB Sensitivity analysis</h2>
+<img data-src="publication-bias_files/figure-revealjs/unnamed-chunk-37-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="pb-sensitivity-analysis" class="slide level2"><h2>PB Sensitivity analysis</h2>
 <ul>
 <li>The SM is correctly detecting, estimating and correcting the PB. But we simulated a pretty strong bias with <span class="math inline">\(k = 500\)</span> studies. In reality meta-analyses have few studies.</li>
 <li>
-<span class="citation" data-cites="Vevea2005-xc">Vevea and Woods (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2005</a>)</span> proposed to fix the weight function parameters to certain values representing different degree of selection and check how the model changes.</li>
+<span class="citation" data-cites="Vevea2005-xc">Vevea and Woods (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2005</a>)</span> proposed to fix the weight function parameters to certain values representing different degree of selection and check how the model changes.</li>
 <li>If the model parameters are affected after taking into account the SM, this could be considered as an index of PB.</li>
 <li>This approach is really interesting in general but especially when <span class="math inline">\(k\)</span> is too small for estimating the SM</li>
-</ul></section><section id="more-on-sm-and-publication-bias" class="slide level2 smaller scrollable"><h2>More on SM and Publication Bias</h2>
+<li>see <code>?selmodel</code> for information about performing sensitivity analysis with pre-specified weight functions</li>
+</ul></section><section id="more-on-sm-and-publication-bias" class="slide level2"><h2>More on SM and Publication Bias</h2>
 <ul>
 <li>The SM documentation of <code><a href="https://wviechtb.github.io/metafor/reference/selmodel.html">metafor::selmodel()</a></code> <a href="https://www.youtube.com/watch?v=ucmOCuyCk-c">https://wviechtb.github.io/metafor/reference/selmodel.html</a>
 </li>
 <li>Wolfgang Viechtbauer overview of PB <a href="https://www.youtube.com/watch?v=ucmOCuyCk-c">https://www.youtube.com/watch?v=ucmOCuyCk-c</a>
 </li>
 <li>
-<span class="citation" data-cites="Harrer2021-go">Harrer et al. (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2021</a>)</span> - Doing Meta-analysis in R - <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pub-bias.html">Chapter 9</a>
+<span class="citation" data-cites="Harrer2021-go">Harrer et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2021</a>)</span> - Doing Meta-analysis in R - <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pub-bias.html">Chapter 9</a>
 </li>
 <li>
-<span class="citation" data-cites="McShane2016-bk">McShane, Böckenholt, and Hansen (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2016</a>)</span> for a nice introduction about publication bias and SM</li>
-<li>Another good overview by <span class="citation" data-cites="Jin2015-ik">Jin, Zhou, and He (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2015</a>)</span>
+<span class="citation" data-cites="McShane2016-bk">McShane, Böckenholt, and Hansen (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2016</a>)</span> for a nice introduction about publication bias and SM</li>
+<li>Another good overview by <span class="citation" data-cites="Jin2015-ik">Jin, Zhou, and He (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2015</a>)</span>
 </li>
-<li>See also <span class="citation" data-cites="Guan2016-kn">Guan and Vandekerckhove (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="Maier2023-js">Maier, Bartoš, and Wagenmakers (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2023</a>)</span> and <span class="citation" data-cites="Bartos2022-im">Bartoš et al. (<a href="#/more-on-sm-and-publication-bias" role="doc-biblioref" onclick="">2022</a>)</span> for Bayesian approaches to PB</li>
-</ul>
+<li>See also <span class="citation" data-cites="Guan2016-kn">Guan and Vandekerckhove (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="Maier2023-js">Maier, Bartoš, and Wagenmakers (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2023</a>)</span> and <span class="citation" data-cites="Bartos2022-im">Bartoš et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2022</a>)</span> for Bayesian approaches to PB</li>
+</ul></section><section id="references-download-.bib-file" class="slide level2 refs smaller scrollable"><h2>References <button class="btn"><i class="fa fa-download"></i><a href="data:text/x-bibtex;base64,QEFSVElDTEV7U2hpMjAxOS1waiwNCiAgdGl0bGUgPSB7VGhlIHRyaW0tYW5kLWZpbGwgbWV0aG9kIGZvciBwdWJsaWNhdGlvbiBiaWFzOiBwcmFjdGljYWwgZ3VpZGVsaW5lcw0KICBhbmQgcmVjb21tZW5kYXRpb25zIGJhc2VkIG9uIGEgbGFyZ2UgZGF0YWJhc2Ugb2YgbWV0YS1hbmFseXNlczogcHJhY3RpY2FsDQogIGd1aWRlbGluZXMgYW5kIHJlY29tbWVuZGF0aW9ucyBiYXNlZCBvbiBhIGxhcmdlIGRhdGFiYXNlIG9mIG1ldGEtYW5hbHlzZXN9LA0KICBhdXRob3IgPSB7U2hpLCBMaW55dSBhbmQgTGluLCBMaWZlbmd9LA0KICBqb3VybmFsdGl0bGUgPSB7TWVkaWNpbmV9LA0KICBwdWJsaXNoZXIgPSB7T3ZpZCBUZWNobm9sb2dpZXMgKFdvbHRlcnMgS2x1d2VyIEhlYWx0aCl9LA0KICB2b2x1bWUgPSB7OTh9LA0KICBpc3N1ZSA9IHsyM30sDQogIHBhZ2VzID0ge2UxNTk4N30sDQogIGRhdGUgPSB7MjAxOS0wNn0sDQogIGRvaSA9IHsxMC4xMDk3L01ELjAwMDAwMDAwMDAwMTU5ODd9LA0KICBwbWMgPSB7UE1DNjU3MTM3Mn0sDQogIHBtaWQgPSB7MzExNjk3MzZ9LA0KICBpc3NuID0gezAwMjUtNzk3NCwxNTM2LTU5NjR9LA0KICBhYnN0cmFjdCA9IHtQdWJsaWNhdGlvbiBiaWFzIGlzIGEgdHlwZSBvZiBzeXN0ZW1hdGljIGVycm9yIHdoZW4gc3ludGhlc2l6aW5nDQogIGV2aWRlbmNlIHRoYXQgY2Fubm90IHJlcHJlc2VudCB0aGUgdW5kZXJseWluZyB0cnV0aC4gQ2xpbmljYWwgc3R1ZGllcyB3aXRoDQogIGZhdm9yYWJsZSByZXN1bHRzIGFyZSBtb3JlIGxpa2VseSBwdWJsaXNoZWQgYW5kIHRodXMgZXhhZ2dlcmF0ZSB0aGUNCiAgc3ludGhlc2l6ZWQgZXZpZGVuY2UgaW4gbWV0YS1hbmFseXNlcy4gVGhlIHRyaW0tYW5kLWZpbGwgbWV0aG9kIGlzIGEgcG9wdWxhcg0KICB0b29sIHRvIGRldGVjdCBhbmQgYWRqdXN0IGZvciBwdWJsaWNhdGlvbiBiaWFzLiBTaW11bGF0aW9uIHN0dWRpZXMgaGF2ZSBiZWVuDQogIHBlcmZvcm1lZCB0byBhc3Nlc3MgdGhpcyBtZXRob2QsIGJ1dCB0aGV5IG1heSBub3QgZnVsbHkgcmVwcmVzZW50IHJlYWxpc3RpYw0KICBzZXR0aW5ncyBhYm91dCBwdWJsaWNhdGlvbiBiaWFzLiBCYXNlZCBvbiByZWFsLXdvcmxkIG1ldGEtYW5hbHlzZXMsIHRoaXMNCiAgYXJ0aWNsZSBwcm92aWRlcyBwcmFjdGljYWwgZ3VpZGVsaW5lcyBhbmQgcmVjb21tZW5kYXRpb25zIGZvciB1c2luZyB0aGUNCiAgdHJpbS1hbmQtZmlsbCBtZXRob2QuIFdlIHVzZWQgYSB3b3JrZWQgaWxsdXN0cmF0aXZlIGV4YW1wbGUgdG8gZGVtb25zdHJhdGUgdGhlDQogIGlkZWEgb2YgdGhlIHRyaW0tYW5kLWZpbGwgbWV0aG9kLCBhbmQgd2UgcmV2aWV3ZWQgdGhyZWUgZXN0aW1hdG9ycyAoUjAsIEwwLA0KICBhbmQgUTApIGZvciBpbXB1dGluZyBtaXNzaW5nIHN0dWRpZXMuIEEgcmVzYW1wbGluZyBtZXRob2Qgd2FzIHByb3Bvc2VkIHRvDQogIGNhbGN1bGF0ZSBQIHZhbHVlcyBmb3IgYWxsIDMgZXN0aW1hdG9ycy4gV2UgYWxzbyBzdW1tYXJpemVkIGF2YWlsYWJsZQ0KICBtZXRhLWFuYWx5c2lzIHNvZnR3YXJlIHByb2dyYW1zIGZvciBpbXBsZW1lbnRpbmcgdGhlIHRyaW0tYW5kLWZpbGwgbWV0aG9kLg0KICBNb3Jlb3Zlciwgd2UgYXBwbGllZCB0aGUgbWV0aG9kIHRvIDI5LDkzMiBtZXRhLWFuYWx5c2VzIGZyb20gdGhlIENvY2hyYW5lDQogIERhdGFiYXNlIG9mIFN5c3RlbWF0aWMgUmV2aWV3cywgYW5kIGVtcGlyaWNhbGx5IGV2YWx1YXRlZCBpdHMgb3ZlcmFsbA0KICBwZXJmb3JtYW5jZS4gV2UgY2FyZWZ1bGx5IGV4cGxvcmVkIHBvdGVudGlhbCBpc3N1ZXMgb2NjdXJyZWQgaW4gb3VyIGFuYWx5c2lzLg0KICBUaGUgZXN0aW1hdG9ycyBMMCBhbmQgUTAgZGV0ZWN0ZWQgYXQgbGVhc3Qgb25lIG1pc3Npbmcgc3R1ZHkgaW4gbW9yZQ0KICBtZXRhLWFuYWx5c2VzIHRoYW4gUjAsIHdoaWxlIFEwIG9mdGVuIGltcHV0ZWQgbW9yZSBtaXNzaW5nIHN0dWRpZXMgdGhhbiBMMC4NCiAgQWZ0ZXIgYWRkaW5nIGltcHV0ZWQgbWlzc2luZyBzdHVkaWVzLCB0aGUgc2lnbmlmaWNhbmNlIG9mIGhldGVyb2dlbmVpdHkgYW5kDQogIG92ZXJhbGwgZWZmZWN0IHNpemVzIGNoYW5nZWQgaW4gbWFueSBtZXRhLWFuYWx5c2VzLiBBbGwgZXN0aW1hdG9ycyBnZW5lcmFsbHkNCiAgY29udmVyZ2VkIGZhc3QuIEhvd2V2ZXIsIEwwIGFuZCBRMCBmYWlsZWQgdG8gY29udmVyZ2UgaW4gYSBmZXcgbWV0YS1hbmFseXNlcw0KICB0aGF0IGNvbnRhaW5lZCBzdHVkaWVzIHdpdGggaWRlbnRpY2FsIGVmZmVjdCBzaXplcy4gQWxzbywgUCB2YWx1ZXMgcHJvZHVjZWQgYnkNCiAgZGlmZmVyZW50IGVzdGltYXRvcnMgY291bGQgeWllbGQgZGlmZmVyZW50IGNvbmNsdXNpb25zIG9mIHB1YmxpY2F0aW9uIGJpYXMNCiAgc2lnbmlmaWNhbmNlLiBPdXRsaWVycyBhbmQgdGhlIHByZS1zcGVjaWZpZWQgZGlyZWN0aW9uIG9mIG1pc3Npbmcgc3R1ZGllcw0KICBjb3VsZCBoYXZlIGluZmx1ZW50aWFsIGltcGFjdCBvbiB0aGUgdHJpbS1hbmQtZmlsbCByZXN1bHRzLiBNZXRhLWFuYWx5c3RzIGFyZQ0KICByZWNvbW1lbmRlZCB0byBwZXJmb3JtIHRoZSB0cmltLWFuZC1maWxsIG1ldGhvZCB3aXRoIGdyZWF0IGNhdXRpb24gd2hlbiB1c2luZw0KICBtZXRhLWFuYWx5c2lzIHNvZnR3YXJlIHByb2dyYW1zLiBTb21lIGRlZmF1bHQgc2V0dGluZ3MgKGUuZy4sIHRoZSBjaG9pY2Ugb2YNCiAgZXN0aW1hdG9ycyBhbmQgdGhlIGRpcmVjdGlvbiBvZiBtaXNzaW5nIHN0dWRpZXMpIGluIHRoZSBwcm9ncmFtcyBtYXkgbm90IGJlDQogIG9wdGltYWwgZm9yIGEgY2VydGFpbiBtZXRhLWFuYWx5c2lzOyB0aGV5IHNob3VsZCBiZSBkZXRlcm1pbmVkIG9uIGENCiAgY2FzZS1ieS1jYXNlIGJhc2lzLiBTZW5zaXRpdml0eSBhbmFseXNlcyBhcmUgZW5jb3VyYWdlZCB0byBleGFtaW5lIGVmZmVjdHMgb2YNCiAgZGlmZmVyZW50IGVzdGltYXRvcnMgYW5kIG91dGx5aW5nIHN0dWRpZXMuIEFsc28sIHRoZSB0cmltLWFuZC1maWxsIGVzdGltYXRvcg0KICBzaG91bGQgYmUgcm91dGluZWx5IHJlcG9ydGVkIGluIG1ldGEtYW5hbHlzZXMsIGJlY2F1c2UgdGhlIHJlc3VsdHMgZGVwZW5kDQogIGhpZ2hseSBvbiBpdC59LA0KICB1cmwgPSB7aHR0cHM6Ly93d3cubmNiaS5ubG0ubmloLmdvdi9wbWMvYXJ0aWNsZXMvUE1DNjU3MTM3Mi99LA0KICBsYW5ndWFnZSA9IHtlbn0NCn0NCg0KQEFSVElDTEV7Um9zZW50aGFsMTk3OS15eCwNCiAgdGl0bGUgPSB7VGhlIGZpbGUgZHJhd2VyIHByb2JsZW0gYW5kIHRvbGVyYW5jZSBmb3IgbnVsbCByZXN1bHRzfSwNCiAgYXV0aG9yID0ge1Jvc2VudGhhbCwgUm9iZXJ0fSwNCiAgam91cm5hbHRpdGxlID0ge1BzeWNob2xvZ2ljYWwgYnVsbGV0aW59LA0KICBwdWJsaXNoZXIgPSB7QW1lcmljYW4gUHN5Y2hvbG9naWNhbCBBc3NvY2lhdGlvbiAoQVBBKX0sDQogIHZvbHVtZSA9IHs4Nn0sDQogIGlzc3VlID0gezN9LA0KICBwYWdlcyA9IHs2MzgtNjQxfSwNCiAgZGF0ZSA9IHsxOTc5LTA1fSwNCiAgZG9pID0gezEwLjEwMzcvMDAzMy0yOTA5Ljg2LjMuNjM4fSwNCiAgaXNzbiA9IHswMDMzLTI5MDksMTkzOS0xNDU1fSwNCiAgdXJsID0ge2h0dHBzOi8vcHN5Y25ldC5hcGEub3JnL3JlY29yZC8xOTc5LTI3NjAyLTAwMX0sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQpAQVJUSUNMRXtPcndpbjE5ODMtdnUsDQogIHRpdGxlID0ge0EgZmFpbC1TYWZlTiBmb3IgZWZmZWN0IHNpemUgaW4gbWV0YS1hbmFseXNpc30sDQogIGF1dGhvciA9IHtPcndpbiwgUm9iZXJ0IEd9LA0KICBqb3VybmFsdGl0bGUgPSB7Sm91cm5hbCBvZiBlZHVjYXRpb25hbCBzdGF0aXN0aWNzfSwNCiAgcHVibGlzaGVyID0ge0FtZXJpY2FuIEVkdWNhdGlvbmFsIFJlc2VhcmNoIEFzc29jaWF0aW9uIChBRVJBKX0sDQogIHZvbHVtZSA9IHs4fSwNCiAgaXNzdWUgPSB7Mn0sDQogIHBhZ2VzID0gezE1Ny0xNTl9LA0KICBkYXRlID0gezE5ODMtMDZ9LA0KICBkb2kgPSB7MTAuMzEwMi8xMDc2OTk4NjAwODAwMjE1N30sDQogIGlzc24gPSB7MDM2Mi05NzkxLDIzMjgtMDczNX0sDQogIGFic3RyYWN0ID0ge1Jvc2VudGhhbuKAmXMgKDE5NzkpIGNvbmNlcHQgb2YgZmFpbC1zYWZlIE4gaGFzIHRodXMgZmFyIGJlZW4NCiAgYXBwbGllZCB0byBwcm9iYWJpbGl0eSBsZXZlbHMgZXhjbHVzaXZlbHkuIFRoaXMgbm90ZSBpbnRyb2R1Y2VzIGEgZmFpbC1zYWZlIE4NCiAgZm9yIGVmZmVjdCBzaXplLn0sDQogIHVybCA9IHtodHRwczovL2pvdXJuYWxzLnNhZ2VwdWIuY29tL2RvaS9hYnMvMTAuMzEwMi8xMDc2OTk4NjAwODAwMjE1N30sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQpAQVJUSUNMRXtSb3NlbmJlcmcyMDA1LWllLA0KICB0aXRsZSA9IHtUaGUgZmlsZS1kcmF3ZXIgcHJvYmxlbSByZXZpc2l0ZWQ6IGEgZ2VuZXJhbCB3ZWlnaHRlZCBtZXRob2QgZm9yDQogIGNhbGN1bGF0aW5nIGZhaWwtc2FmZSBudW1iZXJzIGluIG1ldGEtYW5hbHlzaXN9LA0KICBhdXRob3IgPSB7Um9zZW5iZXJnLCBNaWNoYWVsIFN9LA0KICBqb3VybmFsdGl0bGUgPSB7RXZvbHV0aW9uOyBpbnRlcm5hdGlvbmFsIGpvdXJuYWwgb2Ygb3JnYW5pYyBldm9sdXRpb259LA0KICBwdWJsaXNoZXIgPSB7V2lsZXl9LA0KICB2b2x1bWUgPSB7NTl9LA0KICBpc3N1ZSA9IHsyfSwNCiAgcGFnZXMgPSB7NDY0LTQ2OH0sDQogIGRhdGUgPSB7MjAwNS0wMn0sDQogIGRvaSA9IHsxMC4xMTExL2ouMDAxNC0zODIwLjIwMDUudGIwMTAwNC54fSwNCiAgcG1pZCA9IHsxNTgwNzQzMH0sDQogIGlzc24gPSB7MDAxNC0zODIwLDE1NTgtNTY0Nn0sDQogIGFic3RyYWN0ID0ge1F1YW50aXRhdGl2ZSBsaXRlcmF0dXJlIHJldmlld3Mgc3VjaCBhcyBtZXRhLWFuYWx5c2lzIGFyZSBiZWNvbWluZw0KICBjb21tb24gaW4gZXZvbHV0aW9uYXJ5IGJpb2xvZ3kgYnV0IG1heSBiZSBzdHJvbmdseSBhZmZlY3RlZCBieSBwdWJsaWNhdGlvbg0KICBiaWFzZXMuIFVzaW5nIGZhaWwtc2FmZSBudW1iZXJzIGlzIGEgcXVpY2sgd2F5IHRvIGVzdGltYXRlIHdoZXRoZXIgcHVibGljYXRpb24NCiAgYmlhcyBpcyBsaWtlbHkgdG8gYmUgYSBwcm9ibGVtIGZvciBhIHNwZWNpZmljIHN0dWR5LiBIb3dldmVyLCBwcmV2aW91c2x5DQogIHN1Z2dlc3RlZCBmYWlsLXNhZmUgY2FsY3VsYXRpb25zIGFyZSB1bndlaWdodGVkIGFuZCBhcmUgbm90IGJhc2VkIG9uIHRoZQ0KICBmcmFtZXdvcmsgaW4gd2hpY2ggbW9zdCBtZXRhLWFuYWx5c2VzIGFyZSBwZXJmb3JtZWQuIEEgZ2VuZXJhbCwgd2VpZ2h0ZWQNCiAgZmFpbC1zYWZlIGNhbGN1bGF0aW9uLCBncm91bmRlZCBpbiB0aGUgbWV0YS1hbmFseXNpcyBmcmFtZXdvcmssIGFwcGxpY2FibGUgdG8NCiAgYm90aCBmaXhlZC0gYW5kIHJhbmRvbS1lZmZlY3RzIG1vZGVscywgaXMgcHJvcG9zZWQuIFJlY2VudCBtZXRhLWFuYWx5c2VzDQogIHB1Ymxpc2hlZCBpbiBFdm9sdXRpb24gYXJlIHVzZWQgZm9yIGlsbHVzdHJhdGlvbi59LA0KICB1cmwgPSB7aHR0cHM6Ly9vbmxpbmVsaWJyYXJ5LndpbGV5LmNvbS9kb2kvYWJzLzEwLjExMTEvai4wMDE0LTM4MjAuMjAwNS50YjAxMDA0Lnh9LA0KICBsYW5ndWFnZSA9IHtlbn0NCn0NCg0KQEFSVElDTEV7Q2l0a293aWN6MjAxNy1veCwNCiAgdGl0bGUgPSB7QSBwYXJzaW1vbmlvdXMgd2VpZ2h0IGZ1bmN0aW9uIGZvciBtb2RlbGluZyBwdWJsaWNhdGlvbiBiaWFzfSwNCiAgYXV0aG9yID0ge0NpdGtvd2ljeiwgTWFydHluYSBhbmQgVmV2ZWEsIEphY2sgTH0sDQogIGpvdXJuYWx0aXRsZSA9IHtQc3ljaG9sb2dpY2FsIG1ldGhvZHN9LA0KICBwdWJsaXNoZXIgPSB7cHN5Y25ldC5hcGEub3JnfSwNCiAgdm9sdW1lID0gezIyfSwNCiAgaXNzdWUgPSB7MX0sDQogIHBhZ2VzID0gezI4LTQxfSwNCiAgZGF0ZSA9IHsyMDE3LTAzfSwNCiAgZG9pID0gezEwLjEwMzcvbWV0MDAwMDExOX0sDQogIHBtaWQgPSB7MjgyNTI5OTh9LA0KICBpc3NuID0gezEwODItOTg5WCwxOTM5LTE0NjN9LA0KICBhYnN0cmFjdCA9IHtRdWFudGl0YXRpdmUgcmVzZWFyY2ggbGl0ZXJhdHVyZSBpcyBvZnRlbiBiaWFzZWQgYmVjYXVzZSBzdHVkaWVzDQogIHRoYXQgZmFpbCB0byBmaW5kIGEgc2lnbmlmaWNhbnQgZWZmZWN0IChvciB0aGF0IGRlbW9uc3RyYXRlIGVmZmVjdHMgaW4gYW4NCiAgdW5kZXNpcmVkIG9yIHVuZXhwZWN0ZWQgZGlyZWN0aW9uKSBhcmUgbGVzcyBsaWtlbHkgdG8gYmUgcHVibGlzaGVkLiBUaGlzDQogIHBoZW5vbWVub24sIHRlcm1lZCBwdWJsaWNhdGlvbiBiaWFzLCBjYW4gY2F1c2UgcHJvYmxlbXMgd2hlbiByZXNlYXJjaGVycw0KICBhdHRlbXB0IHRvIHN5bnRoZXNpemUgcmVzdWx0cyB1c2luZyBtZXRhLWFuYWx5dGljIG1ldGhvZHMuIFZhcmlvdXMgdGVjaG5pcXVlcw0KICBleGlzdCB0aGF0IGF0dGVtcHQgdG8gZXN0aW1hdGUgYW5kIGNvcnJlY3QgbWV0YS1hbmFseXNlcyBmb3IgcHVibGljYXRpb24gYmlhcy4NCiAgSG93ZXZlciwgdGhlcmUgaXMgbm8gc2luZ2xlIG1ldGhvZCB0aGF0IGNhbiAoYSkgYWNjb3VudCBmb3IgY29udGludW91cw0KICBtb2RlcmF0b3JzIGJ5IGluY2x1ZGluZyB0aGVtIHdpdGhpbiB0aGUgbW9kZWwsIChiKSBhbGxvdyBmb3Igc3Vic3RhbnRpYWwgZGF0YQ0KICBoZXRlcm9nZW5laXR5LCAoYykgcHJvZHVjZSBhbiBhZGp1c3RlZCBtZWFuIGVmZmVjdCBzaXplLCAoZCkgaW5jbHVkZSBhIGZvcm1hbA0KICB0ZXN0IGZvciBwdWJsaWNhdGlvbiBiaWFzLCBhbmQgKGUpIGFsbG93IGZvciBjb3JyZWN0aW9uIHdoZW4gb25seSBhIHNtYWxsDQogIG51bWJlciBvZiBlZmZlY3RzIGlzIGluY2x1ZGVkIGluIHRoZSBhbmFseXNpcy4gVGhpcyBhcnRpY2xlIGRlc2NyaWJlcyBhIG1ldGhvZA0KICB0aGF0IHdlIGJlbGlldmUgaGVscHMgZmlsbCB0aGF0IGdhcC4gVGhlIG1vZGVsIHVzZXMgdGhlIGJldGEgZGVuc2l0eSBhcyBhDQogIHdlaWdodCBmdW5jdGlvbiB0aGF0IHJlcHJlc2VudHMgdGhlIHNlbGVjdGlvbiBwcm9jZXNzIGFuZCBwcm92aWRlcyBhZGp1c3RlZA0KICBwYXJhbWV0ZXIgZXN0aW1hdGVzIHRoYXQgYWNjb3VudCBmb3IgcHVibGljYXRpb24gYmlhcy4gVXNlIG9mIHRoZSBiZXRhIGRlbnNpdHkNCiAgYWxsb3dzIHVzIHRvIHJlcHJlc2VudCBzZWxlY3Rpb24gdXNpbmcgZmV3ZXIgcGFyYW1ldGVycyB0aGFuIHNpbWlsYXIgbW9kZWxzIHNvDQogIHRoYXQgdGhlIHByb3Bvc2VkIG1vZGVsIGlzIHN1aXRhYmxlIGZvciBtZXRhLWFuYWx5c2VzIHRoYXQgaW5jbHVkZSByZWxhdGl2ZWx5DQogIGZldyBzdHVkaWVzLiBXZSBleHBsYWluIHRoZSBtb2RlbCBhbmQgaXRzIHJhdGlvbmFsZSwgaWxsdXN0cmF0ZSBpdHMgdXNlIHdpdGggYQ0KICByZWFsIGRhdGEgc2V0LCBhbmQgZGVzY3JpYmUgdGhlIHJlc3VsdHMgb2YgYSBzaW11bGF0aW9uIHN0dWR5IHRoYXQgc2hvd3MgdGhlDQogIG1vZGVsJ3MgdXRpbGl0eS4gKFBzeWNJTkZPIERhdGFiYXNlIFJlY29yZH0sDQogIHVybCA9IHtodHRwczovL3BzeWNuZXQuYXBhLm9yZy9qb3VybmFscy9tZXQvMjIvMS8yOC99LA0KICBsYW5ndWFnZSA9IHtlbn0NCn0NCg0KQEFSVElDTEV7TWNTaGFuZTIwMTYtYmssDQogIHRpdGxlID0ge0FkanVzdGluZyBmb3IgcHVibGljYXRpb24gYmlhcyBpbiBtZXRhLWFuYWx5c2lzOiBBbiBldmFsdWF0aW9uIG9mDQogIHNlbGVjdGlvbiBtZXRob2RzIGFuZCBzb21lIGNhdXRpb25hcnkgbm90ZXM6IEFuIGV2YWx1YXRpb24gb2Ygc2VsZWN0aW9uDQogIG1ldGhvZHMgYW5kIHNvbWUgY2F1dGlvbmFyeSBub3Rlc30sDQogIGF1dGhvciA9IHtNY1NoYW5lLCBCbGFrZWxleSBCIGFuZCBCw7Zja2VuaG9sdCwgVWxmIGFuZCBIYW5zZW4sIEthcnN0ZW4gVH0sDQogIGpvdXJuYWx0aXRsZSA9IHtQZXJzcGVjdGl2ZXMgb24gcHN5Y2hvbG9naWNhbCBzY2llbmNlOiBhIGpvdXJuYWwgb2YgdGhlDQogIEFzc29jaWF0aW9uIGZvciBQc3ljaG9sb2dpY2FsIFNjaWVuY2V9LA0KICBwdWJsaXNoZXIgPSB7U0FHRSBQdWJsaWNhdGlvbnN9LA0KICB2b2x1bWUgPSB7MTF9LA0KICBpc3N1ZSA9IHs1fSwNCiAgcGFnZXMgPSB7NzMwLTc0OX0sDQogIGRhdGUgPSB7MjAxNi0wOX0sDQogIGRvaSA9IHsxMC4xMTc3LzE3NDU2OTE2MTY2NjIyNDN9LA0KICBwbWlkID0gezI3Njk0NDY3fSwNCiAgaXNzbiA9IHsxNzQ1LTY5MTYsMTc0NS02OTI0fSwNCiAgYWJzdHJhY3QgPSB7V2UgcmV2aWV3IGFuZCBldmFsdWF0ZSBzZWxlY3Rpb24gbWV0aG9kcywgYSBwcm9taW5lbnQgY2xhc3Mgb2YNCiAgdGVjaG5pcXVlcyBmaXJzdCBwcm9wb3NlZCBieSBIZWRnZXMgKDE5ODQpIHRoYXQgYXNzZXNzIGFuZCBhZGp1c3QgZm9yDQogIHB1YmxpY2F0aW9uIGJpYXMgaW4gbWV0YS1hbmFseXNpcywgdmlhIGFuIGV4dGVuc2l2ZSBzaW11bGF0aW9uIHN0dWR5LiBPdXINCiAgc2ltdWxhdGlvbiBjb3ZlcnMgYm90aCByZXN0cmljdGl2ZSBzZXR0aW5ncyBhcyB3ZWxsIGFzIG1vcmUgcmVhbGlzdGljIHNldHRpbmdzDQogIGFuZCBwcm9jZWVkcyBhY3Jvc3MgbXVsdGlwbGUgbWV0cmljcyB0aGF0IGFzc2VzcyBkaWZmZXJlbnQgYXNwZWN0cyBvZiBtb2RlbA0KICBwZXJmb3JtYW5jZS4gVGhpcyBldmFsdWF0aW9uIGlzIHRpbWVseSBpbiBsaWdodCBvZiB0d28gcmVjZW50bHkgcHJvcG9zZWQNCiAgYXBwcm9hY2hlcywgdGhlIHNvLWNhbGxlZCBwLWN1cnZlIGFuZCBwLXVuaWZvcm0gYXBwcm9hY2hlcywgdGhhdCBjYW4gYmUgdmlld2VkDQogIGFzIGFsdGVybmF0aXZlIGltcGxlbWVudGF0aW9ucyBvZiB0aGUgb3JpZ2luYWwgSGVkZ2VzIHNlbGVjdGlvbiBtZXRob2QNCiAgYXBwcm9hY2guIFdlIGZpbmQgdGhhdCB0aGUgcC1jdXJ2ZSBhbmQgcC11bmlmb3JtIGFwcHJvYWNoZXMgcGVyZm9ybSByZWFzb25hYmx5DQogIHdlbGwgYnV0IG5vdCBhcyB3ZWxsIGFzIHRoZSBvcmlnaW5hbCBIZWRnZXMgYXBwcm9hY2ggaW4gdGhlIHJlc3RyaWN0aXZlDQogIHNldHRpbmcgZm9yIHdoaWNoIGFsbCB0aHJlZSB3ZXJlIGRlc2lnbmVkLiBXZSBhbHNvIGZpbmQgdGhleSBwZXJmb3JtIHBvb3JseSBpbg0KICBtb3JlIHJlYWxpc3RpYyBzZXR0aW5ncywgd2hlcmVhcyB2YXJpYW50cyBvZiB0aGUgSGVkZ2VzIGFwcHJvYWNoIHBlcmZvcm0gd2VsbC4NCiAgV2UgY29uY2x1ZGUgYnkgdXJnaW5nIGNhdXRpb24gaW4gdGhlIGFwcGxpY2F0aW9uIG9mIHNlbGVjdGlvbiBtZXRob2RzOiBHaXZlbg0KICB0aGUgaWRlYWxpc3RpYyBtb2RlbCBhc3N1bXB0aW9ucyB1bmRlcmx5aW5nIHNlbGVjdGlvbiBtZXRob2RzIGFuZCB0aGUNCiAgc2Vuc2l0aXZpdHkgb2YgcG9wdWxhdGlvbiBhdmVyYWdlIGVmZmVjdCBzaXplIGVzdGltYXRlcyB0byB0aGVtLCB3ZSBhZHZvY2F0ZQ0KICB0aGF0IHNlbGVjdGlvbiBtZXRob2RzIHNob3VsZCBiZSB1c2VkIGxlc3MgZm9yIG9idGFpbmluZyBhIHNpbmdsZSBlc3RpbWF0ZQ0KICB0aGF0IHB1cnBvcnRzIHRvIGFkanVzdCBmb3IgcHVibGljYXRpb24gYmlhcyBleCBwb3N0IGFuZCBtb3JlIGZvciBzZW5zaXRpdml0eQ0KICBhbmFseXNpcy10aGF0IGlzLCBleHBsb3JpbmcgdGhlIHJhbmdlIG9mIGVzdGltYXRlcyB0aGF0IHJlc3VsdCBmcm9tIGFzc3VtaW5nDQogIGRpZmZlcmVudCBmb3JtcyBvZiBhbmQgc2V2ZXJpdHkgb2YgcHVibGljYXRpb24gYmlhcy59LA0KICB1cmwgPSB7aHR0cHM6Ly9qb3VybmFscy5zYWdlcHViLmNvbS9kb2kvYWJzLzEwLjExNzcvMTc0NTY5MTYxNjY2MjI0M30sDQogIGtleXdvcmRzID0ge2VmZmVjdCBzaXplOyBtZXRhLWFuYWx5c2lzOyBwLWN1cnZlOyBwLXVuaWZvcm07IHNlbGVjdGlvbiBtZXRob2RzfSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBBUlRJQ0xFe0JhcnRvczIwMjItaW0sDQogIHRpdGxlID0ge0FkanVzdGluZyBmb3IgcHVibGljYXRpb24gYmlhcyBpbiBKQVNQIGFuZCBSOiBTZWxlY3Rpb24gbW9kZWxzLA0KICBQRVQtUEVFU0UsIGFuZCByb2J1c3QgQmF5ZXNpYW4gbWV0YS1hbmFseXNpc30sDQogIGF1dGhvciA9IHtCYXJ0b8WhLCBGcmFudGnFoWVrIGFuZCBNYWllciwgTWF4aW1pbGlhbiBhbmQgUXVpbnRhbmEsIERhbmllbCBTIGFuZA0KICBXYWdlbm1ha2VycywgRXJpYy1KYW59LA0KICBqb3VybmFsdGl0bGUgPSB7QWR2YW5jZXMgaW4gbWV0aG9kcyBhbmQgcHJhY3RpY2VzIGluIHBzeWNob2xvZ2ljYWwgc2NpZW5jZX0sDQogIHB1Ymxpc2hlciA9IHtTQUdFIFB1YmxpY2F0aW9uc30sDQogIHZvbHVtZSA9IHs1fSwNCiAgaXNzdWUgPSB7M30sDQogIHBhZ2VzID0gezI1MTUyNDU5MjIxMTA5Mn0sDQogIGRhdGUgPSB7MjAyMi0wN30sDQogIGRvaSA9IHsxMC4xMTc3LzI1MTUyNDU5MjIxMTA5MjU5fSwNCiAgaXNzbiA9IHsyNTE1LTI0NTksMjUxNS0yNDY3fSwNCiAgYWJzdHJhY3QgPSB7TWV0YS1hbmFseXNlcyBhcmUgZXNzZW50aWFsIGZvciBjdW11bGF0aXZlIHNjaWVuY2UsIGJ1dCB0aGVpcg0KICB2YWxpZGl0eSBjYW4gYmUgY29tcHJvbWlzZWQgYnkgcHVibGljYXRpb24gYmlhcy4gVG8gbWl0aWdhdGUgdGhlIGltcGFjdCBvZg0KICBwdWJsaWNhdGlvbiBiaWFzLCBvbmUgbWF5IGFwcGx5IHB1YmxpY2F0aW9uLWJpYXMtYWRqdXN0bWVudCB0ZWNobmlxdWVzIHN1Y2ggYXMNCiAgcHJlY2lzaW9uLWVmZmVjdCB0ZXN0IGFuZCBwcmVjaXNpb24tZWZmZWN0IGVzdGltYXRlIHdpdGggc3RhbmRhcmQgZXJyb3JzDQogIChQRVQtUEVFU0UpIGFuZCBzZWxlY3Rpb24gbW9kZWxzLiBUaGVzZSBtZXRob2RzLCBpbXBsZW1lbnRlZCBpbiBKQVNQIGFuZCBSLA0KICBhbGxvdyByZXNlYXJjaGVycyB3aXRob3V0IHByb2dyYW1taW5nIGV4cGVyaWVuY2UgdG8gY29uZHVjdCBzdGF0ZS1vZi10aGUtYXJ0DQogIHB1YmxpY2F0aW9uLWJpYXMtYWRqdXN0ZWQgbWV0YS1hbmFseXNpcy4gSW4gdGhpcyB0dXRvcmlhbCwgd2UgZGVtb25zdHJhdGUgaG93DQogIHRvIGNvbmR1Y3QgYSBwdWJsaWNhdGlvbi1iaWFzLWFkanVzdGVkIG1ldGEtYW5hbHlzaXMgaW4gSkFTUCBhbmQgUiBhbmQNCiAgaW50ZXJwcmV0IHRoZSByZXN1bHRzLiBGaXJzdCwgd2UgZXhwbGFpbiB0d28gZnJlcXVlbnRpc3QgYmlhcy1jb3JyZWN0aW9uDQogIG1ldGhvZHM6IFBFVC1QRUVTRSBhbmQgc2VsZWN0aW9uIG1vZGVscy4gU2Vjb25kLCB3ZSBpbnRyb2R1Y2Ugcm9idXN0IEJheWVzaWFuDQogIG1ldGEtYW5hbHlzaXMsIGEgQmF5ZXNpYW4gYXBwcm9hY2ggdGhhdCBzaW11bHRhbmVvdXNseSBjb25zaWRlcnMgYm90aA0KICBQRVQtUEVFU0UgYW5kIHNlbGVjdGlvbiBtb2RlbHMuIFdlIGlsbHVzdHJhdGUgdGhlIG1ldGhvZG9sb2d5IG9uIGFuIGV4YW1wbGUNCiAgZGF0YSBzZXQsIHByb3ZpZGUgYW4gaW5zdHJ1Y3Rpb25hbCB2aWRlbyAoIGh0dHBzOi8vYml0Lmx5L3B1YmJpYXMgKSBhbmQgYW4NCiAgUi1tYXJrZG93biBzY3JpcHQgKCBodHRwczovL29zZi5pby91aGFldy8gKSwgYW5kIGRpc2N1c3MgdGhlIGludGVycHJldGF0aW9uIG9mDQogIHRoZSByZXN1bHRzLiBGaW5hbGx5LCB3ZSBpbmNsdWRlIGNvbmNyZXRlIGd1aWRhbmNlIG9uIHJlcG9ydGluZyB0aGUNCiAgbWV0YS1hbmFseXRpYyByZXN1bHRzIGluIGFuIGFjYWRlbWljIGFydGljbGUufSwNCiAgdXJsID0ge2h0dHBzOi8vam91cm5hbHMuc2FnZXB1Yi5jb20vZG9pL2Ficy8xMC4xMTc3LzI1MTUyNDU5MjIxMTA5MjU5fSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBBUlRJQ0xFe01haWVyMjAyMy1qcywNCiAgdGl0bGUgPSB7Um9idXN0IEJheWVzaWFuIG1ldGEtYW5hbHlzaXM6IEFkZHJlc3NpbmcgcHVibGljYXRpb24gYmlhcyB3aXRoDQogIG1vZGVsLWF2ZXJhZ2luZ30sDQogIGF1dGhvciA9IHtNYWllciwgTWF4aW1pbGlhbiBhbmQgQmFydG/FoSwgRnJhbnRpxaFlayBhbmQgV2FnZW5tYWtlcnMsIEVyaWMtSmFufSwNCiAgam91cm5hbHRpdGxlID0ge1BzeWNob2xvZ2ljYWwgbWV0aG9kc30sDQogIHZvbHVtZSA9IHsyOH0sDQogIGlzc3VlID0gezF9LA0KICBwYWdlcyA9IHsxMDctMTIyfSwNCiAgZGF0ZSA9IHsyMDIzLTAyfSwNCiAgZG9pID0gezEwLjEwMzcvbWV0MDAwMDQwNX0sDQogIHBtaWQgPSB7MzU1ODgwNzV9LA0KICBpc3NuID0gezEwODItOTg5WCwxOTM5LTE0NjN9LA0KICBhYnN0cmFjdCA9IHtNZXRhLWFuYWx5c2lzIGlzIGFuIGltcG9ydGFudCBxdWFudGl0YXRpdmUgdG9vbCBmb3IgY3VtdWxhdGl2ZQ0KICBzY2llbmNlLCBidXQgaXRzIGFwcGxpY2F0aW9uIGlzIGZydXN0cmF0ZWQgYnkgcHVibGljYXRpb24gYmlhcy4gSW4gb3JkZXIgdG8NCiAgdGVzdCBhbmQgYWRqdXN0IGZvciBwdWJsaWNhdGlvbiBiaWFzLCB3ZSBleHRlbmQgbW9kZWwtYXZlcmFnZWQgQmF5ZXNpYW4NCiAgbWV0YS1hbmFseXNpcyB3aXRoIHNlbGVjdGlvbiBtb2RlbHMuIFRoZSByZXN1bHRpbmcgcm9idXN0IEJheWVzaWFuDQogIG1ldGEtYW5hbHlzaXMgKFJvQk1BKSBtZXRob2RvbG9neSBkb2VzIG5vdCByZXF1aXJlIGFsbC1vci1ub25lIGRlY2lzaW9ucyBhYm91dA0KICB0aGUgcHJlc2VuY2Ugb2YgcHVibGljYXRpb24gYmlhcywgY2FuIHF1YW50aWZ5IGV2aWRlbmNlIGluIGZhdm9yIG9mIHRoZQ0KICBhYnNlbmNlIG9mIHB1YmxpY2F0aW9uIGJpYXMsIGFuZCBwZXJmb3JtcyB3ZWxsIHVuZGVyIGhpZ2ggaGV0ZXJvZ2VuZWl0eS4gQnkNCiAgbW9kZWwtYXZlcmFnaW5nIG92ZXIgYSBzZXQgb2YgMTIgbW9kZWxzLCBSb0JNQSBpcyByZWxhdGl2ZWx5IHJvYnVzdCB0byBtb2RlbA0KICBtaXNzcGVjaWZpY2F0aW9uIGFuZCBzaW11bGF0aW9ucyBzaG93IHRoYXQgaXQgb3V0cGVyZm9ybXMgZXhpc3RpbmcgbWV0aG9kcy4gV2UNCiAgZGVtb25zdHJhdGUgdGhhdCBSb0JNQSBmaW5kcyBldmlkZW5jZSBmb3IgdGhlIGFic2VuY2Ugb2YgcHVibGljYXRpb24gYmlhcyBpbg0KICBSZWdpc3RlcmVkIFJlcGxpY2F0aW9uIFJlcG9ydHMgYW5kIHJlbGlhYmx5IGF2b2lkcyBmYWxzZSBwb3NpdGl2ZXMuIFdlIHByb3ZpZGUNCiAgYW4gaW1wbGVtZW50YXRpb24gaW4gUiBzbyB0aGF0IHJlc2VhcmNoZXJzIGNhbiBlYXNpbHkgdXNlIHRoZSBuZXcgbWV0aG9kb2xvZ3kNCiAgaW4gcHJhY3RpY2UuIChQc3ljSW5mbyBEYXRhYmFzZSBSZWNvcmQgKGMpIDIwMjMgQVBBLCBhbGwgcmlnaHRzIHJlc2VydmVkKS59LA0KICB1cmwgPSB7aHR0cHM6Ly9wc3ljbmV0LmFwYS5vcmcvcmVjb3JkLzIwMjItNjI1NTItMDAxfSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBBUlRJQ0xFe0d1YW4yMDE2LWtuLA0KICB0aXRsZSA9IHtBIEJheWVzaWFuIGFwcHJvYWNoIHRvIG1pdGlnYXRpb24gb2YgcHVibGljYXRpb24gYmlhc30sDQogIGF1dGhvciA9IHtHdWFuLCBNYWltZSBhbmQgVmFuZGVrZXJja2hvdmUsIEpvYWNoaW19LA0KICBqb3VybmFsdGl0bGUgPSB7UHN5Y2hvbm9taWMgYnVsbGV0aW4gXCYgcmV2aWV3fSwNCiAgdm9sdW1lID0gezIzfSwNCiAgaXNzdWUgPSB7MX0sDQogIHBhZ2VzID0gezc0LTg2fSwNCiAgZGF0ZSA9IHsyMDE2LTAyfSwNCiAgZG9pID0gezEwLjM3NTgvczEzNDIzLTAxNS0wODY4LTZ9LA0KICBwbWlkID0gezI2MTI2Nzc2fSwNCiAgaXNzbiA9IHsxMDY5LTkzODQsMTUzMS01MzIwfSwNCiAgYWJzdHJhY3QgPSB7VGhlIHJlbGlhYmlsaXR5IG9mIHB1Ymxpc2hlZCByZXNlYXJjaCBmaW5kaW5ncyBpbiBwc3ljaG9sb2d5IGhhcw0KICBiZWVuIGEgdG9waWMgb2YgcmlzaW5nIGNvbmNlcm4uIFB1YmxpY2F0aW9uIGJpYXMsIG9yIHRyZWF0aW5nIHBvc2l0aXZlDQogIGZpbmRpbmdzIGRpZmZlcmVudGx5IGZyb20gbmVnYXRpdmUgZmluZGluZ3MsIGlzIGEgY29udHJpYnV0aW5nIGZhY3RvciB0byB0aGlzDQogICJjcmlzaXMgb2YgY29uZmlkZW5jZSwiIGluIHRoYXQgaXQgbGlrZWx5IGluZmxhdGVzIHRoZSBudW1iZXIgb2YNCiAgZmFsc2UtcG9zaXRpdmUgZWZmZWN0cyBpbiB0aGUgbGl0ZXJhdHVyZS4gV2UgZGVtb25zdHJhdGUgYSBCYXllc2lhbiBtb2RlbA0KICBhdmVyYWdpbmcgYXBwcm9hY2ggdGhhdCB0YWtlcyBpbnRvIGFjY291bnQgdGhlIHBvc3NpYmlsaXR5IG9mIHB1YmxpY2F0aW9uIGJpYXMNCiAgYW5kIGFsbG93cyBmb3IgYSBiZXR0ZXIgZXN0aW1hdGUgb2YgdHJ1ZSB1bmRlcmx5aW5nIGVmZmVjdCBzaXplLiBBY2NvdW50aW5nDQogIGZvciB0aGUgcG9zc2liaWxpdHkgb2YgYmlhcyBsZWFkcyB0byBhIG1vcmUgY29uc2VydmF0aXZlIGludGVycHJldGF0aW9uIG9mDQogIHB1Ymxpc2hlZCBzdHVkaWVzIGFzIHdlbGwgYXMgbWV0YS1hbmFseXNlcy4gV2UgcHJvdmlkZSBtYXRoZW1hdGljYWwgZGV0YWlscyBvZg0KICB0aGUgbWV0aG9kIGFuZCBleGFtcGxlcy59LA0KICB1cmwgPSB7aHR0cDovL2R4LmRvaS5vcmcvMTAuMzc1OC9zMTM0MjMtMDE1LTA4NjgtNn0sDQogIGtleXdvcmRzID0ge0JheWVzaWFuIGluZmVyZW5jZSBhbmQgcGFyYW1ldGVyIGVzdGltYXRpb247IEJheWVzaWFuIHN0YXRpc3RpY3M7DQogIE1hdGggbW9kZWxpbmcgYW5kIG1vZGVsIHNlbGVjdGlvbjsgTWV0YS1hbmFseXNpcztCYXllc2lhbiBTdGF0aXN0aWNzfSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBCT09Le0hhcnJlcjIwMjEtZ28sDQogIHRpdGxlID0ge0RvaW5nIG1ldGEtYW5hbHlzaXMgd2l0aCBSOiBBIGhhbmRzLW9uIGd1aWRlfSwNCiAgYXV0aG9yID0ge0hhcnJlciwgTWF0aGlhcyBhbmQgQ3VpanBlcnMsIFBpbSBhbmQgRnVydWthd2EsIFRvc2hpIGFuZCBFYmVydCwNCiAgRGF2aWR9LA0KICBwdWJsaXNoZXIgPSB7Q1JDIFByZXNzfSwNCiAgbG9jYXRpb24gPSB7TG9uZG9uLCBFbmdsYW5kfSwNCiAgZWRpdGlvbiA9IHsxc3R9LA0KICBkYXRlID0gezIwMjEtMDktMTN9LA0KICBwYWdldG90YWwgPSB7NDc0fSwNCiAgaXNibiA9IHs5NzgwMzY3NjEwMDc0fSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBBUlRJQ0xFe0R1dmFsMjAwMC15bSwNCiAgdGl0bGUgPSB7VHJpbSBhbmQgZmlsbDogQSBzaW1wbGUgZnVubmVsLXBsb3QtYmFzZWQgbWV0aG9kIG9mIHRlc3RpbmcgYW5kDQogIGFkanVzdGluZyBmb3IgcHVibGljYXRpb24gYmlhcyBpbiBtZXRhLWFuYWx5c2lzfSwNCiAgYXV0aG9yID0ge0R1dmFsLCBTIGFuZCBUd2VlZGllLCBSfSwNCiAgam91cm5hbHRpdGxlID0ge0Jpb21ldHJpY3N9LA0KICBwdWJsaXNoZXIgPSB7V2lsZXl9LA0KICB2b2x1bWUgPSB7NTZ9LA0KICBpc3N1ZSA9IHsyfSwNCiAgcGFnZXMgPSB7NDU1LTQ2M30sDQogIGRhdGUgPSB7MjAwMC0wNn0sDQogIGRvaSA9IHsxMC4xMTExL2ouMDAwNi0zNDF4LjIwMDAuMDA0NTUueH0sDQogIHBtaWQgPSB7MTA4NzczMDR9LA0KICBpc3NuID0gezAwMDYtMzQxWCwxNTQxLTA0MjB9LA0KICBhYnN0cmFjdCA9IHtXZSBzdHVkeSByZWNlbnRseSBkZXZlbG9wZWQgbm9ucGFyYW1ldHJpYyBtZXRob2RzIGZvciBlc3RpbWF0aW5nDQogIHRoZSBudW1iZXIgb2YgbWlzc2luZyBzdHVkaWVzIHRoYXQgbWlnaHQgZXhpc3QgaW4gYSBtZXRhLWFuYWx5c2lzIGFuZCB0aGUNCiAgZWZmZWN0IHRoYXQgdGhlc2Ugc3R1ZGllcyBtaWdodCBoYXZlIGhhZCBvbiBpdHMgb3V0Y29tZS4gVGhlc2UgYXJlIHNpbXBsZQ0KICByYW5rLWJhc2VkIGRhdGEgYXVnbWVudGF0aW9uIHRlY2huaXF1ZXMsIHdoaWNoIGZvcm1hbGl6ZSB0aGUgdXNlIG9mIGZ1bm5lbA0KICBwbG90cy4gV2Ugc2hvdyB0aGF0IHRoZXkgcHJvdmlkZSBlZmZlY3RpdmUgYW5kIHJlbGF0aXZlbHkgcG93ZXJmdWwgdGVzdHMgZm9yDQogIGV2YWx1YXRpbmcgdGhlIGV4aXN0ZW5jZSBvZiBzdWNoIHB1YmxpY2F0aW9uIGJpYXMuIEFmdGVyIGFkanVzdGluZyBmb3IgbWlzc2luZw0KICBzdHVkaWVzLCB3ZSBmaW5kIHRoYXQgdGhlIHBvaW50IGVzdGltYXRlIG9mIHRoZSBvdmVyYWxsIGVmZmVjdCBzaXplIGlzDQogIGFwcHJveGltYXRlbHkgY29ycmVjdCBhbmQgY292ZXJhZ2Ugb2YgdGhlIGVmZmVjdCBzaXplIGNvbmZpZGVuY2UgaW50ZXJ2YWxzIGlzDQogIHN1YnN0YW50aWFsbHkgaW1wcm92ZWQsIGluIG1hbnkgY2FzZXMgcmVjb3ZlcmluZyB0aGUgbm9taW5hbCBjb25maWRlbmNlIGxldmVscw0KICBlbnRpcmVseS4gV2UgaWxsdXN0cmF0ZSB0aGUgdHJpbSBhbmQgZmlsbCBtZXRob2Qgb24gZXhpc3RpbmcgbWV0YS1hbmFseXNlcyBvZg0KICBzdHVkaWVzIGluIGNsaW5pY2FsIHRyaWFscyBhbmQgcHN5Y2hvbWV0cmljcy59LA0KICB1cmwgPSB7aHR0cHM6Ly9vbmxpbmVsaWJyYXJ5LndpbGV5LmNvbS9kb2kvMTAuMTExMS9qLjAwMDYtMzQxWC4yMDAwLjAwNDU1Lnh9LA0KICBrZXl3b3JkcyA9IHtNZXRhLWFuYWx5c2lzfSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCkBBUlRJQ0xFe1ZldmVhMjAwNS14YywNCiAgdGl0bGUgPSB7UHVibGljYXRpb24gYmlhcyBpbiByZXNlYXJjaCBzeW50aGVzaXM6IHNlbnNpdGl2aXR5IGFuYWx5c2lzIHVzaW5nIGENCiAgcHJpb3JpIHdlaWdodCBmdW5jdGlvbnN9LA0KICBhdXRob3IgPSB7VmV2ZWEsIEphY2sgTCBhbmQgV29vZHMsIENhcm9sIE19LA0KICBqb3VybmFsdGl0bGUgPSB7UHN5Y2hvbG9naWNhbCBtZXRob2RzfSwNCiAgcHVibGlzaGVyID0ge0FtZXJpY2FuIFBzeWNob2xvZ2ljYWwgQXNzb2NpYXRpb24gKEFQQSl9LA0KICB2b2x1bWUgPSB7MTB9LA0KICBpc3N1ZSA9IHs0fSwNCiAgcGFnZXMgPSB7NDI4LTQ0M30sDQogIGRhdGUgPSB7MjAwNS0xMn0sDQogIGRvaSA9IHsxMC4xMDM3LzEwODItOTg5WC4xMC40LjQyOH0sDQogIHBtaWQgPSB7MTYzOTI5OTh9LA0KICBpc3NuID0gezEwODItOTg5WCwxOTM5LTE0NjN9LA0KICBhYnN0cmFjdCA9IHtQdWJsaWNhdGlvbiBiaWFzLCBzb21ldGltZXMga25vd24gYXMgdGhlICJmaWxlLWRyYXdlciBwcm9ibGVtIiBvcg0KICAiZnVubmVsLXBsb3QgYXN5bW1ldHJ5LCIgaXMgY29tbW9uIGluIGVtcGlyaWNhbCByZXNlYXJjaC4gVGhlIGF1dGhvcnMgcmV2aWV3DQogIHRoZSBpbXBsaWNhdGlvbnMgb2YgcHVibGljYXRpb24gYmlhcyBmb3IgcXVhbnRpdGF0aXZlIHJlc2VhcmNoIHN5bnRoZXNpcw0KICAobWV0YS1hbmFseXNpcykgYW5kIGRlc2NyaWJlIGV4aXN0aW5nIHRlY2huaXF1ZXMgZm9yIGRldGVjdGluZyBhbmQgY29ycmVjdGluZw0KICBpdC4gQSBuZXcgYXBwcm9hY2ggaXMgcHJvcG9zZWQgdGhhdCBpcyBzdWl0YWJsZSBmb3IgYXBwbGljYXRpb24gdG8NCiAgbWV0YS1hbmFseXRpYyBkYXRhIHNldHMgdGhhdCBhcmUgdG9vIHNtYWxsIGZvciB0aGUgYXBwbGljYXRpb24gb2YgZXhpc3RpbmcNCiAgbWV0aG9kcy4gVGhlIG1vZGVsIGVzdGltYXRlcyBwYXJhbWV0ZXJzIHJlbGV2YW50IHRvIGZpeGVkLWVmZmVjdHMsDQogIG1peGVkLWVmZmVjdHMgb3IgcmFuZG9tLWVmZmVjdHMgbWV0YS1hbmFseXNpcyBjb250aW5nZW50IG9uIGEgaHlwb3RoZXRpY2FsDQogIHBhdHRlcm4gb2YgYmlhcyB0aGF0IGlzIGZpeGVkIGluZGVwZW5kZW50bHkgb2YgdGhlIGRhdGEuIFRoZSBhdXRob3JzDQogIGlsbHVzdHJhdGUgdGhpcyBhcHByb2FjaCBmb3Igc2Vuc2l0aXZpdHkgYW5hbHlzaXMgdXNpbmcgMyBkYXRhIHNldHMgYWRhcHRlZA0KICBmcm9tIGEgY29tbW9ubHkgY2l0ZWQgcmVmZXJlbmNlIHdvcmsgb24gcmVzZWFyY2ggc3ludGhlc2lzIChILiBNLiBDb29wZXIgXCYgTC4NCiAgVi4gSGVkZ2VzLCAxOTk0KS59LA0KICB1cmwgPSB7aHR0cHM6Ly9wc3ljbmV0LmFwYS5vcmcvcmVjb3JkLzIwMDUtMTYxMzYtMDA2fSwNCiAgdXJsZGF0ZSA9IHsyMDI0LTAyLTAzfSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCg==" download="refs_to_download.bib"> Download .bib file</a></button>
+</h2>
+<p>::: {#refs} :::s</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">

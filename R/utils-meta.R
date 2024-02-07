@@ -91,6 +91,7 @@ all_rma <- function(fit){
   return(fitl)
 }
 
+# summarise an rma model
 summary_rma <- function(x,
                         b = "intrcpt",
                         extra_params = NULL) {
@@ -133,6 +134,7 @@ summary_rma <- function(x,
   return(out)
 }
 
+# compare two rma objects, similar to car::compareCoefs()
 compare_rma <- function(..., fitlist = NULL, b = "intrcpt", extra_params = NULL) {
   if(!is.null(fitlist)){
     fits <- fitlist
@@ -151,6 +153,7 @@ compare_rma <- function(..., fitlist = NULL, b = "intrcpt", extra_params = NULL)
   out
 }
 
+# plot an egger regression line above a funnel plot
 plot_regtest <- function(fit, main = "", ...){
   reg <- regtest(fit, ...)
   funnel(fit, refline = 0, main = main)
@@ -158,14 +161,17 @@ plot_regtest <- function(fit, main = "", ...){
   lines(coef(reg$fit)[1] + coef(reg$fit)[2]*se, se, lwd=3, col = "firebrick")
 }
 
+# negative-exponential selection function
 wnegexp <- function(p, delta = 0, ...){
   exp((-delta) * p)
 }
 
+# step selection function
 wstep <- function(p, delta, steps, ...){
   delta[findInterval(p, steps) + 1]
 }
 
+# simulate a (biased) dataset according to a selection model
 sim_biased_studies <- function(k, 
                                es, 
                                tau2 = 0, 
@@ -220,6 +226,7 @@ sim_biased_studies <- function(k,
   
 }
 
+# analytical power analysis
 power_meta <- function(es, k, tau2 = 0, n1, n2 = NULL, alpha = 0.05){
   if(is.null(n2)) n2 <- n1
   zc <- qnorm(1 - alpha/2)

@@ -36,8 +36,8 @@ summary {
   color: blue!important;
 }
 
-aside {
-  font-size: 50%!important;
+.reveal aside {
+  font-size: 80%!important;
 }
 
 .reveal h1 {
@@ -88,6 +88,15 @@ p code:not(.sourceCode){
 
 code {
   font-size: 80%;
+}
+
+code:not(.sourceCode){
+  font-size:70%;
+  background: #e5e5e5;
+  color: black;
+  border-radius: 1ch;
+  padding-block: 0.2ch;
+  padding-inline: 1ch;
 }
 
 /* PANELSET */

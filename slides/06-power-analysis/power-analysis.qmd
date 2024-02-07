@@ -6,18 +6,27 @@ title: "Power analysis"
 #| label: setup
 #| include: false
 
+# packages
 library(tidyverse)
 library(patchwork)
 library(metafor)
 library(here)
 devtools::load_all()
+
+# ggplot theme
+theme_set(mtheme())
+
+# objects
+imgs <- readRDS(here("slides", "03-meta-analysis-models", "objects", "r-imgs.rds"))
+
+# bibtex file
+filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
 ```
 
 ```{r}
+#| label: functions
 #| include: false
 funs <- read_all_funs()
-
-filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
 ```
 
 # Statistical Power {.section}
@@ -599,7 +608,7 @@ A special type of multilab studies are the replication projects. There are some 
 - @Schauer2023-yn
 - @Hedges2019-ry
 
-## References
+## References `r link_refs()` {.refs}
 
 ::: {#refs}
 :::

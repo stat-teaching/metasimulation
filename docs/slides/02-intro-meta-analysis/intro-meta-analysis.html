@@ -421,7 +421,7 @@
 <section id="title-slide" class="center"><h1 class="title">Introduction to Meta-Analysis</h1>
   <p class="author">Filippo Gambarota</p>
   <p class="author">Gianmarco Altoè</p>
-  <p class="institute">Department of Developmental Psychology and Socialization, University of Padova</p>
+  <p class="institute">University of Padova</p>
   <p class="date">08 February 2024</p>
 </section><section><section id="meta-analysis" class="title-slide slide level1 section center"><h1>Meta-analysis</h1>
 
@@ -460,13 +460,13 @@
 </ol></section><section id="unstandardized-effect-sizes" class="slide level2"><h2>Unstandardized effect sizes</h2>
 <p>The basic idea of an effect size is just using the raw measure. For example studies using reaction times we can calculate the difference between two conditions as <span class="math inline">\(\overline X_1 - \overline X_2\)</span>:</p>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section><section id="unstandardized-effect-sizes-1" class="slide level2"><h2>Unstandardized effect sizes</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="unstandardized-effect-sizes-1" class="slide level2"><h2>Unstandardized effect sizes</h2>
 <p>But another study (with the same research question) could use another measure, e.g., accuracy. We can still (not the best strategy but) compute the difference between the group means.</p>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section><section id="unstandardized-effect-sizes-2" class="slide level2"><h2>Unstandardized effect sizes</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="unstandardized-effect-sizes-2" class="slide level2"><h2>Unstandardized effect sizes</h2>
 <p>Clearly we cannot directly compare the two effects but we need to standardize the measure.</p>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section><section id="standardized-effect-sizes" class="slide level2"><h2>Standardized effect sizes</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-5-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="standardized-effect-sizes" class="slide level2"><h2>Standardized effect sizes</h2>
 <p>To compare results from different studies, we should use a common metric. Frequently meta-analysts use <em>standardized</em> effect sizes. For example the Pearson correlation or the Cohen’s <span class="math inline">\(d\)</span>.</p>
 <p><span id="eq-correlation"><span class="math display">\[
 r = \frac{\sum{(x_i - \bar{x})(y_i - \bar{y})}}{\sqrt{\sum{(x_i - \bar{x})^2}\sum{(y_i - \bar{y})^2}}}
@@ -479,7 +479,7 @@ s_p = \sqrt{\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}
 \]</span></p>
 </section><section id="standardized-effect-sizes-1" class="slide level2"><h2>Standardized effect sizes</h2>
 <p>The advantage of standardized effect size is that regardless the original variable, the interpretation and the scale is the same. For example the pearson correlation ranges between -1 and 1 and the Cohen’s <span class="math inline">\(d\)</span> between <span class="math inline">\(- \infty\)</span> and <span class="math inline">\(\infty\)</span> and is interpreted as how many standard deviations the two groups/conditions differs.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">mvrnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, <span class="va">S</span>, empirical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -496,7 +496,7 @@ s_p = \sqrt{\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section><section id="standardized-vs-unstandardized" class="slide level2"><h2>Standardized vs unstandardized</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="standardized-vs-unstandardized" class="slide level2"><h2>Standardized vs unstandardized</h2>
 <p>The main difference is (usually) the absence of a effect-size-variance relationship for unstandardized effects. For example, the variance of the difference between two groups is:</p>
 <p><span id="eq-var-umd"><span class="math display">\[
 V_d = \frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}
@@ -507,7 +507,7 @@ V_d = \frac{n_1 + n_2}{n_1 n_2} + \frac{d^2}{2(n_1 + n_2)}
 \]</span></p>
 </section><section id="standardized-vs-unstandardized-1" class="slide level2"><h2>Standardized vs unstandardized</h2>
 <p>In this <a href="https://www.jepusto.com/alternative-formulas-for-the-smd/">amazing blog post</a> James Pustejovsky explained where the equations comes from. Basically, the <span class="math inline">\(\frac{n_1 + n_2}{n_1 n_2}\)</span> term is the same as the <span class="math inline">\(\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}\)</span> while the extra <span class="math inline">\(\frac{d^2}{2(n_1 + n_2)}\)</span> is for the non-centrality induced by the standardized difference.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0.001</span><span class="op">)</span></span>
 <span></span>
@@ -523,7 +523,7 @@ V_d = \frac{n_1 + n_2}{n_1 n_2} + \frac{d^2}{2(n_1 + n_2)}
 <span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section><section id="sec-effsize-se" class="slide level2"><h2>Effect size sampling variability</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="sec-effsize-se" class="slide level2"><h2>Effect size sampling variability</h2>
 <p>Crucially, we can calculate also the <strong>sampling variability</strong> of each effect size. The <strong>sampling variability</strong> is the precision of estimated value.</p>
 <p>For example, there are multiple methods to estimate the Cohen’s <span class="math inline">\(d\)</span> sampling variability. For example:</p>
 <p><span class="math display">\[
@@ -533,8 +533,8 @@ V_d = \frac{n_1 + n_2}{n_1 n_2} + \frac{d^2}{2(n_1 + n_2)}
 </section><section id="effect-size-sampling-variability" class="slide level2"><h2>Effect size sampling variability</h2>
 <p>As the sample size grows and tends to infinity, the sampling variability approach zero.</p>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section><section id="unstandardized-effect-sizes-3" class="slide level2"><h2>Unstandardized effect sizes</h2>
-<p>For the examples and plots I’m going to use simulated data. We simulate <em>unstandardized</em> effect sizes (UMD) because the computations are easier and the estimator is unbiased <span class="citation" data-cites="Viechtbauer2005-zt">(e.g., <a href="#/references" role="doc-biblioref" onclick="">Viechtbauer 2005</a>)</span></p>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="unstandardized-effect-sizes-3" class="slide level2"><h2>Unstandardized effect sizes</h2>
+<p>For the examples and plots I’m going to use simulated data. We simulate <em>unstandardized</em> effect sizes (UMD) because the computations are easier and the estimator is unbiased <span class="citation" data-cites="Viechtbauer2005-zt">(e.g., <a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Viechtbauer 2005</a>)</span></p>
 <p>More specifically we simulate hypothetical studies where two independent groups are compared:</p>
 <p><span id="eq-umd"><span class="math display">\[
 \Delta = \overline{X_1} - \overline{X_2}
@@ -548,7 +548,7 @@ SE_{\Delta} = \sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}
 
 </section><section id="simulating-a-single-study---umd" class="slide level2"><h2>Simulating a single study - UMD</h2>
 <p>To simulate a single study using a UMD we need to generate data according to the appropriate model. Here we have a difference between two groups. We can assume that the two groups comes from a normal distribution where group 1 <span class="math inline">\(g_1 \sim \mathcal{N}(0, 1)\)</span> and group 2 <span class="math inline">\(g_2 \sim \mathcal{N}(D, 1)\)</span> where <span class="math inline">\(D\)</span> is the effect size. Then using Equations <a href="#/standardized-vs-unstandardized" class="quarto-xref">2</a>, <a href="#/unstandardized-effect-sizes-3" class="quarto-xref">3</a> we can estimate the effect size and the variance.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fl">1</span>  <span class="co"># effect size</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">50</span> <span class="co"># sample size</span></span>
 <span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -556,15 +556,15 @@ SE_{\Delta} = \sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}
 <span></span>
 <span><span class="co"># effect size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.695263</span></span>
+<span><span class="co">#&gt; [1] 0.7230639</span></span>
 <span></span>
 <span><span class="co"># variance</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span><span class="op">/</span><span class="va">n</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">g2</span><span class="op">)</span><span class="op">/</span><span class="va">n</span></span>
-<span><span class="co">#&gt; [1] 0.04379183</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] 0.03975529</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-a-single-study---umd-1" class="slide level2"><h2>Simulating a single study - UMD</h2>
 <p>For simplicity we can wrap everything within a function:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># default sd = 1</span></span>
 <span><span class="va">sim_umd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n1</span>, <span class="va">n2</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">D</span>, <span class="va">sd</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">n2</span><span class="op">)</span><span class="op">)</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="va">n1</span> <span class="co"># same to n1 if null </span></span>
@@ -577,33 +577,33 @@ SE_{\Delta} = \sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}
 <span></span>
 <span><span class="fu">sim_umd</span><span class="op">(</span><span class="fl">100</span>, D <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          yi         vi</span></span>
-<span><span class="co">#&gt; 1 0.4440109 0.01986912</span></span>
+<span><span class="co">#&gt; 1 0.3541436 0.01977615</span></span>
 <span><span class="fu">sim_umd</span><span class="op">(</span><span class="fl">50</span>, D <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          yi         vi</span></span>
-<span><span class="co">#&gt; 1 0.2991465 0.03883357</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt;           yi         vi</span></span>
+<span><span class="co">#&gt; 1 0.04009586 0.03548816</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-a-single-study---umd-2" class="slide level2"><h2>Simulating a single study - UMD</h2>
 <p>We can also generate a large number of studies and check the distribution of effect size and sampling variances. Note that the real <span class="math inline">\(D = 1\)</span> and the real variance <span class="math inline">\(V_D = 1/50 + 1/50 = 0.04\)</span></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">studies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fu">sim_umd</span><span class="op">(</span>n1 <span class="op">=</span> <span class="fl">50</span>, D <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># simplify = FALSE return a list</span></span>
 <span><span class="va">studies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">studies</span><span class="op">)</span> <span class="co"># to dataframe</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">studies</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;          yi         vi
-#&gt; 1 0.9060168 0.03516543
-#&gt; 2 1.1107438 0.04084593
-#&gt; 3 0.9574151 0.04207529
-#&gt; 4 0.9132999 0.03967006
-#&gt; 5 1.1120462 0.03253532
-#&gt; 6 1.1651496 0.03577494</code></pre>
+#&gt; 1 1.2324889 0.04765695
+#&gt; 2 0.8783156 0.04946772
+#&gt; 3 0.9322944 0.04464114
+#&gt; 4 1.0089275 0.04884973
+#&gt; 5 1.0454451 0.06256715
+#&gt; 6 1.0781383 0.03647883</code></pre>
 </div>
 </div>
 </section><section id="sec-umd-sampling-distribution" class="slide level2"><h2>Simulating a single study - UMD</h2>
 <p>Then we can plot the sampling distributions:</p>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section><section id="simulating-a-single-study---smd" class="slide level2"><h2>Simulating a single study - SMD</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-a-single-study---smd" class="slide level2"><h2>Simulating a single study - SMD</h2>
 <p>The idea is the same when simulating a SDM but we need extra steps. Let’s adjust the previous function:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sim_smd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n1</span>, <span class="va">n2</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">D</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">n2</span><span class="op">)</span><span class="op">)</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="va">n1</span> <span class="co"># same to n1 if null </span></span>
 <span>  <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -621,7 +621,7 @@ SE_{\Delta} = \sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-a-single-study---smd-1" class="slide level2"><h2>Simulating a single study - SMD</h2>
-<p>When working with SMD, calculating the sampling variance can be challenging. <span class="citation" data-cites="Veroniki2016-nw">Veroniki et al. (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span> identified 16 different estimators with different properties. Furthermore, it is a common practice to correct the SDM effect and variance using the Hedges’s correction <span class="citation" data-cites="Hedges1989-ip">(<a href="#/references" role="doc-biblioref" onclick="">Hedges 1989</a>)</span>.</p>
+<p>When working with SMD, calculating the sampling variance can be challenging. <span class="citation" data-cites="Veroniki2016-nw">Veroniki et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2016</a>)</span> identified 16 different estimators with different properties. Furthermore, it is a common practice to correct the SDM effect and variance using the Hedges’s correction <span class="citation" data-cites="Hedges1989-ip">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Hedges 1989</a>)</span>.</p>
 <p>You can directly implement another equation for the sampling variance or the Hedges’s correction directly in the simulation function.</p>
 </section><section id="simulating-a-single-study---pearson-rho" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
@@ -632,7 +632,7 @@ V_{r} = \frac{(1 - r^2)^2}{n - 1}
 </section><section id="simulating-a-single-study---pearson-rho-1" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
 <p>There is a huge dependency between <span class="math inline">\(r\)</span> and it’s sampling variance (similar to the Cohen’s <span class="math inline">\(d\)</span>):</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span></span>
 <span><span class="va">v</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">r</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> </span>
@@ -640,7 +640,7 @@ V_{r} = \frac{(1 - r^2)^2}{n - 1}
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">v</span>, type <span class="op">=</span> <span class="st">"l"</span>, main <span class="op">=</span> <span class="st">"N = 50"</span>, xlab <span class="op">=</span> <span class="st">"r"</span>, ylab <span class="op">=</span> <span class="fu">latex2exp</span><span class="fu">::</span><span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html">TeX</a></span><span class="op">(</span><span class="st">"$V_r$"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section><section id="simulating-a-single-study---pearson-rho-2" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-a-single-study---pearson-rho-2" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
 <p>For this reason the so-called Fisher’s <span class="math inline">\(z\)</span> transformation is used to stabilize the relationship.</p>
 <p><span class="math display">\[
@@ -653,7 +653,7 @@ V_z = \frac{1}{n - 3}
 </section><section id="simulating-a-single-study---pearson-rho-3" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
 <p>This is the relationship between <span class="math inline">\(r\)</span> and <span class="math inline">\(z\)</span>:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span></span>
 <span><span class="va">v</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">r</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> </span>
@@ -662,10 +662,10 @@ V_z = \frac{1}{n - 3}
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">r</span>, type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Fisher's z"</span>, ylab <span class="op">=</span> <span class="st">"Correlation"</span>, main <span class="op">=</span> <span class="st">"Correlation to Fisher's z"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section><section id="simulating-a-single-study---pearson-rho-4" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-a-single-study---pearson-rho-4" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
 <p>To simulate a study using correlations we can use the <code><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">MASS::mvrnorm()</a></code> function that can generate correlated data from a multivariate normal distribution.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sim_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">r</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R</span> <span class="op">&lt;-</span> <span class="va">r</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">r</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># 2 x 2 correlation matrix</span></span>
 <span>  <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">mvrnorm</a></span><span class="op">(</span><span class="va">n</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, Sigma <span class="op">=</span> <span class="va">R</span><span class="op">)</span> <span class="co"># the means are not relevant here</span></span>
@@ -678,31 +678,31 @@ V_z = \frac{1}{n - 3}
 </div>
 </section><section id="simulating-a-single-study---pearson-rho-5" class="slide level2"><h2>Simulating a single study - Pearson <span class="math inline">\(\rho\)</span>
 </h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sim_r</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          yi         vi         r          vr</span></span>
-<span><span class="co">#&gt; 1 0.5252601 0.01030928 0.4817496 0.005956536</span></span>
+<span><span class="co">#&gt;          yi         vi        r         vr</span></span>
+<span><span class="co">#&gt; 1 0.5157097 0.01030928 0.474382 0.00606632</span></span>
 <span><span class="fu">sim_r</span><span class="op">(</span><span class="fl">50</span>, <span class="fl">0.8</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          yi        vi         r          vr</span></span>
-<span><span class="co">#&gt; 1 0.8690961 0.0212766 0.7009146 0.005281526</span></span>
+<span><span class="co">#&gt;         yi        vi         r          vr</span></span>
+<span><span class="co">#&gt; 1 1.154219 0.0212766 0.8191468 0.002208979</span></span>
 <span></span>
 <span><span class="co"># also here the sampling distributions</span></span>
 <span><span class="va">studies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fu">sim_r</span><span class="op">(</span><span class="fl">50</span>, <span class="fl">0.7</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">studies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">studies</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">studies</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        yi               vi                r                vr           </span></span>
-<span><span class="co">#&gt;  Min.   :0.4457   Min.   :0.02128   Min.   :0.4184   Min.   :0.0008931  </span></span>
-<span><span class="co">#&gt;  1st Qu.:0.7804   1st Qu.:0.02128   1st Qu.:0.6529   1st Qu.:0.0039468  </span></span>
-<span><span class="co">#&gt;  Median :0.8713   Median :0.02128   Median :0.7020   Median :0.0052491  </span></span>
-<span><span class="co">#&gt;  Mean   :0.8753   Mean   :0.02128   Mean   :0.6969   Mean   :0.0054887  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:0.9695   3rd Qu.:0.02128   3rd Qu.:0.7485   3rd Qu.:0.0067171  </span></span>
-<span><span class="co">#&gt;  Max.   :1.4184   Max.   :0.02128   Max.   :0.8893   Max.   :0.0138887</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt;        yi               vi                r                vr          </span></span>
+<span><span class="co">#&gt;  Min.   :0.2762   Min.   :0.02128   Min.   :0.2693   Min.   :0.001297  </span></span>
+<span><span class="co">#&gt;  1st Qu.:0.7795   1st Qu.:0.02128   1st Qu.:0.6524   1st Qu.:0.003975  </span></span>
+<span><span class="co">#&gt;  Median :0.8775   Median :0.02128   Median :0.7052   Median :0.005158  </span></span>
+<span><span class="co">#&gt;  Mean   :0.8721   Mean   :0.02128   Mean   :0.6951   Mean   :0.005538  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:0.9671   3rd Qu.:0.02128   3rd Qu.:0.7474   3rd Qu.:0.006732  </span></span>
+<span><span class="co">#&gt;  Max.   :1.3121   Max.   :0.02128   Max.   :0.8648   Max.   :0.017555</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="more-on-effect-sizes" class="slide level2"><h2>More on effect sizes</h2>
 <p>The same logic can be applied to any situation. Just understand the data generation process, find the effect size equations and generate data.</p>
 <ul>
 <li>
-<span class="citation" data-cites="Borenstein2009-mo">Borenstein et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> for all effect sizes equations. Also with equations to convert among effect sizes (useful in real-world meta-analyses)<br>
+<span class="citation" data-cites="Borenstein2009-mo">Borenstein et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2009</a>)</span> for all effect sizes equations. Also with equations to convert among effect sizes (useful in real-world meta-analyses)<br>
 </li>
 <li>the <a href="https://wviechtb.github.io/metafor/reference/escalc.html"><code>metafor::escalc()</code></a> function implements basically any effect size. You can see also the <a href="https://github.com/wviechtb/metafor/blob/master/R/escalc.r">source code</a> to see the actual R implementation.</li>
 <li>
@@ -724,25 +724,27 @@ y_i \sim \mathcal{N}(\theta, \sqrt{\sigma^2_i})
 \]</span></p>
 <p>In this way we can sample <span class="math inline">\(k\)</span> effects and sampling variances directly from the sampling distributions. Without generating data and then aggregate.</p>
 </section><section id="simulating-from-sampling-distributions-extra-2" class="slide level2"><h2>Simulating from sampling distributions [#extra]</h2>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section><section id="simulating-from-sampling-distributions-extra-3" class="slide level2"><h2>Simulating from sampling distributions [#extra]</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sim_k_umd</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10</span>, D <span class="op">=</span> <span class="fl">0.5</span>, n1 <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           yi         vi</span></span>
-<span><span class="co">#&gt; 1  0.5615220 0.03199241</span></span>
-<span><span class="co">#&gt; 2  0.7090879 0.04072495</span></span>
-<span><span class="co">#&gt; 3  0.8747290 0.03782992</span></span>
-<span><span class="co">#&gt; 4  0.2622071 0.03611184</span></span>
-<span><span class="co">#&gt; 5  0.4817906 0.04983232</span></span>
-<span><span class="co">#&gt; 6  0.4679578 0.04102855</span></span>
-<span><span class="co">#&gt; 7  0.6137022 0.04066401</span></span>
-<span><span class="co">#&gt; 8  0.9425488 0.03873986</span></span>
-<span><span class="co">#&gt; 9  0.2264550 0.04888571</span></span>
-<span><span class="co">#&gt; 10 0.5514893 0.04518130</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; 1  0.3460315 0.03923051</span></span>
+<span><span class="co">#&gt; 2  0.3504835 0.02986473</span></span>
+<span><span class="co">#&gt; 3  0.7170081 0.03699552</span></span>
+<span><span class="co">#&gt; 4  0.8983855 0.03887867</span></span>
+<span><span class="co">#&gt; 5  0.4421066 0.04717938</span></span>
+<span><span class="co">#&gt; 6  0.3080571 0.02615308</span></span>
+<span><span class="co">#&gt; 7  0.5303050 0.03172290</span></span>
+<span><span class="co">#&gt; 8  0.7152342 0.03387656</span></span>
+<span><span class="co">#&gt; 9  0.5377599 0.03969165</span></span>
+<span><span class="co">#&gt; 10 0.6297485 0.04765138</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-from-sampling-distributions-extra-4" class="slide level2"><h2>Simulating from sampling distributions [#extra]</h2>
 <p>We can compare the two methods and see that we are sampling from the same data generation process.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
 <span><span class="va">s_umd</span> <span class="op">&lt;-</span> <span class="fu">sim_k_umd</span><span class="op">(</span><span class="va">k</span>, D <span class="op">=</span> <span class="fl">1</span>, n1 <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="va">ip_umd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="va">k</span>, <span class="fu">sim_umd</span><span class="op">(</span>n1 <span class="op">=</span> <span class="fl">50</span>, D <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -750,9 +752,9 @@ y_i \sim \mathcal{N}(\theta, \sqrt{\sigma^2_i})
 </details>
 </div>
 
-<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section><section id="simulating-from-sampling-distributions-extra-5" class="slide level2"><h2>Simulating from sampling distributions [#extra]</h2>
+<img data-src="intro-meta-analysis_files/figure-revealjs/unnamed-chunk-21-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="simulating-from-sampling-distributions-extra-5" class="slide level2"><h2>Simulating from sampling distributions [#extra]</h2>
 <p>The actual advantage is in terms of computational speed. To simulate <span class="math inline">\(k = 10\)</span> studies for 1000 times (similar to a standard Monte Carlo simulation):</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bench</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span></span>
 <span>  sampling <span class="op">=</span> <span class="fu">sim_k_umd</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10</span>, n1 <span class="op">=</span> <span class="fl">50</span>, D <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu">sim_umd</span><span class="op">(</span>n1 <span class="op">=</span> <span class="fl">50</span>, D <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -760,16 +762,15 @@ y_i \sim \mathcal{N}(\theta, \sqrt{\sigma^2_i})
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">(</span><span class="va">bench</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">bench</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          expr    min      lq      mean  median      uq     max neval cld</span></span>
-<span><span class="co">#&gt; 1    sampling  210.0  230.60  329.8967  246.05  265.95  8290.4  1000  a </span></span>
-<span><span class="co">#&gt; 2 participant 2664.8 2818.95 3929.7974 2994.50 4703.85 24229.1  1000   b</span></span>
+<span><span class="co">#&gt;          expr    min      lq      mean median      uq    max neval cld</span></span>
+<span><span class="co">#&gt; 1    sampling  209.0  223.90  278.0305  238.3  255.40 4110.4  1000  a </span></span>
+<span><span class="co">#&gt; 2 participant 2738.4 2873.25 3401.6251 2990.6 3694.85 8249.0  1000   b</span></span>
 <span></span>
 <span><span class="va">bench</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="va">bench</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="co"># faster</span></span>
-<span><span class="co">#&gt; [1] 11.91221</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] 12.23472</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="references" class="slide level2 smaller scrollable"><h2>References</h2>
-
-
+</section><section id="references-download-.bib-file" class="slide level2 refs smaller scrollable"><h2>References <button class="btn"><i class="fa fa-download"></i><a href="data:text/x-bibtex;base64,QEFSVElDTEV7VmllY2h0YmF1ZXIyMDA1LXp0LA0KICB0aXRsZSA9IHtCaWFzIGFuZCBlZmZpY2llbmN5IG9mIG1ldGEtYW5hbHl0aWMgdmFyaWFuY2UgZXN0aW1hdG9ycyBpbiB0aGUNCiAgcmFuZG9tLWVmZmVjdHMgbW9kZWx9LA0KICBhdXRob3IgPSB7VmllY2h0YmF1ZXIsIFdvbGZnYW5nfSwNCiAgam91cm5hbHRpdGxlID0ge0pvdXJuYWwgb2YgZWR1Y2F0aW9uYWwgYW5kIGJlaGF2aW9yYWwgc3RhdGlzdGljczogYSBxdWFydGVybHkNCiAgcHVibGljYXRpb24gc3BvbnNvcmVkIGJ5IHRoZSBBbWVyaWNhbiBFZHVjYXRpb25hbCBSZXNlYXJjaCBBc3NvY2lhdGlvbiBhbmQgdGhlDQogIEFtZXJpY2FuIFN0YXRpc3RpY2FsIEFzc29jaWF0aW9ufSwNCiAgcHVibGlzaGVyID0ge0FtZXJpY2FuIEVkdWNhdGlvbmFsIFJlc2VhcmNoIEFzc29jaWF0aW9uIChBRVJBKX0sDQogIHZvbHVtZSA9IHszMH0sDQogIGlzc3VlID0gezN9LA0KICBwYWdlcyA9IHsyNjEtMjkzfSwNCiAgZGF0ZSA9IHsyMDA1LTA5fSwNCiAgZG9pID0gezEwLjMxMDIvMTA3Njk5ODYwMzAwMDMyNjF9LA0KICBpc3NuID0gezEwNzYtOTk4NiwxOTM1LTEwNTR9LA0KICBhYnN0cmFjdCA9IHtUaGUgbWV0YS1hbmFseXRpYyByYW5kb20gZWZmZWN0cyBtb2RlbCBhc3N1bWVzIHRoYXQgdGhlDQogIHZhcmlhYmlsaXR5IGluIGVmZmVjdCBzaXplIGVzdGltYXRlcyBkcmF3biBmcm9tIGEgc2V0IG9mIHN0dWRpZXMgY2FuIGJlDQogIGRlY29tcG9zZWQgaW50byB0d28gcGFydHM6IGhldGVyb2dlbmVpdHkgZHVlIHRvIHJhbmRvbSBwb3B1bGF0aW9uIGVmZmVjdHMgYW5kDQogIHNhbXBsaW5nIHZhcmlhbmNlLiBJbiB0aGlzIGNvbnRleHQsIHRoZSB1c3VhbCBnb2FsIGlzIHRvIGVzdGltYXRlIHRoZSBjZW50cmFsDQogIHRlbmRlbmN5IGFuZCB0aGUgYW1vdW50IG9mIGhldGVyb2dlbmVpdHkgaW4gdGhlIHBvcHVsYXRpb24gZWZmZWN0IHNpemVzLiBUaGUNCiAgYW1vdW50IG9mIGhldGVyb2dlbmVpdHkgaW4gYSBzZXQgb2YgZWZmZWN0IHNpemVzIGhhcyBpbXBsaWNhdGlvbnMgcmVnYXJkaW5nDQogIHRoZSBpbnRlcnByZXRhdGlvbiBvZiB0aGUgbWV0YS1hbmFseXRpYyBmaW5kaW5ncyBhbmQgb2Z0ZW4gc2VydmVzIGFzIGFuDQogIGluZGljYXRvciBmb3IgdGhlIHByZXNlbmNlIG9mIHBvdGVudGlhbCBtb2RlcmF0b3IgdmFyaWFibGVzLiBGaXZlIHBvcHVsYXRpb24NCiAgaGV0ZXJvZ2VuZWl0eSBlc3RpbWF0b3JzIHdlcmUgY29tcGFyZWQgaW4gdGhpcyBhcnRpY2xlIGFuYWx5dGljYWxseSBhbmQgdmlhDQogIE1vbnRlIENhcmxvIHNpbXVsYXRpb25zIHdpdGggcmVzcGVjdCB0byB0aGVpciBiaWFzIGFuZCBlZmZpY2llbmN5Ln0sDQogIHVybCA9IHtodHRwczovL3NjaG9sYXIuZ29vZ2xlLmNvbS9jaXRhdGlvbnM/dmlld19vcD12aWV3X2NpdGF0aW9uJmhsPWVuJnVzZXI9Sjg5UlhKa0FBQUFKJmNpdGF0aW9uX2Zvcl92aWV3PUo4OVJYSmtBQUFBSjpxak1ha0ZIRHk3c0N9LA0KICBsYW5ndWFnZSA9IHtlbn0NCn0NCg0KQEFSVElDTEV7VmVyb25pa2kyMDE2LW53LA0KICB0aXRsZSA9IHtNZXRob2RzIHRvIGVzdGltYXRlIHRoZSBiZXR3ZWVuLXN0dWR5IHZhcmlhbmNlIGFuZCBpdHMgdW5jZXJ0YWludHkgaW4NCiAgbWV0YS1hbmFseXNpc30sDQogIGF1dGhvciA9IHtWZXJvbmlraSwgQXJldGkgQW5nZWxpa2kgYW5kIEphY2tzb24sIERhbiBhbmQgVmllY2h0YmF1ZXIsIFdvbGZnYW5nDQogIGFuZCBCZW5kZXIsIFJhbGYgYW5kIEJvd2RlbiwgSmFjayBhbmQgS25hcHAsIEd1aWRvIGFuZCBLdXNzLCBPbGl2ZXIgYW5kDQogIEhpZ2dpbnMsIEp1bGlhbiBQIFQgYW5kIExhbmdhbiwgRGVhbiBhbmQgU2FsYW50aSwgR2VvcmdpYX0sDQogIGpvdXJuYWx0aXRsZSA9IHtSZXNlYXJjaCBzeW50aGVzaXMgbWV0aG9kc30sDQogIHB1Ymxpc2hlciA9IHtXaWxleX0sDQogIHZvbHVtZSA9IHs3fSwNCiAgaXNzdWUgPSB7MX0sDQogIHBhZ2VzID0gezU1LTc5fSwNCiAgZGF0ZSA9IHsyMDE2LTAzfSwNCiAgZG9pID0gezEwLjEwMDIvanJzbS4xMTY0fSwNCiAgcG1jID0ge1BNQzQ5NTAwMzB9LA0KICBwbWlkID0gezI2MzMyMTQ0fSwNCiAgaXNzbiA9IHsxNzU5LTI4NzksMTc1OS0yODg3fSwNCiAgYWJzdHJhY3QgPSB7TWV0YS1hbmFseXNlcyBhcmUgdHlwaWNhbGx5IHVzZWQgdG8gZXN0aW1hdGUgdGhlIG92ZXJhbGwvbWVhbiBvZg0KICBhbiBvdXRjb21lIG9mIGludGVyZXN0LiBIb3dldmVyLCBpbmZlcmVuY2UgYWJvdXQgYmV0d2Vlbi1zdHVkeSB2YXJpYWJpbGl0eSwNCiAgd2hpY2ggaXMgdHlwaWNhbGx5IG1vZGVsbGVkIHVzaW5nIGEgYmV0d2Vlbi1zdHVkeSB2YXJpYW5jZSBwYXJhbWV0ZXIsIGlzDQogIHVzdWFsbHkgYW4gYWRkaXRpb25hbCBhaW0uIFRoZSBEZXJTaW1vbmlhbiBhbmQgTGFpcmQgbWV0aG9kLCBjdXJyZW50bHkgd2lkZWx5DQogIHVzZWQgYnkgZGVmYXVsdCB0byBlc3RpbWF0ZSB0aGUgYmV0d2Vlbi1zdHVkeSB2YXJpYW5jZSwgaGFzIGJlZW4gbG9uZw0KICBjaGFsbGVuZ2VkLiBPdXIgYWltIGlzIHRvIGlkZW50aWZ5IGtub3duIG1ldGhvZHMgZm9yIGVzdGltYXRpb24gb2YgdGhlDQogIGJldHdlZW4tc3R1ZHkgdmFyaWFuY2UgYW5kIGl0cyBjb3JyZXNwb25kaW5nIHVuY2VydGFpbnR5LCBhbmQgdG8gc3VtbWFyaXNlIHRoZQ0KICBzaW11bGF0aW9uIGFuZCBlbXBpcmljYWwgZXZpZGVuY2UgdGhhdCBjb21wYXJlcyB0aGVtLiBXZSBpZGVudGlmaWVkIDE2DQogIGVzdGltYXRvcnMgZm9yIHRoZSBiZXR3ZWVuLXN0dWR5IHZhcmlhbmNlLCBzZXZlbiBtZXRob2RzIHRvIGNhbGN1bGF0ZQ0KICBjb25maWRlbmNlIGludGVydmFscywgYW5kIHNldmVyYWwgY29tcGFyYXRpdmUgc3R1ZGllcy4gU2ltdWxhdGlvbiBzdHVkaWVzDQogIHN1Z2dlc3QgdGhhdCBmb3IgYm90aCBkaWNob3RvbW91cyBhbmQgY29udGludW91cyBkYXRhIHRoZSBlc3RpbWF0b3IgcHJvcG9zZWQNCiAgYnkgUGF1bGUgYW5kIE1hbmRlbCBhbmQgZm9yIGNvbnRpbnVvdXMgZGF0YSB0aGUgcmVzdHJpY3RlZCBtYXhpbXVtIGxpa2VsaWhvb2QNCiAgZXN0aW1hdG9yIGFyZSBiZXR0ZXIgYWx0ZXJuYXRpdmVzIHRvIGVzdGltYXRlIHRoZSBiZXR3ZWVuLXN0dWR5IHZhcmlhbmNlLg0KICBCYXNlZCBvbiB0aGUgc2NlbmFyaW9zIGFuZCByZXN1bHRzIHByZXNlbnRlZCBpbiB0aGUgcHVibGlzaGVkIHN0dWRpZXMsIHdlDQogIHJlY29tbWVuZCB0aGUgUS1wcm9maWxlIG1ldGhvZCBhbmQgdGhlIGFsdGVybmF0aXZlIGFwcHJvYWNoIGJhc2VkIG9uIGENCiAgJ2dlbmVyYWxpc2VkIENvY2hyYW4gYmV0d2Vlbi1zdHVkeSB2YXJpYW5jZSBzdGF0aXN0aWMnIHRvIGNvbXB1dGUNCiAgY29ycmVzcG9uZGluZyBjb25maWRlbmNlIGludGVydmFscyBhcm91bmQgdGhlIHJlc3VsdGluZyBlc3RpbWF0ZXMuIE91cg0KICByZWNvbW1lbmRhdGlvbnMgYXJlIGJhc2VkIG9uIGEgcXVhbGl0YXRpdmUgZXZhbHVhdGlvbiBvZiB0aGUgZXhpc3RpbmcNCiAgbGl0ZXJhdHVyZSBhbmQgZXhwZXJ0IGNvbnNlbnN1cy4gRXZpZGVuY2UtYmFzZWQgcmVjb21tZW5kYXRpb25zIHJlcXVpcmUgYW4NCiAgZXh0ZW5zaXZlIHNpbXVsYXRpb24gc3R1ZHkgd2hlcmUgYWxsIG1ldGhvZHMgd291bGQgYmUgY29tcGFyZWQgdW5kZXIgdGhlIHNhbWUNCiAgc2NlbmFyaW9zLn0sDQogIHVybCA9IHtodHRwczovL29ubGluZWxpYnJhcnkud2lsZXkuY29tL2RvaS8xMC4xMDAyL2pyc20uMTE2NH0sDQogIGZpbGUgPSB7VmVyb25pa2kgZXQgYWwuIDIwMTYgLSBNZXRob2RzIHRvIGVzdGltYXRlIHRoZSBiZXR3ZWVuLXN0dWR5IHZhcmlhbmNlIGFuZCBpdHMgdW5jZXJ0YWludHkgaW4gbWV0YS1hbmFseXNpcy5wZGZ9LA0KICBrZXl3b3JkcyA9IHtiaWFzOyBjb25maWRlbmNlIGludGVydmFsOyBjb3ZlcmFnZSBwcm9iYWJpbGl0eTsgaGV0ZXJvZ2VuZWl0eTsNCiAgbWVhbiBzcXVhcmVkIGVycm9yO01BIENvZGluZ30sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQpATUlTQ3tCb3JlbnN0ZWluMjAwOS1tbywNCiAgdGl0bGUgPSB7SW50cm9kdWN0aW9uIHRvIHtNZXRhLUFuYWx5c2lzfX0sDQogIGF1dGhvciA9IHtCb3JlbnN0ZWluLCBNaWNoYWVsIGFuZCBIZWRnZXMsIExhcnJ5IFYgYW5kIEhpZ2dpbnMsIEp1bGlhbiBQIFQgYW5kDQogIFJvdGhzdGVpbiwgSGFubmFoIFJ9LA0KICBkYXRlID0gezIwMDl9LA0KICBkb2kgPSB7MTAuMTAwMi85NzgwNDcwNzQzMzg2fSwNCiAgdXJsID0ge2h0dHA6Ly9keC5kb2kub3JnLzEwLjEwMDIvOTc4MDQ3MDc0MzM4Nn0sDQogIGtleXdvcmRzID0ge01BIFVuY29uc2Npb3VzIFdNfQ0KfQ0KDQpAQVJUSUNMRXtIZWRnZXMxOTg5LWlwLA0KICB0aXRsZSA9IHtBbiB1bmJpYXNlZCBjb3JyZWN0aW9uIGZvciBzYW1wbGluZyBlcnJvciBpbiB2YWxpZGl0eSBnZW5lcmFsaXphdGlvbg0KICBzdHVkaWVzfSwNCiAgYXV0aG9yID0ge0hlZGdlcywgTGFycnkgVn0sDQogIGpvdXJuYWx0aXRsZSA9IHtUaGUgSm91cm5hbCBvZiBhcHBsaWVkIHBzeWNob2xvZ3l9LA0KICBwdWJsaXNoZXIgPSB7QW1lcmljYW4gUHN5Y2hvbG9naWNhbCBBc3NvY2lhdGlvbiAoQVBBKX0sDQogIHZvbHVtZSA9IHs3NH0sDQogIGlzc3VlID0gezN9LA0KICBwYWdlcyA9IHs0NjktNDc3fSwNCiAgZGF0ZSA9IHsxOTg5LTA2fSwNCiAgZG9pID0gezEwLjEwMzcvMDAyMS05MDEwLjc0LjMuNDY5fSwNCiAgaXNzbiA9IHswMDIxLTkwMTAsMTkzOS0xODU0fSwNCiAgdXJsID0ge2h0dHA6Ly9keC5kb2kub3JnLzEwLjEwMzcvMDAyMS05MDEwLjc0LjMuNDY5fSwNCiAgbGFuZ3VhZ2UgPSB7ZW59DQp9DQoNCg==" download="refs_to_download.bib"> Download .bib file</a></button>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Borenstein2009-mo" class="csl-entry" role="listitem">
 Borenstein, Michael, Larry V Hedges, Julian P T Higgins, and Hannah R Rothstein. 2009. <span>“Introduction to <span>Meta-Analysis</span>.”</span> <a href="https://doi.org/10.1002/9780470743386">https://doi.org/10.1002/9780470743386</a>.
@@ -784,6 +785,8 @@ Veroniki, Areti Angeliki, Dan Jackson, Wolfgang Viechtbauer, Ralf Bender, Jack B
 Viechtbauer, Wolfgang. 2005. <span>“Bias and Efficiency of Meta-Analytic Variance Estimators in the Random-Effects Model.”</span> <em>Journal of Educational and Behavioral Statistics: A Quarterly Publication Sponsored by the American Educational Research Association and the American Statistical Association</em> 30 (September): 261–93. <a href="https://doi.org/10.3102/10769986030003261">https://doi.org/10.3102/10769986030003261</a>.
 </div>
 </div>
+
+
 </section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 

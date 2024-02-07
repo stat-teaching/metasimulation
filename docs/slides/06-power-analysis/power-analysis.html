@@ -421,24 +421,24 @@
 <section id="title-slide" class="center"><h1 class="title">Power analysis</h1>
   <p class="author">Filippo Gambarota</p>
   <p class="author">Gianmarco Altoè</p>
-  <p class="institute">Department of Developmental Psychology and Socialization, University of Padova</p>
+  <p class="institute">University of Padova</p>
   <p class="date">08 February 2024</p>
 </section><section><section id="statistical-power" class="title-slide slide level1 section center"><h1>Statistical Power</h1>
 
 </section><section id="power-in-a-nutshell" class="slide level2"><h2>Power in a nutshell<sup>1</sup>
 </h2>
 <p>The stastistical power is defined as the probability of correctly rejecting the null hypothesis <span class="math inline">\(H_0\)</span>.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
-<figure><p><img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Thanks to https://rpsychologist.com/creating-a-typical-textbook-illustration-of-statistical-power-using-either-ggplot-or-base-graphics</p></li></ol></aside></section><section id="power-in-a-nutshell-1" class="slide level2"><h2>Power in a nutshell</h2>
 <p>For simple designs such as t-test, ANOVA, etc. the power can be computed analytically. For example, let’s find the power of detecting an effect size of <span class="math inline">\(d = 0.5\)</span> with <span class="math inline">\(n1 = n2 = 30\)</span>.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
@@ -458,27 +458,27 @@
 <span></span>
 <span><span class="co"># Calculate power</span></span>
 <span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html">pt</a></span><span class="op">(</span><span class="va">critical_t</span> <span class="op">-</span> <span class="va">non_central_t</span>, <span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">## [1] 0.4741093</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] 0.4741093</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="power-in-a-nutshell-2" class="slide level2"><h2>Power in a nutshell</h2>
 <p>The same can be done using the <code>pwr</code> package:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">power</span> <span class="op">&lt;-</span> <span class="fu">pwr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pwr/man/pwr.t.test.html">pwr.t.test</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n1</span>, d <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="va">power</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##      Two-sample t test power calculation </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##               n = 30</span></span>
-<span><span class="co">##               d = 0.5</span></span>
-<span><span class="co">##       sig.level = 0.05</span></span>
-<span><span class="co">##           power = 0.4778965</span></span>
-<span><span class="co">##     alternative = two.sided</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## NOTE: n is number in *each* group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Two-sample t test power calculation </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;               n = 30</span></span>
+<span><span class="co">#&gt;               d = 0.5</span></span>
+<span><span class="co">#&gt;       sig.level = 0.05</span></span>
+<span><span class="co">#&gt;           power = 0.4778965</span></span>
+<span><span class="co">#&gt;     alternative = two.sided</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; NOTE: n is number in *each* group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="power-in-a-nutshell-3" class="slide level2"><h2>Power in a nutshell</h2>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section><section id="power-by-simulations" class="slide level2"><h2>Power by simulations</h2>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="power-by-simulations" class="slide level2"><h2>Power by simulations</h2>
 <p>Sometimes the analytical solution is not available or we can estimate the power for complex scenarios (missing data, unequal variances, etc.). The general workflow is:</p>
 <ol type="1">
 <li>Generate data under the parametric assumptions</li>
@@ -490,7 +490,7 @@
 <p>For example, the power is the number of p-values lower than <span class="math inline">\(\alpha\)</span> over the total number of simulations.</p>
 </section><section id="power-by-simulations-1" class="slide level2"><h2>Power by simulations</h2>
 <p>Let’s see the previous example using simulations:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsim</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span></span>
@@ -499,16 +499,16 @@
 <span>    <span class="va">p</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;=</span> <span class="va">alpha</span><span class="op">)</span></span>
-<span><span class="co">## [1] 0.479</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] 0.4828</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The estimated value is pretty close to the analytical value.</p>
 </section><section id="what-about-meta-analysis" class="slide level2"><h2>What about meta-analysis</h2>
 <p>Also for meta-analysis we have the two approaches analytical and simulation-based.</p>
 <ul>
-<li>The analytical approach for (intercept-only) random-effects and equal-effects model can be found on <span class="citation" data-cites="Borenstein2009-mo">Borenstein et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> (Chapter 29). See also <span class="citation" data-cites="Valentine2010-aj">Valentine, Pigott, and Rothstein (<a href="#/references" role="doc-biblioref" onclick="">2010</a>)</span> and <span class="citation" data-cites="Hedges2001-ra">L. V. Hedges and Pigott (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span>
+<li>The analytical approach for (intercept-only) random-effects and equal-effects model can be found on <span class="citation" data-cites="Borenstein2009-mo">Borenstein et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2009</a>)</span> (Chapter 29). See also <span class="citation" data-cites="Valentine2010-aj">Valentine, Pigott, and Rothstein (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2010</a>)</span> and <span class="citation" data-cites="Hedges2001-ra">L. V. Hedges and Pigott (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2001</a>)</span>
 </li>
 <li>
-<span class="citation" data-cites="Jackson2017-dv">Jackson and Turner (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> proposed a similar but improved approach</li>
+<span class="citation" data-cites="Jackson2017-dv">Jackson and Turner (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2017</a>)</span> proposed a similar but improved approach</li>
 </ul></section><section id="analytical-approach" class="slide level2"><h2>Analytical approach</h2>
 <p>For the analytical approach we need to make some assumptions:</p>
 <ul>
@@ -532,7 +532,7 @@
 \]</span></p>
 </section><section id="analytical-approach---ee-model-1" class="slide level2"><h2>Analytical approach - EE model</h2>
 <p>For example, a meta-analysis of <span class="math inline">\(k = 15\)</span> studies where each study have a sample size of <span class="math inline">\(n1 = n2 = 20\)</span> (assuming again unstandardized mean difference as effect size):</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.3</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
@@ -540,10 +540,8 @@
 <span><span class="va">vtheta</span> <span class="op">&lt;-</span> <span class="va">vt</span><span class="op">/</span><span class="va">k</span></span>
 <span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="va">theta</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">vtheta</span><span class="op">)</span></span>
 <span><span class="va">zcrit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9183621</code></pre>
-</div>
+<span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.9183621</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Be careful that the EE model is assuming <span class="math inline">\(\tau^2 = 0\)</span> thus is like having a huge study with <span class="math inline">\(k \times n_1\)</span> participants per group.</p>
 </section><section id="analytical-approach---re-model" class="slide level2"><h2>Analytical approach - RE model</h2>
@@ -553,8 +551,8 @@
 \]</span></p>
 <p>The other calculations are the same as the EE model.</p>
 </section><section id="analytical-approach---re-model-1" class="slide level2"><h2>Analytical approach - RE model</h2>
-<div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fl">0.3</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
@@ -562,34 +560,32 @@
 <span><span class="va">vtheta</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">vt</span> <span class="op">+</span> <span class="va">tau2</span><span class="op">)</span><span class="op">/</span><span class="va">k</span></span>
 <span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="va">mu</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">vtheta</span><span class="op">)</span></span>
 <span><span class="va">zcrit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6087795</code></pre>
-</div>
+<span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="va">zcrit</span> <span class="op">-</span> <span class="va">lambda</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.6087795</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The power is reduced because we are considering another source of heterogeneity. Clearly the maximal power of <span class="math inline">\(k\)</span> studies is achieved when <span class="math inline">\(\tau^2 = 0\)</span>. Hypothetically we can increase the power either increasing <span class="math inline">\(k\)</span> (the number of studies) or reducing <span class="math inline">\(\sigma^2_k\)</span> (increasing the number of participants in each study).</p>
 </section><section id="analytical-approach---power-curves" class="slide level2"><h2>Analytical approach - Power curves</h2>
 <p>The most informative approach is plotting the power curves for different values of <span class="math inline">\(\tau^2\)</span>, <span class="math inline">\(\sigma^2_k\)</span> and <span class="math inline">\(\theta\)</span> (or <span class="math inline">\(\mu_{\theta}\)</span>).</p>
 <p>You can use the <code>power_meta()</code> function:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section><section id="analytical-approach---power-curves-1" class="slide level2"><h2>Analytical approach - Power curves</h2>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section><section id="analytical-approach---power-curves-2" class="slide level2"><h2>Analytical approach - Power curves</h2>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="analytical-approach---power-curves-2" class="slide level2"><h2>Analytical approach - Power curves</h2>
 <p>With the analytical approach we can (quickly) do interesting stuff. For example, we fix the total <span class="math inline">\(N = n_1 + n_2\)</span> for a series of <span class="math inline">\(k\)</span> and check the power.</p>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"><p>As long as <span class="math inline">\(\tau^2 \neq 0\)</span> we need more studies (even if the total sample size is the same).</p>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>As long as <span class="math inline">\(\tau^2 \neq 0\)</span> we need more studies (even if the total sample size is the same).</p>
 </section><section id="simulation-based-power" class="slide level2"><h2>Simulation-based power</h2>
 <p>With simulations we can fix or relax the previous assumptions. For example, let’s compute the power for an EE model:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.916</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; [1] 0.932</code></pre>
 </div>
 <p>The value is similar to the analytical simulation. But we can improve it e.g.&nbsp;generating heterogeneous sample sizes.</p>
 </section><section id="simulation-based-power-curve" class="slide level2"><h2>Simulation-based power curve</h2>
 <p>By repeating the previous approach for a series of parameters we can easily draw a power curve:</p>
-<div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">es</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span><span class="op">)</span></span>
 <span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
@@ -611,12 +607,12 @@
 </div>
 </section><section id="simulation-based-power-curve-1" class="slide level2"><h2>Simulation-based power curve</h2>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section><section id="power-analysis-for-meta-regression" class="slide level2"><h2>Power analysis for meta-regression</h2>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="power-analysis-for-meta-regression" class="slide level2"><h2>Power analysis for meta-regression</h2>
 <p>The power for a meta-regression can be easily computed by simulating the moderator effect. For example, let’s simulate the effect of a binary predictor <span class="math inline">\(x\)</span>.</p>
 </section><section id="power-analysis-for-meta-regression-1" class="slide level2"><h2>Power analysis for meta-regression</h2>
 <p>Then we can plot the results:</p>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section></section><section><section id="multilab-studies" class="title-slide slide level1 section center"><h1>Multilab Studies</h1>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section></section><section><section id="multilab-studies" class="title-slide slide level1 section center"><h1>Multilab Studies</h1>
 
 </section><section id="multilab-studies-1" class="slide level2"><h2>Multilab studies</h2>
 <p>Multilab studies can be seen as a meta-analysis that is planned (a <em>prospective</em> meta-analysis) compared to standard <em>retrospective</em> meta-analysis.</p>
@@ -624,8 +620,8 @@
 <p>In multilab studies we have also the raw data (i.e., participant-level data) thus we can do more complex multilevel modeling.</p>
 </section><section id="meta-analysis-as-multilevel-model" class="slide level2"><h2>Meta-analysis as multilevel model</h2>
 <p>Assuming that we have <span class="math inline">\(k\)</span> studies with raw data available there is no need to aggregate, calculate the effect size and variances and then use an EE or RE model.</p>
-<div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">es</span> <span class="op">&lt;-</span> <span class="fl">0.4</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
@@ -641,53 +637,51 @@
 <span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="fu">ht</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
-<span><span class="co">##      id unit          y group</span></span>
-<span><span class="co">## 1     1    1 -0.3527787     0</span></span>
-<span><span class="co">## 2     2    1  0.9250724     0</span></span>
-<span><span class="co">## 3     3    1  0.5655600     0</span></span>
-<span><span class="co">## 4     4    1  0.2058254     0</span></span>
-<span><span class="co">## 5     5    1 -0.3201426     0</span></span>
-<span><span class="co">## 5067 61   50 -0.1537464     1</span></span>
-<span><span class="co">## 5068 62   50  2.1569767     1</span></span>
-<span><span class="co">## 5069 63   50 -0.3760206     1</span></span>
-<span><span class="co">## 5070 64   50  0.2661011     1</span></span>
-<span><span class="co">## 5071 65   50  0.9310069     1</span></span>
-<span><span class="co">## 5072 66   50 -0.5790200     1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt;      id unit           y group</span></span>
+<span><span class="co">#&gt; 1     1    1  0.25351317     0</span></span>
+<span><span class="co">#&gt; 2     2    1  2.21833569     0</span></span>
+<span><span class="co">#&gt; 3     3    1 -1.59512076     0</span></span>
+<span><span class="co">#&gt; 4     4    1 -0.57003152     0</span></span>
+<span><span class="co">#&gt; 5     5    1  0.35994291     0</span></span>
+<span><span class="co">#&gt; 5471 33   50  0.99274994     1</span></span>
+<span><span class="co">#&gt; 5472 34   50  2.81048166     1</span></span>
+<span><span class="co">#&gt; 5473 35   50  2.46494714     1</span></span>
+<span><span class="co">#&gt; 5474 36   50  1.52578306     1</span></span>
+<span><span class="co">#&gt; 5475 37   50  0.70916460     1</span></span>
+<span><span class="co">#&gt; 5476 38   50 -0.07521999     1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="meta-analysis-as-multilevel-model-1" class="slide level2"><h2>Meta-analysis as multilevel model</h2>
 <p>This is a simple <strong>multilevel model</strong> (pupils within classrooms or trials within participants). We can fit the model using <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code>:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Linear mixed model fit by REML ['lmerMod']
-Formula: y ~ group + (1 | unit)
-   Data: dat
-
-REML criterion at convergence: 14915.8
-
-Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--3.4863 -0.6782  0.0043  0.6833  3.5032 
-
-Random effects:
- Groups   Name        Variance Std.Dev.
- unit     (Intercept) 0.04175  0.2043  
- Residual             1.09017  1.0441  
-Number of obs: 5072, groups:  unit, 50
-
-Fixed effects:
-             Estimate Std. Error t value
-(Intercept) -0.009541   0.036159  -0.264
-group        0.428598   0.029322  14.617
-
-Correlation of Fixed Effects:
-      (Intr)
-group -0.405</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; Linear mixed model fit by REML ['lmerMod']
+#&gt; Formula: y ~ group + (1 | unit)
+#&gt;    Data: dat
+#&gt; 
+#&gt; REML criterion at convergence: 15851.7
+#&gt; 
+#&gt; Scaled residuals: 
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -3.8783 -0.6644 -0.0152  0.6603  3.9740 
+#&gt; 
+#&gt; Random effects:
+#&gt;  Groups   Name        Variance Std.Dev.
+#&gt;  unit     (Intercept) 0.01536  0.1239  
+#&gt;  Residual             1.04809  1.0238  
+#&gt; Number of obs: 5476, groups:  unit, 50
+#&gt; 
+#&gt; Fixed effects:
+#&gt;             Estimate Std. Error t value
+#&gt; (Intercept) -0.01519    0.02698  -0.563
+#&gt; group        0.47306    0.02767  17.097
+#&gt; 
+#&gt; Correlation of Fixed Effects:
+#&gt;       (Intr)
+#&gt; group -0.513</code></pre>
 </div>
 </section><section id="meta-analysis-as-multilevel-model-2" class="slide level2"><h2>Meta-analysis as multilevel model</h2>
 <p>Let’s do the same as a meta-analysis. Firstly we compute the effect sizes for each unit:</p>
-<div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">datagg</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">datagg</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">unit</span>, <span class="va">group</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>,</span>
 <span>            sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>,</span>
@@ -697,88 +691,78 @@ group -0.405</code></pre>
 <span><span class="va">datagg</span> <span class="op">&lt;-</span> <span class="fu">escalc</span><span class="op">(</span><span class="st">"MD"</span>, m1i <span class="op">=</span> <span class="va">m1</span>, m2i <span class="op">=</span> <span class="va">m0</span>, sd1i <span class="op">=</span> <span class="va">sd1</span>, sd2i <span class="op">=</span> <span class="va">sd0</span>, n1i <span class="op">=</span> <span class="va">n1</span>, n2i <span class="op">=</span> <span class="va">n0</span>, data <span class="op">=</span> <span class="va">datagg</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="meta-analysis-as-multilevel-model-3" class="slide level2"><h2>Meta-analysis as multilevel model</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   unit           m0           m1       sd0       sd1 n0 n1      yi     vi 
-1     1  0.049965709 -0.004962583 0.9373755 1.0510537 63 63 -0.0549 0.0315 
-2     2  0.090771638  0.485499771 0.9893023 0.9523611 78 78  0.3947 0.0242 
-3     3  0.128519687  0.283088771 1.0111578 0.8513269 53 53  0.1546 0.0330 
-4     4  0.119270070 -0.458742812 1.0337232 1.0412068 57 57 -0.5780 0.0378 
-5     5 -0.118120850  1.150522996 0.9977532 1.3457892 37 37  1.2686 0.0759 
-45   45  0.057973305 -0.026451787 1.0597983 0.9950742 26 26 -0.0844 0.0813 
-46   46 -0.091659519  0.622772286 1.0599128 0.7928472 59 59  0.7144 0.0297 
-47   47  0.008253221 -0.109140947 0.8923834 0.9596149 70 70 -0.1174 0.0245 
-48   48  0.011306010  0.098236489 1.0257345 1.0498893 45 45  0.0869 0.0479 
-49   49 -0.042973407  0.632997457 1.3417626 0.9962859 16 16  0.6760 0.1746 
-50   50 -0.063252249  0.378438493 0.8917357 0.9194668 33 33  0.4417 0.0497 </code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt;    unit          m0        m1       sd0       sd1 n0 n1     yi     vi 
+#&gt; 1     1  0.04832768 0.8352791 1.0415511 1.0081381 51 51 0.7870 0.0412 
+#&gt; 2     2  0.17514842 0.7970731 1.0065334 0.8038306 49 49 0.6219 0.0339 
+#&gt; 3     3 -0.26231701 0.2935666 1.0407124 1.1675311 23 23 0.5559 0.1064 
+#&gt; 4     4 -0.02154628 0.4011219 0.9582875 0.7732307 78 78 0.4227 0.0194 
+#&gt; 5     5 -0.00968915 0.1157841 1.1914665 0.7034426 33 33 0.1255 0.0580 
+#&gt; 45   45 -0.09326319 0.5462242 1.0407688 1.0040196 94 94 0.6395 0.0222 
+#&gt; 46   46 -0.16313667 0.8368845 1.0914930 1.0872035 95 95 1.0000 0.0250 
+#&gt; 47   47  0.01306647 0.1629511 1.1504861 1.1392431 49 49 0.1499 0.0535 
+#&gt; 48   48  0.05309306 0.7589418 1.1088198 1.0849408 97 97 0.7058 0.0248 
+#&gt; 49   49  0.03729666 0.4541249 1.0761246 0.5711910 23 23 0.4168 0.0645 
+#&gt; 50   50  0.13340769 0.9028684 0.9206645 0.8649275 19 19 0.7695 0.0840</code></pre>
 </div>
 </section><section id="meta-analysis-as-multilevel-model-4" class="slide level2"><h2>Meta-analysis as multilevel model</h2>
 <p>Then we can fit the model:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Random-Effects Model (k = 50; tau^2 estimator: REML)
-
-tau^2 (estimated amount of total heterogeneity): 0.1803 (SE = 0.0462)
-tau (square root of estimated tau^2 value):      0.4246
-I^2 (total heterogeneity / total variability):   81.75%
-H^2 (total variability / sampling variability):  5.48
-
-Test for Heterogeneity:
-Q(df = 49) = 288.5404, p-val &lt; .0001
-
-Model Results:
-
-estimate      se    zval    pval   ci.lb   ci.ub      
-  0.4185  0.0679  6.1625  &lt;.0001  0.2854  0.5516  *** 
-
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; 
+#&gt; Random-Effects Model (k = 50; tau^2 estimator: REML)
+#&gt; 
+#&gt; tau^2 (estimated amount of total heterogeneity): 0.0266 (SE = 0.0131)
+#&gt; tau (square root of estimated tau^2 value):      0.1631
+#&gt; I^2 (total heterogeneity / total variability):   41.61%
+#&gt; H^2 (total variability / sampling variability):  1.71
+#&gt; 
+#&gt; Test for Heterogeneity:
+#&gt; Q(df = 49) = 84.5366, p-val = 0.0012
+#&gt; 
+#&gt; Model Results:
+#&gt; 
+#&gt; estimate      se     zval    pval   ci.lb   ci.ub      
+#&gt;   0.4711  0.0370  12.7309  &lt;.0001  0.3986  0.5436  *** 
+#&gt; 
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </section><section id="meta-analysis-as-multilevel-modeling" class="slide level2"><h2>Meta-analysis as multilevel modeling</h2>
 <p>Actually the results are very similar where the standard deviation of the intercepts of the <code>lme4</code> model is <span class="math inline">\(\approx \tau\)</span> and the <code>group</code> effect is the intercept of the <code>rma</code> model.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>              b         se       tau2   model
-group 0.4285978 0.02932156 0.04174759    lme4
-      0.4184767 0.06790661 0.18025386 metafor</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt;               b        se       tau2   model
+#&gt; group 0.4730643 0.0276693 0.01536141    lme4
+#&gt;       0.4710951 0.0370040 0.02660848 metafor</code></pre>
 </div>
 <p>Actually the two model are not exactly the same, especially when using only the aggregated data. See https://www.metafor-project.org/doku.php/tips:rma_vs_lm_lme_lmer.</p>
 </section><section id="meta-analysis-as-multilevel-modeling-1" class="slide level2"><h2>Meta-analysis as multilevel modeling</h2>
 <p>To note, aggregating data and then computing a standard (non-weighted) model (sometimes this is done with trial-level data) is wrong and should be avoided. Using meta-analysis is clear that aggregating without taking into account the cluster (e.g., study or subject) precision is misleading.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Linear mixed model fit by REML ['lmerMod']
-Formula: y ~ group + (1 | unit)
-   Data: dataggl
-
-REML criterion at convergence: 69
-
-Scaled residuals: 
-     Min       1Q   Median       3Q      Max 
--2.83089 -0.44445 -0.00956  0.38240  2.92162 
-
-Random effects:
- Groups   Name        Variance Std.Dev.
- unit     (Intercept) 0.0000   0.0000  
- Residual             0.1093   0.3305  
-Number of obs: 100, groups:  unit, 50
-
-Fixed effects:
-             Estimate Std. Error t value
-(Intercept) -0.004819   0.046746  -0.103
-groupm1      0.411316   0.066109   6.222
-
-Correlation of Fixed Effects:
-        (Intr)
-groupm1 -0.707
-optimizer (nloptwrap) convergence code: 0 (OK)
-boundary (singular) fit: see help('isSingular')</code></pre>
-</div>
+<div class="cell" data-layout-align="center">
+<pre><code>#&gt; Linear mixed model fit by REML ['lmerMod']
+#&gt; Formula: y ~ group + (1 | unit)
+#&gt;    Data: dataggl
+#&gt; 
+#&gt; REML criterion at convergence: -6.2
+#&gt; 
+#&gt; Scaled residuals: 
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -2.5291 -0.4831  0.0060  0.4325  3.7067 
+#&gt; 
+#&gt; Random effects:
+#&gt;  Groups   Name        Variance Std.Dev.
+#&gt;  unit     (Intercept) 0.009927 0.09963 
+#&gt;  Residual             0.041790 0.20443 
+#&gt; Number of obs: 100, groups:  unit, 50
+#&gt; 
+#&gt; Fixed effects:
+#&gt;             Estimate Std. Error t value
+#&gt; (Intercept) -0.02031    0.03216  -0.632
+#&gt; groupm1      0.47465    0.04089  11.609
+#&gt; 
+#&gt; Correlation of Fixed Effects:
+#&gt;         (Intr)
+#&gt; groupm1 -0.636</code></pre>
 </div>
 </section><section id="mulitlab-sample-size-vs-unit" class="slide level2"><h2>Mulitlab sample size vs unit</h2>
 <p>When planning a multilab study there is an important decision between <strong>increasing the sample size within each unit</strong> (more effort for each lab) or <strong>recruiting more units</strong> with less participants per unit (more effort for the organization).</p>
@@ -787,8 +771,8 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 </section><section id="fixed-k-increasing-n" class="slide level2"><h2>Fixed <span class="math inline">\(k\)</span>, increasing <span class="math inline">\(n\)</span>
 </h2>
 <p>Let’s assume that the maximum number of labs is <span class="math inline">\(10\)</span>. How many participants are required assuming a certain amount of heterogeneity?</p>
-<div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">es</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">es</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
 <span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">500</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span><span class="op">)</span></span>
@@ -799,35 +783,36 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 <span><span class="va">sim</span><span class="op">$</span><span class="va">power</span> <span class="op">&lt;-</span> <span class="fu">power_meta</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">es</span>, <span class="va">sim</span><span class="op">$</span><span class="va">k</span>, <span class="va">sim</span><span class="op">$</span><span class="va">tau2</span>, <span class="va">sim</span><span class="op">$</span><span class="va">n1</span>, <span class="va">sim</span><span class="op">$</span><span class="va">n2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ht</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
-<span><span class="co">## # A tibble: 11 × 8</span></span>
-<span><span class="co">##        k    es  tau2    n1    n2      vt    I2 power</span></span>
-<span><span class="co">##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">##  1    10   0.2  0.01    10    10 0.2      4.76 0.281</span></span>
-<span><span class="co">##  2    10   0.2  0.01    20    20 0.1      9.09 0.479</span></span>
-<span><span class="co">##  3    10   0.2  0.01    30    30 0.0667  13.0  0.627</span></span>
-<span><span class="co">##  4    10   0.2  0.01    40    40 0.05    16.7  0.733</span></span>
-<span><span class="co">##  5    10   0.2  0.01    50    50 0.04    20    0.807</span></span>
-<span><span class="co">##  6    10   0.2  0.2    450   450 0.00444 97.8  0.288</span></span>
-<span><span class="co">##  7    10   0.2  0.2    460   460 0.00435 97.9  0.288</span></span>
-<span><span class="co">##  8    10   0.2  0.2    470   470 0.00426 97.9  0.288</span></span>
-<span><span class="co">##  9    10   0.2  0.2    480   480 0.00417 98.0  0.288</span></span>
-<span><span class="co">## 10    10   0.2  0.2    490   490 0.00408 98    0.288</span></span>
-<span><span class="co">## 11    10   0.2  0.2    500   500 0.004   98.0  0.288</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; # A tibble: 11 × 8</span></span>
+<span><span class="co">#&gt;        k    es  tau2    n1    n2      vt    I2 power</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1    10   0.2  0.01    10    10 0.2      4.76 0.281</span></span>
+<span><span class="co">#&gt;  2    10   0.2  0.01    20    20 0.1      9.09 0.479</span></span>
+<span><span class="co">#&gt;  3    10   0.2  0.01    30    30 0.0667  13.0  0.627</span></span>
+<span><span class="co">#&gt;  4    10   0.2  0.01    40    40 0.05    16.7  0.733</span></span>
+<span><span class="co">#&gt;  5    10   0.2  0.01    50    50 0.04    20    0.807</span></span>
+<span><span class="co">#&gt;  6    10   0.2  0.2    450   450 0.00444 97.8  0.288</span></span>
+<span><span class="co">#&gt;  7    10   0.2  0.2    460   460 0.00435 97.9  0.288</span></span>
+<span><span class="co">#&gt;  8    10   0.2  0.2    470   470 0.00426 97.9  0.288</span></span>
+<span><span class="co">#&gt;  9    10   0.2  0.2    480   480 0.00417 98.0  0.288</span></span>
+<span><span class="co">#&gt; 10    10   0.2  0.2    490   490 0.00408 98    0.288</span></span>
+<span><span class="co">#&gt; 11    10   0.2  0.2    500   500 0.004   98.0  0.288</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="fixed-k-increasing-n-1" class="slide level2"><h2>Fixed <span class="math inline">\(k\)</span>, increasing <span class="math inline">\(n\)</span>
 </h2>
 <p>With a fixed <span class="math inline">\(k\)</span>, we could reach a plateau even increasing <span class="math inline">\(n\)</span>. This depends also on <span class="math inline">\(\mu_{\theta}\)</span> and <span class="math inline">\(\tau^2\)</span>.</p>
 
-<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section><section id="multilab-replication-studies" class="slide level2"><h2>Multilab replication studies</h2>
+<img data-src="power-analysis_files/figure-revealjs/unnamed-chunk-26-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="multilab-replication-studies" class="slide level2"><h2>Multilab replication studies</h2>
 <p>A special type of multilab studies are the replication projects. There are some paper discussing how to view replication studies as meta-analyses and how to plan them.</p>
 <ul>
-<li><span class="citation" data-cites="Hedges2021-of">Larry V. Hedges and Schauer (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></li>
-<li><span class="citation" data-cites="Schauer2022-mj">Jacob M. Schauer (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span></li>
-<li><span class="citation" data-cites="Schauer2020-tw">Jacob M. Schauer and Hedges (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></li>
-<li><span class="citation" data-cites="Schauer2021-ja">J. M. Schauer and Hedges (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></li>
-<li><span class="citation" data-cites="Schauer2023-yn">Jacob M. Schauer (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></li>
-<li><span class="citation" data-cites="Hedges2019-ry">Larry V. Hedges and Schauer (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></li>
-</ul></section><section id="references" class="slide level2 smaller scrollable"><h2>References</h2>
+<li><span class="citation" data-cites="Hedges2021-of">Larry V. Hedges and Schauer (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2021</a>)</span></li>
+<li><span class="citation" data-cites="Schauer2022-mj">Jacob M. Schauer (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2022</a>)</span></li>
+<li><span class="citation" data-cites="Schauer2020-tw">Jacob M. Schauer and Hedges (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2020</a>)</span></li>
+<li><span class="citation" data-cites="Schauer2021-ja">J. M. Schauer and Hedges (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2021</a>)</span></li>
+<li><span class="citation" data-cites="Schauer2023-yn">Jacob M. Schauer (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2023</a>)</span></li>
+<li><span class="citation" data-cites="Hedges2019-ry">Larry V. Hedges and Schauer (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2019</a>)</span></li>
+</ul></section><section id="references-download-.bib-file" class="slide level2 refs smaller scrollable"><h2>References <button class="btn"><i class="fa fa-download"></i><a href="data:text/x-bibtex;base64,QEFSVElDTEV7VmFsZW50aW5lMjAxMC1haiwNCiAgdGl0bGUgPSB7SG93IE1hbnkgU3R1ZGllcyBEbyBZb3UgTmVlZD86IEEgUHJpbWVyIG9uIFN0YXRpc3RpY2FsIFBvd2VyIGZvcg0KICB7TWV0YS1BbmFseXNpc319LA0KICBhdXRob3IgPSB7VmFsZW50aW5lLCBKZWZmcmV5IEMgYW5kIFBpZ290dCwgVGhlcmVzZSBEIGFuZCBSb3Roc3RlaW4sIEhhbm5haCBSfSwNCiAgam91cm5hbHRpdGxlID0ge0pvdXJuYWwgb2YgZWR1Y2F0aW9uYWwgYW5kIGJlaGF2aW9yYWwgc3RhdGlzdGljczogYSBxdWFydGVybHkNCiAgcHVibGljYXRpb24gc3BvbnNvcmVkIGJ5IHRoZSBBbWVyaWNhbiBFZHVjYXRpb25hbCBSZXNlYXJjaCBBc3NvY2lhdGlvbiBhbmQgdGhlDQogIEFtZXJpY2FuIFN0YXRpc3RpY2FsIEFzc29jaWF0aW9ufSwNCiAgcHVibGlzaGVyID0ge0FtZXJpY2FuIEVkdWNhdGlvbmFsIFJlc2VhcmNoIEFzc29jaWF0aW9ufSwNCiAgdm9sdW1lID0gezM1fSwNCiAgaXNzdWUgPSB7Mn0sDQogIHBhZ2VzID0gezIxNS0yNDd9LA0KICBkYXRlID0gezIwMTAtMDQtMDF9LA0KICBkb2kgPSB7MTAuMzEwMi8xMDc2OTk4NjA5MzQ2OTYxfSwNCiAgaXNzbiA9IHsxMDc2LTk5ODZ9LA0KICBhYnN0cmFjdCA9IHtJbiB0aGlzIGFydGljbGUsIHRoZSBhdXRob3JzIG91dGxpbmUgbWV0aG9kcyBmb3IgdXNpbmcgZml4ZWQgYW5kDQogIHJhbmRvbSBlZmZlY3RzIHBvd2VyIGFuYWx5c2lzIGluIHRoZSBjb250ZXh0IG9mIG1ldGEtYW5hbHlzaXMuIExpa2UNCiAgc3RhdGlzdGljYWwgcG93ZXIgYW5hbHlzaXMgZm9yIHByaW1hcnkgc3R1ZGllcywgcG93ZXIgYW5hbHlzaXMgZm9yDQogIG1ldGEtYW5hbHlzaXMgY2FuIGJlIGRvbmUgZWl0aGVyIHByb3NwZWN0aXZlbHkgb3IgcmV0cm9zcGVjdGl2ZWx5IGFuZCByZXF1aXJlcw0KICBhc3N1bXB0aW9ucyBhYm91dCBwYXJhbWV0ZXJzIHRoYXQgYXJlIHVua25vd24uIFRoZSBhdXRob3JzIHByb3ZpZGUgc29tZQ0KICBzdWdnZXN0aW9ucyBmb3IgdGhpbmtpbmcgYWJvdXQgdGhlc2UgcGFyYW1ldGVycywgaW4gcGFydGljdWxhciBmb3IgdGhlIHJhbmRvbQ0KICBlZmZlY3RzIHZhcmlhbmNlIGNvbXBvbmVudC4gVGhlIGF1dGhvcnMgYWxzbyBzaG93IGhvdyB0aGUgdHlwaWNhbGx5DQogIHVuaW5mb3JtYXRpdmUgcmV0cm9zcGVjdGl2ZSBwb3dlciBhbmFseXNpcyBjYW4gYmUgbWFkZSBtb3JlIGluZm9ybWF0aXZlLiBUaGUNCiAgYXV0aG9ycyB0aGVuIGRpc2N1c3MgdGhlIHZhbHVlIG9mIGNvbmZpZGVuY2UgaW50ZXJ2YWxzLCBzaG93IGhvdyB0aGV5IGNvdWxkIGJlDQogIHVzZWQgaW4gYWRkaXRpb24gdG8gb3IgaW5zdGVhZCBvZiByZXRyb3NwZWN0aXZlIHBvd2VyIGFuYWx5c2lzLCBhbmQgYWxzbw0KICBkZW1vbnN0cmF0ZSB0aGF0IGNvbmZpZGVuY2UgaW50ZXJ2YWxzIGNhbiBjb252ZXkgaW5mb3JtYXRpb24gbW9yZSBlZmZlY3RpdmVseQ0KICBpbiBzb21lIHNpdHVhdGlvbnMgdGhhbiBwb3dlciBhbmFseXNlcyBhbG9uZS4gRmluYWxseSwgdGhlIGF1dGhvcnMgdGFrZSB1cCB0aGUNCiAgcXVlc3Rpb24gP0hvdyBtYW55IHN0dWRpZXMgZG8geW91IG5lZWQgdG8gZG8gYSBtZXRhLWFuYWx5c2lzPz8gYW5kIHNob3cgdGhhdCwNCiAgZ2l2ZW4gdGhlIG5lZWQgZm9yIGEgY29uY2x1c2lvbiwgdGhlIGFuc3dlciBpcyA/dHdvIHN0dWRpZXMsPyBiZWNhdXNlIGFsbA0KICBvdGhlciBzeW50aGVzaXMgdGVjaG5pcXVlcyBhcmUgbGVzcyB0cmFuc3BhcmVudCBhbmQvb3IgYXJlIGxlc3MgbGlrZWx5IHRvIGJlDQogIHZhbGlkLiBGb3Igc3lzdGVtYXRpYyByZXZpZXdlcnMgd2hvIGNob29zZSBub3QgdG8gY29uZHVjdCBhIHF1YW50aXRhdGl2ZQ0KICBzeW50aGVzaXMsIHRoZSBhdXRob3JzIHByb3ZpZGUgc3VnZ2VzdGlvbnMgZm9yIGJvdGggaGlnaGxpZ2h0aW5nIHRoZSBjdXJyZW50DQogIGxpbWl0YXRpb25zIGluIHRoZSByZXNlYXJjaCBiYXNlIGFuZCBmb3IgZGlzcGxheWluZyB0aGUgY2hhcmFjdGVyaXN0aWNzIGFuZA0KICByZXN1bHRzIG9mIHN0dWRpZXMgdGhhdCB3ZXJlIGZvdW5kIHRvIG1lZXQgaW5jbHVzaW9uIGNyaXRlcmlhLn0sDQogIHVybCA9IHtodHRwczovL2RvaS5vcmcvMTAuMzEwMi8xMDc2OTk4NjA5MzQ2OTYxfSwNCiAgbm90ZSA9IHtkb2k6IDEwLjMxMDIvMTA3Njk5ODYwOTM0Njk2MX0sDQogIGtleXdvcmRzID0ge01BIFVuY29uc2Npb3VzIFdNfQ0KfQ0KDQpATUlTQ3tCb3JlbnN0ZWluMjAwOS1tbywNCiAgdGl0bGUgPSB7SW50cm9kdWN0aW9uIHRvIHtNZXRhLUFuYWx5c2lzfX0sDQogIGF1dGhvciA9IHtCb3JlbnN0ZWluLCBNaWNoYWVsIGFuZCBIZWRnZXMsIExhcnJ5IFYgYW5kIEhpZ2dpbnMsIEp1bGlhbiBQIFQgYW5kDQogIFJvdGhzdGVpbiwgSGFubmFoIFJ9LA0KICBkYXRlID0gezIwMDl9LA0KICBkb2kgPSB7MTAuMTAwMi85NzgwNDcwNzQzMzg2fSwNCiAgdXJsID0ge2h0dHA6Ly9keC5kb2kub3JnLzEwLjEwMDIvOTc4MDQ3MDc0MzM4Nn0sDQogIGtleXdvcmRzID0ge01BIFVuY29uc2Npb3VzIFdNfQ0KfQ0KDQpAQVJUSUNMRXtKYWNrc29uMjAxNy1kdiwNCiAgdGl0bGUgPSB7UG93ZXIgYW5hbHlzaXMgZm9yIHJhbmRvbS1lZmZlY3RzIG1ldGEtYW5hbHlzaXN9LA0KICBhdXRob3IgPSB7SmFja3NvbiwgRGFuIGFuZCBUdXJuZXIsIFJlYmVjY2F9LA0KICBqb3VybmFsdGl0bGUgPSB7UmVzZWFyY2ggc3ludGhlc2lzIG1ldGhvZHN9LA0KICBwdWJsaXNoZXIgPSB7V2lsZXkgT25saW5lIExpYnJhcnl9LA0KICB2b2x1bWUgPSB7OH0sDQogIGlzc3VlID0gezN9LA0KICBwYWdlcyA9IHsyOTAtMzAyfSwNCiAgZGF0ZSA9IHsyMDE3LTA5fSwNCiAgZG9pID0gezEwLjEwMDIvanJzbS4xMjQwfSwNCiAgcG1jID0ge1BNQzU1OTA3MzB9LA0KICBwbWlkID0gezI4Mzc4Mzk1fSwNCiAgaXNzbiA9IHsxNzU5LTI4NzksMTc1OS0yODg3fSwNCiAgYWJzdHJhY3QgPSB7T25lIG9mIHRoZSByZWFzb25zIGZvciB0aGUgcG9wdWxhcml0eSBvZiBtZXRhLWFuYWx5c2lzIGlzIHRoZQ0KICBub3Rpb24gdGhhdCB0aGVzZSBhbmFseXNlcyB3aWxsIHBvc3Nlc3MgbW9yZSBwb3dlciB0byBkZXRlY3QgZWZmZWN0cyB0aGFuDQogIGluZGl2aWR1YWwgc3R1ZGllcy4gVGhpcyBpcyBpbmV2aXRhYmx5IHRoZSBjYXNlIHVuZGVyIGEgZml4ZWQtZWZmZWN0IG1vZGVsLg0KICBIb3dldmVyLCB0aGUgaW5jbHVzaW9uIG9mIHRoZSBiZXR3ZWVuLXN0dWR5IHZhcmlhbmNlIGluIHRoZSByYW5kb20tZWZmZWN0cw0KICBtb2RlbCwgYW5kIHRoZSBuZWVkIHRvIGVzdGltYXRlIHRoaXMgcGFyYW1ldGVyLCBjYW4gaGF2ZSB1bmZvcnR1bmF0ZQ0KICBpbXBsaWNhdGlvbnMgZm9yIHRoaXMgcG93ZXIuIFdlIGRldmVsb3AgbWV0aG9kcyBmb3IgYXNzZXNzaW5nIHRoZSBwb3dlciBvZg0KICByYW5kb20tZWZmZWN0cyBtZXRhLWFuYWx5c2VzLCBhbmQgdGhlIGF2ZXJhZ2UgcG93ZXIgb2YgdGhlIGluZGl2aWR1YWwgc3R1ZGllcw0KICB0aGF0IGNvbnRyaWJ1dGUgdG8gbWV0YS1hbmFseXNlcywgc28gdGhhdCB0aGVzZSBwb3dlcnMgY2FuIGJlIGNvbXBhcmVkLiBJbg0KICBhZGRpdGlvbiB0byBkZXJpdmluZyBuZXcgYW5hbHl0aWNhbCByZXN1bHRzIGFuZCBtZXRob2RzLCB3ZSBhcHBseSBvdXIgbWV0aG9kcw0KICB0byAxOTkxIG1ldGEtYW5hbHlzZXMgdGFrZW4gZnJvbSB0aGUgQ29jaHJhbmUgRGF0YWJhc2Ugb2YgU3lzdGVtYXRpYyBSZXZpZXdzDQogIHRvIHJldHJvc3BlY3RpdmVseSBjYWxjdWxhdGUgdGhlaXIgcG93ZXJzLiBXZSBmaW5kIHRoYXQsIGluIHByYWN0aWNlLCA1IG9yDQogIG1vcmUgc3R1ZGllcyBhcmUgbmVlZGVkIHRvIHJlYXNvbmFibHkgY29uc2lzdGVudGx5IGFjaGlldmUgcG93ZXJzIGZyb20NCiAgcmFuZG9tLWVmZmVjdHMgbWV0YS1hbmFseXNlcyB0aGF0IGFyZSBncmVhdGVyIHRoYW4gdGhlIHN0dWRpZXMgdGhhdCBjb250cmlidXRlDQogIHRvIHRoZW0uIE5vdCBvbmx5IGlzIHN0YXRpc3RpY2FsIGluZmVyZW5jZSB1bmRlciB0aGUgcmFuZG9tLWVmZmVjdHMgbW9kZWwNCiAgY2hhbGxlbmdpbmcgd2hlbiB0aGVyZSBhcmUgdmVyeSBmZXcgc3R1ZGllcyBidXQgYWxzbyBsZXNzIHdvcnRod2hpbGUgaW4gc3VjaA0KICBjYXNlcy4gVGhlIGFzc3VtcHRpb24gdGhhdCBtZXRhLWFuYWx5c2lzIHdpbGwgcmVzdWx0IGluIGFuIGluY3JlYXNlIGluIHBvd2VyDQogIGlzIGNoYWxsZW5nZWQgYnkgb3VyIGZpbmRpbmdzLn0sDQogIHVybCA9IHtodHRwczovL29ubGluZWxpYnJhcnkud2lsZXkuY29tL2RvaS9hYnMvMTAuMTAwMi9qcnNtLjEyNDB9LA0KICBrZXl3b3JkcyA9IHtjb2NocmFuZTsgZW1waXJpY2FsIGV2YWx1YXRpb247IHBvd2VyIGNhbGN1bGF0aW9uczsgcmFuZG9tLWVmZmVjdHMNCiAgbWV0YS1hbmFseXNpc30sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQpAQVJUSUNMRXtIZWRnZXMyMDE5LXJ5LA0KICB0aXRsZSA9IHtTdGF0aXN0aWNhbCBhbmFseXNlcyBmb3Igc3R1ZHlpbmcgcmVwbGljYXRpb246IE1ldGEtYW5hbHl0aWMNCiAgcGVyc3BlY3RpdmVzfSwNCiAgYXV0aG9yID0ge0hlZGdlcywgTGFycnkgViBhbmQgU2NoYXVlciwgSmFjb2IgTX0sDQogIGpvdXJuYWx0aXRsZSA9IHtQc3ljaG9sb2dpY2FsIG1ldGhvZHN9LA0KICBwdWJsaXNoZXIgPSB7QW1lcmljYW4gUHN5Y2hvbG9naWNhbCBBc3NvY2lhdGlvbiAoQVBBKX0sDQogIHZvbHVtZSA9IHsyNH0sDQogIGlzc3VlID0gezV9LA0KICBwYWdlcyA9IHs1NTctNTcwfSwNCiAgZGF0ZSA9IHsyMDE5LTEwfSwNCiAgZG9pID0gezEwLjEwMzcvbWV0MDAwMDE4OX0sDQogIHBtaWQgPSB7MzAwNzA1NDd9LA0KICBpc3NuID0gezEwODItOTg5WCwxOTM5LTE0NjN9LA0KICBhYnN0cmFjdCA9IHtGb3JtYWwgZW1waXJpY2FsIGFzc2Vzc21lbnRzIG9mIHJlcGxpY2F0aW9uIGhhdmUgcmVjZW50bHkgYmVjb21lDQogIG1vcmUgcHJvbWluZW50IGluIHNldmVyYWwgYXJlYXMgb2Ygc2NpZW5jZSwgaW5jbHVkaW5nIHBzeWNob2xvZ3kuIFRoZXNlDQogIGFzc2Vzc21lbnRzIGhhdmUgdXNlZCBkaWZmZXJlbnQgc3RhdGlzdGljYWwgYXBwcm9hY2hlcyB0byBkZXRlcm1pbmUgaWYgYQ0KICBmaW5kaW5nIGhhcyBiZWVuIHJlcGxpY2F0ZWQuIFRoZSBwdXJwb3NlIG9mIHRoaXMgYXJ0aWNsZSBpcyB0byBwcm92aWRlIHNldmVyYWwNCiAgYWx0ZXJuYXRpdmUgY29uY2VwdHVhbCBmcmFtZXdvcmtzIHRoYXQgbGVhZCB0byBkaWZmZXJlbnQgc3RhdGlzdGljYWwgYW5hbHlzZXMNCiAgdG8gdGVzdCBoeXBvdGhlc2VzIGFib3V0IHJlcGxpY2F0aW9uLiBBbGwgb2YgdGhlc2UgYW5hbHlzZXMgYXJlIGJhc2VkIG9uDQogIHN0YXRpc3RpY2FsIG1ldGhvZHMgdXNlZCBpbiBtZXRhLWFuYWx5c2lzLiBUaGUgZGlmZmVyZW5jZXMgYW1vbmcgdGhlIG1ldGhvZHMNCiAgZGVzY3JpYmVkIGludm9sdmUgd2hldGhlciB0aGUgYnVyZGVuIG9mIHByb29mIGlzIHBsYWNlZCBvbiByZXBsaWNhdGlvbiBvcg0KICBub25yZXBsaWNhdGlvbiwgd2hldGhlciByZXBsaWNhdGlvbiBpcyBleGFjdCBvciBhbGxvd3MgZm9yIGEgc21hbGwgYW1vdW50IG9mDQogICJuZWdsaWdpYmxlIGhldGVyb2dlbmVpdHksIiBhbmQgd2hldGhlciB0aGUgc3R1ZGllcyBvYnNlcnZlZCBhcmUgYXNzdW1lZCB0byBiZQ0KICBmaXhlZCAoY29uc3RpdHV0aW5nIHRoZSBlbnRpcmUgYm9keSBvZiByZWxldmFudCBldmlkZW5jZSkgb3IgYXJlIGEgc2FtcGxlIGZyb20NCiAgYSB1bml2ZXJzZSBvZiBwb3NzaWJseSByZWxldmFudCBzdHVkaWVzLiBUaGUgc3RhdGlzdGljYWwgcG93ZXIgb2YgZWFjaCBvZg0KICB0aGVzZSB0ZXN0cyBpcyBjb21wdXRlZCBhbmQgc2hvd24gdG8gYmUgbG93IGluIG1hbnkgY2FzZXMsIHJhaXNpbmcgaXNzdWVzIG9mDQogIHRoZSBpbnRlcnByZXRhYmlsaXR5IG9mIHRlc3RzIGZvciByZXBsaWNhdGlvbi4gKFBzeWNJTkZPIERhdGFiYXNlIFJlY29yZCAoYykNCiAgMjAxOSBBUEEsIGFsbCByaWdodHMgcmVzZXJ2ZWQpLn0sDQogIHVybCA9IHtodHRwOi8vZHguZG9pLm9yZy8xMC4xMDM3L21ldDAwMDAxODl9LA0KICBmaWxlID0ge0hlZGdlcyBhbmQgU2NoYXVlciAyMDE5IC0gU3RhdGlzdGljYWwgYW5hbHlzZXMgZm9yIHN0dWR5aW5nIHJlcGxpY2F0aW9uIC0gTWV0YS1hbmFseXRpYyBwZXJzcGVjdGl2ZXMucGRmfSwNCiAga2V5d29yZHMgPSB7cmVwbGljYXRpb24tbWV0aG9kc30sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQo=" download="refs_to_download.bib"> Download .bib file</a></button>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Borenstein2009-mo" class="csl-entry" role="listitem">
 Borenstein, Michael, Larry V Hedges, Julian P T Higgins, and Hannah R Rothstein. 2009. <span>“Introduction to <span>Meta-Analysis</span>.”</span> <a href="https://doi.org/10.1002/9780470743386">https://doi.org/10.1002/9780470743386</a>.

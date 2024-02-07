@@ -68,3 +68,9 @@ as_tex_label <- function(x, pattern){
   labels <- sprintf(pattern, levels(x))
   factor(x, levels = levels(x), labels = latex2exp::TeX(labels))
 }
+
+mtheme <- function(){
+  theme_minimal(base_size = 15) +
+    theme(legend.position = "bottom",
+          plot.title = element_text(face = "bold"))
+}

@@ -9,12 +9,20 @@ knitr:
 ---
 
 ```{r}
-#| label: packages
+#| label: setup
 #| include: false
 
-devtools::load_all()
-library(ggplot2)
+# packages
+library(tidyverse)
 library(patchwork)
+library(metafor)
+devtools::load_all()
+
+# ggplot theme
+theme_set(mtheme())
+
+# bibtex file
+filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
 ```
 
 ```{r}
@@ -473,8 +481,7 @@ bench <- microbenchmark::microbenchmark(
 bench$mean[2] / bench$mean[1] # faster
 ```
 
-## References
+## References `r link_refs()` {.refs}
 
-
-
-
+::: {#refs}
+:::

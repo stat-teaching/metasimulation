@@ -6,21 +6,33 @@ subtitle: CSA 2024
 ```{r}
 #| label: setup
 #| include: false
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.align = "center",
-                      warning = FALSE,
-                      message = FALSE)
 
+# packages
 library(tidyverse)
 library(patchwork)
+devtools::load_all()
+
+# ggplot theme
+theme_set(mtheme())
+
+# bibtex file
+filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
+```
+
+```{r}
+#| label: functions
+#| include: false
+
+funs <- read_all_funs()
 ```
 
 # Monte Carlo Simulations (MCS) {.section}
 
 ## Monte Carlo Simulations (MCS)
 
-something here
+- MCS are controlled experiments where assuming the data generation process, realistic data can be generated
+- MCS (usually) requires parametric assumptions (e.g., data are generated from a normal distribution). To note that the same parametric assumptions are made by the statistical models
+- MCS allow to estimate the statistical power, evaluate a new statistical methods, understand how a specific model works on some conditions, etc.
 
 # Why MCS are useful? {.section}
 

@@ -7,21 +7,28 @@ subtitle: CSA 2024
 #| label: setup
 #| include: false
 
+# packages
 library(tidyverse)
 library(patchwork)
 library(metafor)
 library(here)
 devtools::load_all()
-```
 
-```{r}
-#| include: false
+# ggplot theme
+theme_set(mtheme())
+
+# objects
 imgs <- readRDS(here("slides", "03-meta-analysis-models", "objects", "r-imgs.rds"))
-funs <- read_all_funs()
 
+# bibtex file
 filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_download.bib")
 ```
 
+```{r}
+#| label: functions
+#| include: false
+funs <- read_all_funs()
+```
 
 # Simulation setup {.section}
 
@@ -966,7 +973,7 @@ predict(fit_t) # notice pi.ub/pi.lb vs ci.ub/ci.lb
 fit_z$b[[1]] + qt(c(0.025, 0.975), k - 2) * sqrt(fit_t$se^2 + fit_t$tau2)
 ```
 
-## References
+## References `r link_refs()` {.refs}
 
 ::: {#refs}
 :::
