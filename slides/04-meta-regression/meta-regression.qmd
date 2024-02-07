@@ -120,6 +120,7 @@ Clearly the difference between $\tau^2$ (the total heterogeneity) and $\tau^2_r$
 To simulate a meta-regression we just need to choose the parameters values ($\beta_0$ and $\beta_1$) and implement @eq-metareg-cat. Using treatment coding, $\beta_0$ is the effect size when $X = 0$ (i.e., lab-based experiments) and $\beta_1$ is the difference between lab and online experiments.
 
 ```{r}
+#| echo: true
 b0 <- 0.3 # lab-based effect size
 b1 <- 0.5 # online - lab-based --> online = b0 + b1
 exp_dummy <- ifelse(exp == "lab", 0, 1) # dummy version
@@ -132,6 +133,7 @@ ht(data.frame(exp, exp_dummy, es))
 Now we can use the `sim_studies()` function as usual. The difference is that `es` is no longer a single value but a vector (with different values according to the $X$ level) and `tau2` is $\tau^2_r$ (this the leftover heterogeneity after including the $X$ effect)
 
 ```{r}
+#| echo: true
 tau2r <- 0.05 # residual heterogeneity
 dat <- sim_studies(k = k, es = es, tau2 = tau2r, n1 = n, add = list(exp = exp))
 ht(dat)
@@ -142,6 +144,8 @@ ht(dat)
 To fit a meta-regression we still use the `metafor::rma()` function, adding the `mods = ~` parameter with the model formula (same as the right-hand side of a `y ~ x` call in `lm`). The name of the predictor in the formula need to match a column of the `data = ` dataframe.
 
 ```{r}
+#| echo: true
+#| collapse: true
 fit <- rma(yi, vi, mods = ~ exp, data = dat, method = "REML")
 summary(fit)
 ```
@@ -162,6 +166,7 @@ The output is similar to the RE model with few additions:
 We can plot the model results using the `metafor::regplot()`^[The functions is made for numerical variables thus is less appropriate for categorical variables].
 
 ```{r}
+#| echo: true
 regplot(fit)
 ```
 
@@ -186,6 +191,13 @@ We can also test any combination of parameters. For example we could test if lab
 #| echo: true
 # now we are testing two coefficients
 fit_no_int <- rma(yi, vi, mods = ~ 0 + exp, data = dat)
+```
+
+## General Linear Hypotheses Testing (GLHT)
+
+```{r}
+#| echo: true
+#| collapse: true
 fit_no_int
 ```
 
@@ -256,6 +268,8 @@ Basically is the percentage of heterogeneity reduction from the intercept-only m
 In R:
 
 ```{r}
+#| echo: true
+#| collapse: true
 (1 - fit$tau2/fit0$tau2)*100
 fit$R2
 ```

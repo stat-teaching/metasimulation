@@ -29,7 +29,7 @@ filor::write_bib_rmd(input_bib = filor::fil()$bib, output_bib = "refs_to_downloa
 #| label: functions
 #| include: false
 
-funs <- read_all_funs()
+funs <- read_all_funs(path = "R/")
 ```
 
 # Meta-analysis {.section}
@@ -58,6 +58,17 @@ Usually a meta-analysis work follows these steps:
 6. **Choose an effect size**: Choose a way to standardize the effect across included studies
 7. **Meta-analysis model**: Choose and implement a meta-analysis model
 8. **Interpret and report results**
+
+## Before the fun part...
+
+::: {.incremental}
+- We are dealing only with the **statistical part**. The study selection, data extraction, studies evaluation etc. is another story
+- The quality of the meta-analysis is the **quality of included studies**
+:::
+
+. . .
+
+![](img/gigo.png){fig-align="center" width=60%}
 
 ## Unstandardized effect sizes
 
@@ -427,10 +438,15 @@ In this way we can sample $k$ effects and sampling variances directly from the s
 
 ## Simulating from sampling distributions [#extra]
 
-```{r}
-#| output: asis
-#| echo: false
-filor::print_fun(funs$sim_k_umd)
+We can again put everything within a function:
+
+```r
+sim_k_umd <- function(k, D, n1, n2 = NULL){
+  if(is.null(n2)) n2 <- n1
+  yi <- rnorm(k, D, sqrt(1/n1 + 1/n2))
+  vi <- (rchisq(k, n1 + n2 - 2) / (n1 + n2 - 2)) * (1/n1 + 1/n2)
+  data.frame(yi, vi)
+}
 ```
 
 ## Simulating from sampling distributions [#extra]

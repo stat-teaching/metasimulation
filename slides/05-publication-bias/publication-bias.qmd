@@ -111,6 +111,9 @@ abline(h = 0.05)
 Then, let's assume that our publishing system is very strict (extreme). You can publish only if $p \leq 0.05$ on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that $P(1|p \leq 0.05) = 1$ and $P(1|p \leq 0.05) = 0$.
 
 ```{r}
+#| echo: true
+#| collapse: true
+
 # selecting
 sign <- dat$pval1 <= 0.05 & dat$zi > 0
 dat_pb <- dat[sign, ]
@@ -119,6 +122,13 @@ dat_un <- dat[sample(1:nrow(dat), sum(sign)), ]
 # fitting EE model for the full vs selected (ignore k differences)
 fit <- rma(yi, vi, method = "EE", data = dat_un)
 fit_pb <- rma(yi, vi, method = "EE", data = dat_pb)
+```
+
+## PB under an EE model
+
+Then, let's assume that our publishing system is very strict (extreme). You can publish only if $p \leq 0.05$ on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that $P(1|p \leq 0.05) = 1$ and $P(1|p \leq 0.05) = 0$.
+
+```{r}
 round(compare_rma(fit, fit_pb), 3)
 ```
 
@@ -160,6 +170,7 @@ What could be the shape of the plot when plotting the precision (e.g., the sampl
 ## PB under an EE model
 
 ```{r}
+#|code-fold: true
 plot(dat$yi, sqrt(dat$vi), ylim=rev(range(dat$vi)), pch = 19, col = scales::alpha("black", 0.5), cex = 1.5)
 abline(v = theta, lwd = 3, col = "firebrick")
 ```
@@ -177,7 +188,7 @@ We created a **funnel plot**. This is a **visual tool** to check the presence of
 The plot assume the typical funnel shape and there are not missing spots on the at the bottom. The presence of missing spots is a potential index of publication bias.
 
 ```{r}
-#| echo: false
+#| code-fold: true
 
 fit <- rma(yi, vi, method = "EE", data = dat)
 dat$pb <- dat$pval <= 0.05
@@ -394,6 +405,8 @@ funnel(fit, col = dat$x + 1)
 Also the methods to detect/correct for PB are committing a false alarm:
 
 ```{r}
+#| echo: true
+#| collapse: true
 regtest(fit)
 ```
 
@@ -402,6 +415,8 @@ regtest(fit)
 Also the methods to detect/correct for PB are committing a false alarm:
 
 ```{r}
+#| echo: true
+#| collapse: true
 trimfill(fit)
 ```
 
@@ -494,7 +509,7 @@ plot(pval, wbeta(pval, 1, 1), type = "l", ylim = c(0, 1), col = 1, lwd = 2,
      xlab = "p value", ylab = "Probability of Publishing")
 lines(pval, wbeta(pval, 1, 2), col = 2, lwd = 2)
 lines(pval, wbeta(pval, 1, 5), col = 3, lwd = 2)
-lines(pval, wbeta(pval, 1, 50), col = 3, lwd = 2)
+lines(pval, wbeta(pval, 1, 50), col = 4, lwd = 2)
 ```
 
 ## SM - Weigth function
@@ -605,6 +620,12 @@ plot(dat$yi, dat$sei, ylim = c(rev(range(dat$sei)[2]), 0), xlim = c(-1, 2))
 Let's see the model result:
 
 ```{r}
+#| eval: false
+fit <- rma(yi, vi, data = dat)
+```
+
+```{r}
+#| include: false
 fit
 ```
 

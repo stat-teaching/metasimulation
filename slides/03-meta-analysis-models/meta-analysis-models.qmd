@@ -1,6 +1,5 @@
 ---
 title: Meta-analysis Models
-subtitle: CSA 2024
 ---
 
 ```{r}
@@ -114,12 +113,18 @@ sim_studies <- function(k, es, n1, n2 = NULL){
 
 ## Simulation setup - Disclaimer
 
-The proposed simulation approach using a `for` loop and separated vectors. For the purposed of the workshop this is the best option. In real-world meta-analysis simulations you can choose a more functional approach starting from a simulation grid as `data.frame` and mapping the simulation functions.
+The proposed simulation approach using a `for` loop and separated vectors. For the purpose of the workshop this is the best option. In real-world meta-analysis simulations you can choose a more functional approach starting from a simulation grid as `data.frame` and mapping the simulation functions.
 
 For some examples see:
 
 - @Gambarota2023-on
 - [www.jepusto.com/simulating-correlated-smds](https://www.jepusto.com/simulating-correlated-smds)
+
+## Simulation setup - Disclaimer
+
+For a more extended overview of the simulation setup we have an entire paper. Supplementary materials ([github.com/shared-research/simulating-meta-analysis](https://github.com/shared-research/simulating-meta-analysis)) contains also more examples for complex (multilevel and multivariate models.)
+
+![](img/gambarota2023.png){fig-align="center"}
 
 # Combining studies {.section}
 
@@ -251,6 +256,7 @@ Where $\sigma^2_i$ is the vector of sampling variabilities of $k$ studies. This 
 
 ```{r}
 #| echo: false
+#| fig-height: 7
 imgs$equal
 ```
 
@@ -273,10 +279,12 @@ dats <- lapply(ns, function(n) sim_studies(10, es = D, n1 = n))
 
 ```{r}
 #| echo: false
+#| fig-width: 15
+#| fig-height: 8
 dats <- lapply(dats, summary)
 plts <- lapply(dats, qforest)
 plts <- lapply(1:length(plts), function(i) plts[[i]] + ggtitle(paste("n1 = n2 =", ns[i])) + geom_vline(xintercept = D))
-cowplot::plot_grid(plotlist = plts)
+cowplot::plot_grid(plotlist = plts, nrow = 1)
 ```
 
 ## Simulating an EE model
@@ -300,6 +308,8 @@ As we did for the aggregated data approach. Clearly we need to simulate also the
 The model can be fitted using the `metafor::rma()` function, with `method = "EE"`^[There is a confusion about the *fixed-effects* vs *fixed-effect* (no *s*) and *equal-effects* models. See [https://wviechtb.github.io/metafor/reference/misc-models.html](https://wviechtb.github.io/metafor/reference/misc-models.html)].
 
 ```{r}
+#| echo: true
+#| collapse: true
 theta <- 0.5
 k <- 15
 n <- 10 + rpois(k, 30 - 10)
@@ -320,6 +330,7 @@ The `metafor` package has a several well documented functions to calculate and p
 ## Interpreting an EE model
 
 ```{r}
+#| echo: true
 plot(fit) # general plots
 ```
 
@@ -328,6 +339,7 @@ plot(fit) # general plots
 The main function for plotting model results is the `forest()` function that produce the forest plot.
 
 ```{r}
+#| echo: true
 forest(fit)
 ```
 
@@ -349,6 +361,7 @@ $$
 
 ```{r}
 #| echo: true
+#| collapse: true
 wi <- 1/dat$vi
 theta_hat <- with(dat, sum(yi * wi)/sum(wi))
 se_theta_hat <- sqrt(1/sum(wi))
@@ -460,10 +473,40 @@ head(dat)
 Again, we can put everything within a function expanding the previous `sim_studies()` by including $\tau^2$:
 
 ```{r}
-#| output: asis
-#| echo: false
-rm(sim_studies) # remove previous function and use the R/utils-meta.R version
-filor::print_fun(funs$sim_studies)
+#| include: false
+rm(sim_studies) # remove previous function and use the R/utils-meta.R
+```
+
+```r
+sim_studies <- function(k, es, tau2 = 0, n1, n2 = NULL, add = NULL){
+  if(length(n1) == 1) n1 <- rep(n1, k)
+  if(is.null(n2)) n2 <- n1
+  if(length(es) == 1) es <- rep(es, k)
+  
+  yi <- rep(NA, k)
+  vi <- rep(NA, k)
+  
+  # random effects
+  deltai <- rnorm(k, 0, sqrt(tau2))
+  
+  for(i in 1:k){
+    g1 <- rnorm(n1[i], 0, 1)
+    g2 <- rnorm(n2[i], es[i] + deltai[i], 1)
+    yi[i] <- mean(g2) - mean(g1)
+    vi[i] <- var(g1)/n1[i] + var(g2)/n2[i]
+  }
+  
+  sim <- data.frame(id = 1:k, yi, vi, n1 = n1, n2 = n2)
+  
+  if(!is.null(add)){
+    sim <- cbind(sim, add)
+  }
+  
+  # convert to escalc for using metafor methods
+  sim <- metafor::escalc(yi = yi, vi = vi, data = sim)
+  
+  return(sim)
+}
 ```
 
 ## Simulating a RE model
@@ -524,6 +567,8 @@ The weights are different compared to the EE model. Extremely precise/imprecise 
 In R we can use the `metafor::rma()` function using the `method = "REML"`.
 
 ```{r}
+#| echo: true
+#| collapse: true
 fit <- rma(yi, vi, data = dat, method = "REML")
 summary(fit)
 ```
@@ -534,11 +579,15 @@ The model output is quite similar to the EE model and also the intepretation is 
 
 The only extra section is `tau^2/tau` that is the estimation of the between-study heterogeneity.
 
+```{r}
+summary(fit)
+```
+
+
 ## Estimating $\tau^2$
 
-We used `method = "REML"` but there are actually several estimators for $\tau^2$. @Viechtbauer2005-zt, @Veroniki2016-zs and @Brannick2019-hv provided a comprehensive overview of different estimators.
 
-iframe hete
+![](img/langan2017.png){fig-align="center" width=80%}
 
 ## Estimating $\tau^2$
 
@@ -799,7 +848,7 @@ Thus $H^2$ is the ratio between total heterogeneity and sampling variability. Hi
 
 ## $H^2$
 
-When we are fitting a RE model, the $I^2$ and $H^2$ equations are slightly different [@Higgins2002-fh]^[see also the `metafor` source code https://github.com/cran/metafor/blob/994d26a65455fac90760ad6a004ec1eaca5856b1/R/rma.uni.r#L2459C30-L2459C30].
+When we are fitting a RE model, the $I^2$ and $H^2$ equations are slightly different [@Higgins2002-fh]. See also the `metafor` [source code](https://github.com/cran/metafor/blob/994d26a65455fac90760ad6a004ec1eaca5856b1/R/rma.uni.r#L2459C30-L2459C30).
 
 ```{r}
 #| echo: true

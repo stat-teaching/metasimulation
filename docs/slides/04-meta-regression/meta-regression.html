@@ -15,7 +15,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="utf-8">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-<meta name="generator" content="quarto-1.4.527">
+<meta name="generator" content="quarto-1.4.534">
 <meta name="author" content="Filippo Gambarota">
 <meta name="author" content="Gianmarco Altoè">
 <meta name="dcterms.date" content="2024-02-08">
@@ -482,65 +482,75 @@ y_i = \beta_0 + \beta_{0_i} + \beta_1X_{1_i} + \epsilon_i
 </section><section id="simulating-the-x-effect" class="slide level2"><h2>Simulating the <span class="math inline">\(X\)</span> effect</h2>
 <p>To simulate a meta-regression we just need to choose the parameters values (<span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>) and implement <a href="#/explaining-tau2-3" class="quarto-xref">Equation&nbsp;1</a>. Using treatment coding, <span class="math inline">\(\beta_0\)</span> is the effect size when <span class="math inline">\(X = 0\)</span> (i.e., lab-based experiments) and <span class="math inline">\(\beta_1\)</span> is the difference between lab and online experiments.</p>
 <div class="cell" data-layout-align="center">
-<pre><code>#&gt;        exp exp_dummy  es
-#&gt; 1      lab         0 0.3
-#&gt; 2      lab         0 0.3
-#&gt; 3      lab         0 0.3
-#&gt; 4      lab         0 0.3
-#&gt; 5      lab         0 0.3
-#&gt; 95  online         1 0.8
-#&gt; 96  online         1 0.8
-#&gt; 97  online         1 0.8
-#&gt; 98  online         1 0.8
-#&gt; 99  online         1 0.8
-#&gt; 100 online         1 0.8</code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">0.3</span> <span class="co"># lab-based effect size</span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="co"># online - lab-based --&gt; online = b0 + b1</span></span>
+<span><span class="va">exp_dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">exp</span> <span class="op">==</span> <span class="st">"lab"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># dummy version</span></span>
+<span><span class="va">es</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">*</span> <span class="va">exp_dummy</span></span>
+<span><span class="fu">ht</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">exp</span>, <span class="va">exp_dummy</span>, <span class="va">es</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        exp exp_dummy  es</span></span>
+<span><span class="co">#&gt; 1      lab         0 0.3</span></span>
+<span><span class="co">#&gt; 2      lab         0 0.3</span></span>
+<span><span class="co">#&gt; 3      lab         0 0.3</span></span>
+<span><span class="co">#&gt; 4      lab         0 0.3</span></span>
+<span><span class="co">#&gt; 5      lab         0 0.3</span></span>
+<span><span class="co">#&gt; 95  online         1 0.8</span></span>
+<span><span class="co">#&gt; 96  online         1 0.8</span></span>
+<span><span class="co">#&gt; 97  online         1 0.8</span></span>
+<span><span class="co">#&gt; 98  online         1 0.8</span></span>
+<span><span class="co">#&gt; 99  online         1 0.8</span></span>
+<span><span class="co">#&gt; 100 online         1 0.8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="simulating-the-x-effects" class="slide level2"><h2>Simulating the <span class="math inline">\(X\)</span> effects</h2>
 <p>Now we can use the <code>sim_studies()</code> function as usual. The difference is that <code>es</code> is no longer a single value but a vector (with different values according to the <span class="math inline">\(X\)</span> level) and <code>tau2</code> is <span class="math inline">\(\tau^2_r\)</span> (this the leftover heterogeneity after including the <span class="math inline">\(X\)</span> effect)</p>
 <div class="cell" data-layout-align="center">
-<pre><code>#&gt; 
-#&gt;      id      yi     vi n1 n2    exp 
-#&gt; 1     1  0.1114 0.0505 40 40    lab 
-#&gt; 2     2 -0.1330 0.0624 35 35    lab 
-#&gt; 3     3  0.3525 0.0632 37 37    lab 
-#&gt; 4     4  0.3906 0.0428 51 51    lab 
-#&gt; 5     5  0.3876 0.0504 42 42    lab 
-#&gt; 95   95  0.5008 0.0495 39 39 online 
-#&gt; 96   96  0.5525 0.0550 34 34 online 
-#&gt; 97   97  0.8551 0.0402 42 42 online 
-#&gt; 98   98  0.8025 0.0546 34 34 online 
-#&gt; 99   99  1.1299 0.0512 37 37 online 
-#&gt; 100 100  1.1799 0.0672 33 33 online</code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tau2r</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># residual heterogeneity</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_studies</span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, es <span class="op">=</span> <span class="va">es</span>, tau2 <span class="op">=</span> <span class="va">tau2r</span>, n1 <span class="op">=</span> <span class="va">n</span>, add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>exp <span class="op">=</span> <span class="va">exp</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">ht</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      id      yi     vi n1 n2    exp </span></span>
+<span><span class="co">#&gt; 1     1 -0.1088 0.0462 40 40    lab </span></span>
+<span><span class="co">#&gt; 2     2  0.4318 0.0438 42 42    lab </span></span>
+<span><span class="co">#&gt; 3     3 -0.0455 0.0365 41 41    lab </span></span>
+<span><span class="co">#&gt; 4     4  0.6198 0.0495 26 26    lab </span></span>
+<span><span class="co">#&gt; 5     5  0.8817 0.0406 45 45    lab </span></span>
+<span><span class="co">#&gt; 95   95  0.2727 0.0539 38 38 online </span></span>
+<span><span class="co">#&gt; 96   96  0.6494 0.0611 36 36 online </span></span>
+<span><span class="co">#&gt; 97   97  0.6794 0.0534 33 33 online </span></span>
+<span><span class="co">#&gt; 98   98  0.4407 0.0380 45 45 online </span></span>
+<span><span class="co">#&gt; 99   99  0.4536 0.0469 37 37 online </span></span>
+<span><span class="co">#&gt; 100 100  0.3602 0.0705 27 27 online</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="fitting-a-meta-regression-model" class="slide level2"><h2>Fitting a meta-regression Model</h2>
 <p>To fit a meta-regression we still use the <code><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html">metafor::rma()</a></code> function, adding the <code>mods = ~</code> parameter with the model formula (same as the right-hand side of a <code>y ~ x</code> call in <code>lm</code>). The name of the predictor in the formula need to match a column of the <code>data =</code> dataframe.</p>
 <div class="cell" data-layout-align="center">
-<pre><code>#&gt; 
-#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)
-#&gt; 
-#&gt;   logLik  deviance       AIC       BIC      AICc   
-#&gt; -24.0549   48.1098   54.1098   61.8647   54.3652   
-#&gt; 
-#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0465 (SE = 0.0138)
-#&gt; tau (square root of estimated tau^2 value):             0.2157
-#&gt; I^2 (residual heterogeneity / unaccounted variability): 48.28%
-#&gt; H^2 (unaccounted variability / sampling variability):   1.93
-#&gt; R^2 (amount of heterogeneity accounted for):            58.02%
-#&gt; 
-#&gt; Test for Residual Heterogeneity:
-#&gt; QE(df = 98) = 189.6112, p-val &lt; .0001
-#&gt; 
-#&gt; Test of Moderators (coefficient 2):
-#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001
-#&gt; 
-#&gt; Model Results:
-#&gt; 
-#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      
-#&gt; intrcpt      0.2408  0.0440  5.4704  &lt;.0001  0.1545  0.3271  *** 
-#&gt; exponline    0.5170  0.0624  8.2855  &lt;.0001  0.3947  0.6393  *** 
-#&gt; 
-#&gt; ---
-#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, mods <span class="op">=</span> <span class="op">~</span> <span class="va">exp</span>, data <span class="op">=</span> <span class="va">dat</span>, method <span class="op">=</span> <span class="st">"REML"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   logLik  deviance       AIC       BIC      AICc   </span></span>
+<span><span class="co">#&gt; -21.8286   43.6573   49.6573   57.4122   49.9126   </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0408 (SE = 0.0129)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.2021</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 45.43%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.83</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            38.44%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 98) = 179.6024, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
+<span><span class="co">#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt; intrcpt      0.3975  0.0424  9.3674  &lt;.0001  0.3143  0.4806  *** </span></span>
+<span><span class="co">#&gt; exponline    0.3261  0.0603  5.4104  &lt;.0001  0.2080  0.4443  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="intepreting-a-meta-regression-model" class="slide level2"><h2>Intepreting a meta-regression Model</h2>
 <p>The output is similar to the RE model with few additions:</p>
@@ -556,6 +566,7 @@ y_i = \beta_0 + \beta_{0_i} + \beta_1X_{1_i} + \epsilon_i
 <p><code>intrcpt</code> and <code>exponline</code> are the estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. The interpretation depends on the scale of the effect size and the contrast coding.</p>
 <p>We can plot the model results using the <code><a href="https://wviechtb.github.io/metafor/reference/regplot.html">metafor::regplot()</a></code><sup>1</sup>.</p>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">regplot</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure><p><img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
@@ -568,41 +579,44 @@ y_i = \beta_0 + \beta_{0_i} + \beta_1X_{1_i} + \epsilon_i
 <p>In this case, <strong>coefficient 2</strong> means that we are testing only the 2nd coefficient <span class="math inline">\(\beta_1\)</span>. By default, the intercept is ignored. In fact, the <code>exponline</code> line and the omnibus test are the same (the <span class="math inline">\(\chi^2\)</span> is just the <span class="math inline">\(z^2\)</span>)</p>
 <div class="cell" data-layout-align="center">
 <pre><code>#&gt; Test of Moderators (coefficient 2):
-#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001
+#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001
 #&gt;            estimate      se    zval    pval   ci.lb   ci.ub      
-#&gt; intrcpt      0.2408  0.0440  5.4704  &lt;.0001  0.1545  0.3271  *** 
-#&gt; exponline    0.5170  0.0624  8.2855  &lt;.0001  0.3947  0.6393  ***</code></pre>
+#&gt; intrcpt      0.3975  0.0424  9.3674  &lt;.0001  0.3143  0.4806  *** 
+#&gt; exponline    0.3261  0.0603  5.4104  &lt;.0001  0.2080  0.4443  ***</code></pre>
 </div>
 </section><section id="general-linear-hypotheses-testing-glht" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
 <p>We can also test any combination of parameters. For example we could test if lab-based experiments and online experiments are both different from 0. This is the same as fitting a model without the intercept<sup>1</sup> thus estimating the cell means <span class="citation" data-cites="Schad2020-ht">(see <a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Schad et al. 2020</a>)</span>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># now we are testing two coefficients</span></span>
-<span><span class="va">fit_no_int</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, mods <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">exp</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="va">fit_no_int</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># now we are testing two coefficients</span></span>
+<span><span class="va">fit_no_int</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, mods <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">exp</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>see <a href="https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept">https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept</a> on removing the intercept</p></li></ol></aside></section><section id="general-linear-hypotheses-testing-glht-1" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_no_int</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0465 (SE = 0.0138)</span></span>
-<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.2157</span></span>
-<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 48.28%</span></span>
-<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.93</span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0408 (SE = 0.0129)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.2021</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 45.43%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.83</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
-<span><span class="co">#&gt; QE(df = 98) = 189.6112, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; QE(df = 98) = 179.6024, p-val &lt; .0001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Test of Moderators (coefficients 1:2):</span></span>
-<span><span class="co">#&gt; QM(df = 2) = 323.5856, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; QM(df = 2) = 373.4033, p-val &lt; .0001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            estimate      se     zval    pval   ci.lb   ci.ub      </span></span>
-<span><span class="co">#&gt; explab       0.2408  0.0440   5.4704  &lt;.0001  0.1545  0.3271  *** </span></span>
-<span><span class="co">#&gt; exponline    0.7578  0.0442  17.1365  &lt;.0001  0.6711  0.8444  *** </span></span>
+<span><span class="co">#&gt; explab       0.3975  0.0424   9.3674  &lt;.0001  0.3143  0.4806  *** </span></span>
+<span><span class="co">#&gt; exponline    0.7236  0.0428  16.9013  &lt;.0001  0.6397  0.8075  *** </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>see <a href="https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept">https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept</a> on removing the intercept</p></li></ol></aside></section><section id="general-linear-hypotheses-testing-glht-1" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
+</section><section id="general-linear-hypotheses-testing-glht-2" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
 <p>A more elegant way is by using the GLHT framework. Basically we provide a contrast matrix expressing linear combinations of model parameters to be tested. In our case <span class="math inline">\(\text{lab} = \beta_0 = 0\)</span> and <span class="math inline">\(\text{online} = \beta_0 + \beta_1 = 0\)</span>.</p>
 <p>Practically, the matrix formulation is the following:</p>
 <p><span class="math display">\[
@@ -622,20 +636,20 @@ y_i = \beta_0 + \beta_{0_i} + \beta_1X_{1_i} + \epsilon_i
 \]</span></p>
 <p>In R:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">C</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">B</span> <span class="co"># same as coef(fit)[1] and coef(fit)[1] +  coef(fit)[2]</span></span>
 <span><span class="co">#&gt;           [,1]</span></span>
-<span><span class="co">#&gt; [1,] 0.2407981</span></span>
-<span><span class="co">#&gt; [2,] 0.7577632</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1,] 0.3974823</span></span>
+<span><span class="co">#&gt; [2,] 0.7236168</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="general-linear-hypotheses-testing-glht-2" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
+</section><section id="general-linear-hypotheses-testing-glht-3" class="slide level2"><h2>General Linear Hypotheses Testing (GLHT)</h2>
 <p>We can use the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function providing the model and the hypothesis matrix.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># the default</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># the default</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
-<span><span class="co">#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit</span>, X <span class="op">=</span> <span class="va">C</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Hypotheses:                           </span></span>
@@ -644,26 +658,26 @@ y_i = \beta_0 + \beta_{0_i} + \beta_1X_{1_i} + \epsilon_i
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Results:</span></span>
 <span><span class="co">#&gt;    estimate     se    zval   pval </span></span>
-<span><span class="co">#&gt; 1:   0.2408 0.0440  5.4704 &lt;.0001 </span></span>
-<span><span class="co">#&gt; 2:   0.7578 0.0442 17.1365 &lt;.0001 </span></span>
+<span><span class="co">#&gt; 1:   0.3975 0.0424  9.3674 &lt;.0001 </span></span>
+<span><span class="co">#&gt; 2:   0.7236 0.0428 16.9013 &lt;.0001 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Omnibus Test of Hypotheses:</span></span>
-<span><span class="co">#&gt; QM(df = 2) = 323.5856, p-val &lt; .0001</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; QM(df = 2) = 373.4033, p-val &lt; .0001</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice that is the same as the model without the intercept.</p>
 </section><section id="likelihood-ratio-test-lrt" class="slide level2"><h2>Likelihood Ratio Test (LRT)</h2>
 <p>As in standard regression modelling, we can also compare models using LRT. The <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function will compute the LRT when two (nested) models are provided. In this case we compared a null (intercept-only) model with the model including the predictor.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># the null model</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># the null model</span></span>
 <span><span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu">rma</span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, data <span class="op">=</span> <span class="va">dat</span>, method <span class="op">=</span> <span class="st">"REML"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit0</span>, <span class="va">fit</span>, refit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># refit = TRUE because LRT with REML is not meaningful, using ML instead</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;         df      AIC      BIC     AICc   logLik     LRT   pval       QE  tau^2 </span></span>
-<span><span class="co">#&gt; Full     3  53.1066  60.9222  53.3566 -23.5533                189.6112 0.0447 </span></span>
-<span><span class="co">#&gt; Reduced  2 104.9762 110.1866 105.0999 -50.4881 53.8696 &lt;.0001 319.7111 0.1092 </span></span>
+<span><span class="co">#&gt;         df     AIC     BIC    AICc   logLik     LRT   pval       QE  tau^2 </span></span>
+<span><span class="co">#&gt; Full     3 48.5151 56.3306 48.7651 -21.2575                179.6024 0.0390 </span></span>
+<span><span class="co">#&gt; Reduced  2 72.7633 77.9737 72.8870 -34.3817 26.2482 &lt;.0001 232.4328 0.0652 </span></span>
 <span><span class="co">#&gt;              R^2 </span></span>
 <span><span class="co">#&gt; Full             </span></span>
-<span><span class="co">#&gt; Reduced 59.0925%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; Reduced 40.1114%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="r2" class="slide level2"><h2><span class="math inline">\(R^2\)</span></h2>
 <p>The <span class="math inline">\(R^2\)</span> value reported in the model output is not calculated as in standard regression analysis.</p>
@@ -673,8 +687,10 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <p>Basically is the percentage of heterogeneity reduction from the intercept-only model to the model including predictors.</p>
 <p>In R:</p>
 <div class="cell" data-layout-align="center">
-<pre><code>#&gt; [1] 58.01751
-#&gt; [1] 58.01751</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">fit</span><span class="op">$</span><span class="va">tau2</span><span class="op">/</span><span class="va">fit0</span><span class="op">$</span><span class="va">tau2</span><span class="op">)</span><span class="op">*</span><span class="fl">100</span></span>
+<span><span class="co">#&gt; [1] 38.43963</span></span>
+<span><span class="va">fit</span><span class="op">$</span><span class="va">R2</span></span>
+<span><span class="co">#&gt; [1] 38.43963</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="r2-1" class="slide level2"><h2><span class="math inline">\(R^2\)</span></h2>
 <p>Despite useful, the <span class="math inline">\(R^2\)</span> has some limitations:</p>
@@ -704,7 +720,7 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <p>The intepretation (and the inference) of <span class="math inline">\(\beta_0\)</span> is strongly dependent on the type of numerical predictor. An age of zero is (probably) empirically meaningless thus the <span class="math inline">\(\beta_0\)</span> is somehow not useful.</p>
 <p>We can for example mean-center (or other type of centering procedure) moving the zero on a meaningful value.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">:</span><span class="fl">50</span> <span class="co"># the raw vector</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">:</span><span class="fl">50</span> <span class="co"># the raw vector</span></span>
 <span><span class="va">age0</span> <span class="op">&lt;-</span> <span class="va">age</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="co"># centering on the mean</span></span>
 <span><span class="va">age20</span> <span class="op">&lt;-</span> <span class="va">age</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="co"># centering on the minimum</span></span>
 <span></span>
@@ -725,11 +741,11 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 </section><section id="parametrize-beta_0-1" class="slide level2"><h2>Parametrize <span class="math inline">\(\beta_0\)</span>
 </h2>
 
-<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="parametrize-beta_0-2" class="slide level2"><h2>Parametrize <span class="math inline">\(\beta_0\)</span>
+<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="parametrize-beta_0-2" class="slide level2"><h2>Parametrize <span class="math inline">\(\beta_0\)</span>
 </h2>
 <p>Using different parametrizations will only affect the estimation (and the interpretation) of <span class="math inline">\(\beta_0\)</span>. Other parameters and indexes will be the same.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">0.2</span> <span class="co"># effect size when age 0</span></span>
 <span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># slope (random for now)</span></span>
 <span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="co"># sampling from uniform distribution</span></span>
@@ -754,15 +770,15 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span><span class="co">#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)</span></span>
 <span><span class="co">#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)</span></span>
 <span><span class="co">#&gt;                fit   fit0  fit20</span></span>
-<span><span class="co">#&gt; b (intrcpt)  0.108  1.918  1.157</span></span>
-<span><span class="co">#&gt; se           0.122  0.031  0.059</span></span>
-<span><span class="co">#&gt; zval         0.888 61.058 19.682</span></span>
-<span><span class="co">#&gt; pval         0.375  0.000  0.000</span></span>
-<span><span class="co">#&gt; ci.lb       -0.131  1.856  1.041</span></span>
-<span><span class="co">#&gt; ci.ub        0.348  1.980  1.272</span></span>
-<span><span class="co">#&gt; R2          87.687 87.687 87.687</span></span>
-<span><span class="co">#&gt; I2          33.594 33.594 33.594</span></span>
-<span><span class="co">#&gt; tau2         0.033  0.033  0.033</span></span>
+<span><span class="co">#&gt; b (intrcpt)  0.277  1.981  1.255</span></span>
+<span><span class="co">#&gt; se           0.140  0.033  0.067</span></span>
+<span><span class="co">#&gt; zval         1.988 59.335 18.784</span></span>
+<span><span class="co">#&gt; pval         0.047  0.000  0.000</span></span>
+<span><span class="co">#&gt; ci.lb        0.004  1.916  1.124</span></span>
+<span><span class="co">#&gt; ci.ub        0.551  2.047  1.386</span></span>
+<span><span class="co">#&gt; R2          78.951 78.951 78.951</span></span>
+<span><span class="co">#&gt; I2          42.044 42.044 42.044</span></span>
+<span><span class="co">#&gt; tau2         0.046  0.046  0.046</span></span>
 <span></span>
 <span>  <span class="co"># showing the intercept</span></span>
 <span><span class="fu">compare_rma</span><span class="op">(</span><span class="va">fit</span>, <span class="va">fit0</span>, <span class="va">fit20</span>, b <span class="op">=</span> <span class="st">"age"</span>, extra_params <span class="op">=</span> <span class="st">"R2"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -771,15 +787,15 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span><span class="co">#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)</span></span>
 <span><span class="co">#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)</span></span>
 <span><span class="co">#&gt;            fit   fit0  fit20</span></span>
-<span><span class="co">#&gt; b (age)  0.052  0.052  0.052</span></span>
-<span><span class="co">#&gt; se       0.003  0.003  0.003</span></span>
-<span><span class="co">#&gt; zval    15.356 15.356 15.356</span></span>
+<span><span class="co">#&gt; b (age)  0.049  0.049  0.049</span></span>
+<span><span class="co">#&gt; se       0.004  0.004  0.004</span></span>
+<span><span class="co">#&gt; zval    12.604 12.604 12.604</span></span>
 <span><span class="co">#&gt; pval     0.000  0.000  0.000</span></span>
-<span><span class="co">#&gt; ci.lb    0.046  0.046  0.046</span></span>
-<span><span class="co">#&gt; ci.ub    0.059  0.059  0.059</span></span>
-<span><span class="co">#&gt; R2      87.687 87.687 87.687</span></span>
-<span><span class="co">#&gt; I2      33.594 33.594 33.594</span></span>
-<span><span class="co">#&gt; tau2     0.033  0.033  0.033</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; ci.lb    0.041  0.041  0.041</span></span>
+<span><span class="co">#&gt; ci.ub    0.056  0.056  0.056</span></span>
+<span><span class="co">#&gt; R2      78.951 78.951 78.951</span></span>
+<span><span class="co">#&gt; I2      42.044 42.044 42.044</span></span>
+<span><span class="co">#&gt; tau2     0.046  0.046  0.046</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="choosing-beta_1" class="slide level2"><h2>Choosing <span class="math inline">\(\beta_1\)</span>
 </h2>
@@ -795,7 +811,7 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span class="math inline">\(\beta_1\)</span> by simulations</h2>
 <p>A strategy could be to simulate from the generative model a large number of studies and see the expected range of effect size <span class="citation" data-cites="Gelman2020-tg">(<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">Gelman, Hill, and Vehtari 2020, chap. 5</a> and p.&nbsp;97)</span>. A large number of unplausible values suggest that the chosen <span class="math inline">\(\beta_1\)</span> is probably not appropriate.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span> <span class="co"># age</span></span>
@@ -808,30 +824,30 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span><span class="fu">ht</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;         b1   id      yi     vi n1 n2        x </span></span>
-<span><span class="co">#&gt; 1    0.001    1  0.1386 0.0777 30 30 36.64461 </span></span>
-<span><span class="co">#&gt; 2    0.001    2 -0.0254 0.0571 30 30 47.51239 </span></span>
-<span><span class="co">#&gt; 3    0.001    3  0.1603 0.0691 30 30 28.72855 </span></span>
-<span><span class="co">#&gt; 4    0.001    4  0.5369 0.0793 30 30 32.02046 </span></span>
-<span><span class="co">#&gt; 5    0.001    5 -0.6785 0.0687 30 30 48.38014 </span></span>
-<span><span class="co">#&gt; 2995   0.2  995  6.4789 0.0642 30 30 33.85572 </span></span>
-<span><span class="co">#&gt; 2996   0.2  996  7.0514 0.0529 30 30 34.38240 </span></span>
-<span><span class="co">#&gt; 2997   0.2  997  3.9459 0.0813 30 30 20.07518 </span></span>
-<span><span class="co">#&gt; 2998   0.2  998  6.8888 0.0652 30 30 35.04802 </span></span>
-<span><span class="co">#&gt; 2999   0.2  999  6.8392 0.0755 30 30 33.53124 </span></span>
-<span><span class="co">#&gt; 3000   0.2 1000  9.2417 0.0677 30 30 47.20710</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; 1    0.001    1  0.0298 0.0631 30 30 41.04808 </span></span>
+<span><span class="co">#&gt; 2    0.001    2  0.2132 0.0508 30 30 42.46508 </span></span>
+<span><span class="co">#&gt; 3    0.001    3 -0.0071 0.0631 30 30 38.81188 </span></span>
+<span><span class="co">#&gt; 4    0.001    4 -0.0116 0.1049 30 30 30.88555 </span></span>
+<span><span class="co">#&gt; 5    0.001    5 -0.0313 0.0568 30 30 22.62966 </span></span>
+<span><span class="co">#&gt; 2995   0.2  995 10.0363 0.0625 30 30 47.41694 </span></span>
+<span><span class="co">#&gt; 2996   0.2  996  6.9607 0.0720 30 30 35.56750 </span></span>
+<span><span class="co">#&gt; 2997   0.2  997  6.8963 0.0517 30 30 33.82691 </span></span>
+<span><span class="co">#&gt; 2998   0.2  998  4.8710 0.0503 30 30 25.03220 </span></span>
+<span><span class="co">#&gt; 2999   0.2  999  4.5953 0.0649 30 30 22.85928 </span></span>
+<span><span class="co">#&gt; 3000   0.2 1000  8.8629 0.0694 30 30 45.29689</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="beta_1-by-simulations-1" class="slide level2"><h2>
 <span class="math inline">\(\beta_1\)</span> by simulations</h2>
 <p>Clearly given the limited range of the <span class="math inline">\(x\)</span> variable (<code>age</code>) some <span class="math inline">\(\beta_1\)</span> values are implausible leading to effect sizes that are out of a meaningful empirical range.</p>
 
-<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="fixing-r2" class="slide level2"><h2>Fixing <span class="math inline">\(R^2\)</span>
+<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="fixing-r2" class="slide level2"><h2>Fixing <span class="math inline">\(R^2\)</span>
 </h2>
 <p>We can use the approach by <span class="citation" data-cites="Lopez-Lopez2014-it">López-López et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2014</a>)</span> where predictors <span class="math inline">\(x\)</span> are sampled from a standard normal distribution (or standardized). <span class="math inline">\(\beta_1\)</span> is calculated as <span class="math inline">\(\beta_1 = \sqrt{\tau^2 R^2}\)</span> and the residual heterogeneity as <span class="math inline">\(\tau^2_r = \tau^2 - \beta^2_1\)</span>.</p>
 </section><section id="fixing-r2-1" class="slide level2"><h2>Fixing <span class="math inline">\(R^2\)</span>
 </h2>
 <p>We can check the simulation approach:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
 <span><span class="fl">1</span> <span class="op">-</span> <span class="va">tau2r</span><span class="op">/</span><span class="va">tau2</span></span>
 <span><span class="co">#&gt; [1] 0.4</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span>
@@ -843,25 +859,25 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span><span class="co">#&gt; Mixed-Effects Model (k = 1000; tau^2 estimator: REML)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    logLik   deviance        AIC        BIC       AICc   </span></span>
-<span><span class="co">#&gt; -567.3723  1134.7447  1140.7447  1155.4619  1140.7688   </span></span>
+<span><span class="co">#&gt; -530.7334  1061.4667  1067.4667  1082.1840  1067.4909   </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.1805 (SE = 0.0082)</span></span>
-<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.4249</span></span>
-<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 98.90%</span></span>
-<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   91.31</span></span>
-<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            42.71%</span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.1676 (SE = 0.0076)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.4094</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 98.82%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   85.06</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            39.90%</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
-<span><span class="co">#&gt; QE(df = 998) = 91327.1884, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; QE(df = 998) = 84936.6718, p-val &lt; .0001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
-<span><span class="co">#&gt; QM(df = 1) = 737.6183, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; QM(df = 1) = 656.5223, p-val &lt; .0001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;          estimate      se     zval    pval   ci.lb   ci.ub      </span></span>
-<span><span class="co">#&gt; intrcpt    0.1084  0.0135   8.0214  &lt;.0001  0.0819  0.1349  *** </span></span>
-<span><span class="co">#&gt; x          0.3617  0.0133  27.1591  &lt;.0001  0.3356  0.3878  *** </span></span>
+<span><span class="co">#&gt; intrcpt    0.1007  0.0130   7.7308  &lt;.0001  0.0752  0.1262  *** </span></span>
+<span><span class="co">#&gt; x          0.3275  0.0128  25.6227  &lt;.0001  0.3024  0.3525  *** </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -870,7 +886,7 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span class="math inline">\(R^2\)</span> using simulations</h2>
 <p>The results from <span class="citation" data-cites="Lopez-Lopez2014-it">López-López et al. (<a href="#/references-download-.bib-file" role="doc-biblioref" onclick="">2014</a>)</span> (and also our previous simulation) suggested that we need a large number of studies for precise <span class="math inline">\(R^2\)</span> estimations. Let’s check using simulations the sampling distribution of <span class="math inline">\(R^2\)</span> using a plausible meta-analysis scenario.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">40</span> <span class="co"># number of studies</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">40</span> <span class="co"># number of studies</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="va">k</span>, <span class="fl">40</span> <span class="op">-</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># sample size</span></span>
 <span><span class="va">tau2</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># tau ~ 0.22</span></span>
 <span><span class="va">R2</span> <span class="op">&lt;-</span> <span class="fl">0.3</span></span>
@@ -893,7 +909,7 @@ R^2 = 1 - \frac{\tau^2_r}{\tau^2}
 <span class="math inline">\(R^2\)</span> using simulations</h2>
 <p>We estimated the true <span class="math inline">\(R^2\)</span> correctly but there is a lot of uncertainty with a plausible meta-analysis scenario. There are a lot of meta-analysis also with lower <span class="math inline">\(k\)</span> worsening the results.</p>
 
-<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-22-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="references-download-.bib-file" class="slide level2 refs smaller scrollable"><h2>References <button class="btn"><i class="fa fa-download"></i><a href="data:text/x-bibtex;base64,QEFSVElDTEV7U2NoYWQyMDIwLWh0LA0KICB0aXRsZSA9IHtIb3cgdG8gY2FwaXRhbGl6ZSBvbiBhIHByaW9yaSBjb250cmFzdHMgaW4gbGluZWFyIChtaXhlZCkgbW9kZWxzOiBBDQogIHR1dG9yaWFsfSwNCiAgYXV0aG9yID0ge1NjaGFkLCBEYW5pZWwgSiBhbmQgVmFzaXNodGgsIFNocmF2YW4gYW5kIEhvaGVuc3RlaW4sIFN2ZW4gYW5kDQogIEtsaWVnbCwgUmVpbmhvbGR9LA0KICBqb3VybmFsdGl0bGUgPSB7Sm91cm5hbCBvZiBtZW1vcnkgYW5kIGxhbmd1YWdlfSwNCiAgdm9sdW1lID0gezExMH0sDQogIHBhZ2VzID0gezEwNDAzOH0sDQogIGRhdGUgPSB7MjAyMC0wMi0wMX0sDQogIGRvaSA9IHsxMC4xMDE2L2ouam1sLjIwMTkuMTA0MDM4fSwNCiAgaXNzbiA9IHswNzQ5LTU5Nlh9LA0KICBhYnN0cmFjdCA9IHtGYWN0b3JpYWwgZXhwZXJpbWVudHMgaW4gcmVzZWFyY2ggb24gbWVtb3J5LCBsYW5ndWFnZSwgYW5kIGluDQogIG90aGVyIGFyZWFzIGFyZSBvZnRlbiBhbmFseXplZCB1c2luZyBhbmFseXNpcyBvZiB2YXJpYW5jZSAoQU5PVkEpLiBIb3dldmVyLA0KICBmb3IgZWZmZWN0cyB3aXRoIG1vcmUgdGhhbiBvbmUgbnVtZXJhdG9yIGRlZ3JlZXMgb2YgZnJlZWRvbSwgZS5nLiwgZm9yDQogIGV4cGVyaW1lbnRhbCBmYWN0b3JzIHdpdGggbW9yZSB0aGFuIHR3byBsZXZlbHMsIHRoZSBBTk9WQSBvbW5pYnVzIEYtdGVzdCBpcw0KICBub3QgaW5mb3JtYXRpdmUgYWJvdXQgdGhlIHNvdXJjZSBvZiBhIG1haW4gZWZmZWN0IG9yIGludGVyYWN0aW9uLiBCZWNhdXNlDQogIHJlc2VhcmNoZXJzIHR5cGljYWxseSBoYXZlIHNwZWNpZmljIGh5cG90aGVzZXMgYWJvdXQgd2hpY2ggY29uZGl0aW9uIG1lYW5zDQogIGRpZmZlciBmcm9tIGVhY2ggb3RoZXIsIGEgcHJpb3JpIGNvbnRyYXN0cyAoaS5lLiwgY29tcGFyaXNvbnMgcGxhbm5lZCBiZWZvcmUNCiAgdGhlIHNhbXBsZSBtZWFucyBhcmUga25vd24pIGJldHdlZW4gc3BlY2lmaWMgY29uZGl0aW9ucyBvciBjb21iaW5hdGlvbnMgb2YNCiAgY29uZGl0aW9ucyBhcmUgdGhlIGFwcHJvcHJpYXRlIHdheSB0byByZXByZXNlbnQgc3VjaCBoeXBvdGhlc2VzIGluIHRoZQ0KICBzdGF0aXN0aWNhbCBtb2RlbC4gTWFueSByZXNlYXJjaGVycyBoYXZlIHBvaW50ZWQgb3V0IHRoYXQgY29udHJhc3RzIHNob3VsZCBiZQ0KICDigJx0ZXN0ZWQgaW5zdGVhZCBvZiwgcmF0aGVyIHRoYW4gYXMgYSBzdXBwbGVtZW50IHRvLCB0aGUgb3JkaW5hcnkg4oCYb21uaWJ1c+KAmSBGDQogIHRlc3TigJ0gKEhheXMsIDE5NzMsIHAuIDYwMSkuIEluIHRoaXMgdHV0b3JpYWwsIHdlIGV4cGxhaW4gdGhlIG1hdGhlbWF0aWNzDQogIHVuZGVybHlpbmcgZGlmZmVyZW50IGtpbmRzIG9mIGNvbnRyYXN0cyAoaS5lLiwgdHJlYXRtZW50LCBzdW0sIHJlcGVhdGVkLA0KICBwb2x5bm9taWFsLCBjdXN0b20sIG5lc3RlZCwgaW50ZXJhY3Rpb24gY29udHJhc3RzKSwgZGlzY3VzcyB0aGVpciBwcm9wZXJ0aWVzLA0KICBhbmQgZGVtb25zdHJhdGUgaG93IHRoZXkgYXJlIGFwcGxpZWQgaW4gdGhlIFIgU3lzdGVtIGZvciBTdGF0aXN0aWNhbCBDb21wdXRpbmcNCiAgKFIgQ29yZSBUZWFtLCAyMDE4KS4gSW4gdGhpcyBjb250ZXh0LCB3ZSBleHBsYWluIHRoZSBnZW5lcmFsaXplZCBpbnZlcnNlIHdoaWNoDQogIGlzIG5lZWRlZCB0byBjb21wdXRlIHRoZSBjb2VmZmljaWVudHMgZm9yIGNvbnRyYXN0cyB0aGF0IHRlc3QgaHlwb3RoZXNlcyB0aGF0DQogIGFyZSBub3QgY292ZXJlZCBieSB0aGUgZGVmYXVsdCBzZXQgb2YgY29udHJhc3RzLiBBIGRldGFpbGVkIHVuZGVyc3RhbmRpbmcgb2YNCiAgY29udHJhc3QgY29kaW5nIGlzIGNydWNpYWwgZm9yIHN1Y2Nlc3NmdWwgYW5kIGNvcnJlY3Qgc3BlY2lmaWNhdGlvbiBpbiBsaW5lYXINCiAgbW9kZWxzIChpbmNsdWRpbmcgbGluZWFyIG1peGVkIG1vZGVscykuIENvbnRyYXN0cyBkZWZpbmVkIGEgcHJpb3JpIHlpZWxkIGZhcg0KICBtb3JlIHVzZWZ1bCBjb25maXJtYXRvcnkgdGVzdHMgb2YgZXhwZXJpbWVudGFsIGh5cG90aGVzZXMgdGhhbiBzdGFuZGFyZA0KICBvbW5pYnVzIEYtdGVzdHMuIFJlcHJvZHVjaWJsZSBjb2RlIGlzIGF2YWlsYWJsZSBmcm9tIGh0dHBzOi8vb3NmLmlvLzd1a2Y2Ly59LA0KICB1cmwgPSB7aHR0cHM6Ly93d3cuc2NpZW5jZWRpcmVjdC5jb20vc2NpZW5jZS9hcnRpY2xlL3BpaS9TMDc0OTU5NlgxOTMwMDY5NX0sDQogIGtleXdvcmRzID0ge0NvbnRyYXN0czsgTnVsbCBoeXBvdGhlc2lzIHNpZ25pZmljYW5jZSB0ZXN0aW5nOyBMaW5lYXIgbW9kZWxzOyBBDQogIHByaW9yaSBoeXBvdGhlc2VzO0JheWVzaWFuIFN0YXRpc3RpY3M7TUEgQ29kaW5nfQ0KfQ0KDQpAQVJUSUNMRXtMb3Blei1Mb3BlejIwMTQtaXQsDQogIHRpdGxlID0ge0VzdGltYXRpb24gb2YgdGhlIHByZWRpY3RpdmUgcG93ZXIgb2YgdGhlIG1vZGVsIGluIG1peGVkLWVmZmVjdHMNCiAgbWV0YS1yZWdyZXNzaW9uOiBBIHNpbXVsYXRpb24gc3R1ZHl9LA0KICBhdXRob3IgPSB7TMOzcGV6LUzDs3BleiwgSm9zw6kgQW50b25pbyBhbmQgTWFyw61uLU1hcnTDrW5leiwgRnVsZ2VuY2lvIGFuZA0KICBTw6FuY2hlei1NZWNhLCBKdWxpbyBhbmQgVmFuIGRlbiBOb29ydGdhdGUsIFdpbSBhbmQgVmllY2h0YmF1ZXIsIFdvbGZnYW5nfSwNCiAgam91cm5hbHRpdGxlID0ge1RoZSBCcml0aXNoIGpvdXJuYWwgb2YgbWF0aGVtYXRpY2FsIGFuZCBzdGF0aXN0aWNhbCBwc3ljaG9sb2d5fSwNCiAgcHVibGlzaGVyID0ge1dpbGV5fSwNCiAgdm9sdW1lID0gezY3fSwNCiAgaXNzdWUgPSB7MX0sDQogIHBhZ2VzID0gezMwLTQ4fSwNCiAgZGF0ZSA9IHsyMDE0LTAyfSwNCiAgZG9pID0gezEwLjExMTEvYm1zcC4xMjAwMn0sDQogIHBtaWQgPSB7MjMyOTc3MDl9LA0KICBpc3NuID0gezAwMDctMTEwMiwyMDQ0LTgzMTd9LA0KICBhYnN0cmFjdCA9IHtTZXZlcmFsIG1ldGhvZHMgYXJlIGF2YWlsYWJsZSB0byBlc3RpbWF0ZSB0aGUgdG90YWwgYW5kIHJlc2lkdWFsDQogIGFtb3VudCBvZiBoZXRlcm9nZW5laXR5IGluIG1ldGEtYW5hbHlzaXMsIGxlYWRpbmcgdG8gZGlmZmVyZW50IGFsdGVybmF0aXZlcw0KICB3aGVuIGVzdGltYXRpbmcgdGhlIHByZWRpY3RpdmUgcG93ZXIgaW4gbWl4ZWQtZWZmZWN0cyBtZXRhLXJlZ3Jlc3Npb24gbW9kZWxzDQogIHVzaW5nIHRoZSBmb3JtdWxhIHByb3Bvc2VkIGJ5IFJhdWRlbmJ1c2ggKDE5OTQsIDIwMDkpLiBJbiB0aGlzIHBhcGVyLCBhDQogIHNpbXVsYXRpb24gc3R1ZHkgd2FzIGNvbmR1Y3RlZCB0byBjb21wYXJlIHRoZSBwZXJmb3JtYW5jZSBvZiBzZXZlbiBlc3RpbWF0b3JzDQogIG9mIHRoZXNlIHBhcmFtZXRlcnMgdW5kZXIgdmFyaW91cyByZWFsaXN0aWMgc2NlbmFyaW9zIGluIHBzeWNob2xvZ3kgYW5kDQogIHJlbGF0ZWQgZmllbGRzLiBPdXIgcmVzdWx0cyBzdWdnZXN0IHRoYXQgdGhlIG51bWJlciBvZiBzdHVkaWVzIChrKSBleGVydHMgdGhlDQogIG1vc3QgaW1wb3J0YW50IGluZmx1ZW5jZSBvbiB0aGUgYWNjdXJhY3kgb2YgdGhlIHJlc3VsdHMsIGFuZCB0aGF0IHByZWNpc2UNCiAgZXN0aW1hdGVzIG9mIHRoZSBoZXRlcm9nZW5laXR5IHZhcmlhbmNlcyBhbmQgdGhlIG1vZGVsIHByZWRpY3RpdmUgcG93ZXIgY2FuDQogIG9ubHkgYmUgZXhwZWN0ZWQgd2l0aCBhdCBsZWFzdCAyMCBhbmQgNDAgc3R1ZGllcywgcmVzcGVjdGl2ZWx5LiBJbmNyZWFzZXMgaW4NCiAgdGhlIGF2ZXJhZ2Ugd2l0aGluLXN0dWR5IHNhbXBsZSBzaXplIChOwq8pIGFsc28gaW1wcm92ZWQgdGhlIHJlc3VsdHMgZm9yIGFsbA0KICBlc3RpbWF0b3JzLiBTb21lIGRpZmZlcmVuY2VzIGFtb25nIHRoZSBhY2N1cmFjeSBvZiB0aGUgZXN0aW1hdG9ycyB3ZXJlDQogIG9ic2VydmVkLCBlc3BlY2lhbGx5IHVuZGVyIGFkdmVyc2UgKHNtYWxsIGsgYW5kIE7CrykgY29uZGl0aW9ucywgd2hpbGUgdGhlDQogIHJlc3VsdHMgZm9yIHRoZSBkaWZmZXJlbnQgbWV0aG9kcyB0ZW5kZWQgdG8gY29udmVyZ2VuY2UgZm9yIG1vcmUgb3B0aW1hbA0KICBzY2VuYXJpb3MufSwNCiAgdXJsID0ge2h0dHBzOi8vYnBzcHN5Y2h1Yi5vbmxpbmVsaWJyYXJ5LndpbGV5LmNvbS9kb2kvYWJzLzEwLjExMTEvYm1zcC4xMjAwMn0sDQogIGxhbmd1YWdlID0ge2VufQ0KfQ0KDQpAQk9PS3tHZWxtYW4yMDIwLXRnLA0KICB0aXRsZSA9IHtSZWdyZXNzaW9uIGFuZCBPdGhlciBTdG9yaWVzfSwNCiAgYXV0aG9yID0ge0dlbG1hbiwgQW5kcmV3IGFuZCBIaWxsLCBKZW5uaWZlciBhbmQgVmVodGFyaSwgQWtpfSwNCiAgcHVibGlzaGVyID0ge0NhbWJyaWRnZSBVbml2ZXJzaXR5IFByZXNzfSwNCiAgZGF0ZSA9IHsyMDIwLTA3LTIzfSwNCiAgZG9pID0gezEwLjEwMTcvOTc4MTEzOTE2MTg3OX0sDQogIGlzYm4gPSB7OTc4MTEzOTE2MTg3OX0sDQogIGFic3RyYWN0ID0ge01vc3QgdGV4dGJvb2tzIG9uIHJlZ3Jlc3Npb24gZm9jdXMgb24gdGhlb3J5IGFuZCB0aGUgc2ltcGxlc3Qgb2YNCiAgZXhhbXBsZXMuIFJlYWwgc3RhdGlzdGljYWwgcHJvYmxlbXMsIGhvd2V2ZXIsIGFyZSBjb21wbGV4IGFuZCBzdWJ0bGUuIFRoaXMgaXMNCiAgbm90IGEgYm9vayBhYm91dCB0aGUgdGhlb3J5IG9mIHJlZ3Jlc3Npb24uIEl0IGlzIGFib3V0IHVzaW5nIHJlZ3Jlc3Npb24gdG8NCiAgc29sdmUgcmVhbCBwcm9ibGVtcyBvZiBjb21wYXJpc29uLCBlc3RpbWF0aW9uLCBwcmVkaWN0aW9uLCBhbmQgY2F1c2FsDQogIGluZmVyZW5jZS4gVW5saWtlIG90aGVyIGJvb2tzLCBpdCBmb2N1c2VzIG9uIHByYWN0aWNhbCBpc3N1ZXMgc3VjaCBhcyBzYW1wbGUNCiAgc2l6ZSBhbmQgbWlzc2luZyBkYXRhIGFuZCBhIHdpZGUgcmFuZ2Ugb2YgZ29hbHMgYW5kIHRlY2huaXF1ZXMuIEl0IGp1bXBzIHJpZ2h0DQogIGluIHRvIG1ldGhvZHMgYW5kIGNvbXB1dGVyIGNvZGUgeW91IGNhbiB1c2UgaW1tZWRpYXRlbHkuIFJlYWwgZXhhbXBsZXMsIHJlYWwNCiAgc3RvcmllcyBmcm9tIHRoZSBhdXRob3JzJyBleHBlcmllbmNlIGRlbW9uc3RyYXRlIHdoYXQgcmVncmVzc2lvbiBjYW4gZG8gYW5kDQogIGl0cyBsaW1pdGF0aW9ucywgd2l0aCBwcmFjdGljYWwgYWR2aWNlIGZvciB1bmRlcnN0YW5kaW5nIGFzc3VtcHRpb25zIGFuZA0KICBpbXBsZW1lbnRpbmcgbWV0aG9kcyBmb3IgZXhwZXJpbWVudHMgYW5kIG9ic2VydmF0aW9uYWwgc3R1ZGllcy4gVGhleSBtYWtlIGENCiAgc21vb3RoIHRyYW5zaXRpb24gdG8gbG9naXN0aWMgcmVncmVzc2lvbiBhbmQgR0xNLiBUaGUgZW1waGFzaXMgaXMgb24NCiAgY29tcHV0YXRpb24gaW4gUiBhbmQgU3RhbiByYXRoZXIgdGhhbiBkZXJpdmF0aW9ucywgd2l0aCBjb2RlIGF2YWlsYWJsZSBvbmxpbmUuDQogIEdyYXBoaWNzIGFuZCBwcmVzZW50YXRpb24gYWlkIHVuZGVyc3RhbmRpbmcgb2YgdGhlIG1vZGVscyBhbmQgbW9kZWwgZml0dGluZy59LA0KICB1cmwgPSB7aHR0cHM6Ly93d3cuY2FtYnJpZGdlLm9yZy9oaWdoZXJlZHVjYXRpb24vYm9va3MvcmVncmVzc2lvbi1hbmQtb3RoZXItc3Rvcmllcy9ERDIwREQ2QzkwNTcxMTg1ODEwNzZFNTRFNDBDMzcyQ30sDQogIHVybGRhdGUgPSB7MjAyMy0wMi0xNH0NCn0NCg0K" download="refs_to_download.bib"> Download .bib file</a></button>
+<img data-src="meta-regression_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="references-download-.bib-file" class="slide level2 refs smaller scrollable"><h2>References <button class="btn"><i class="fa fa-download"></i><a href="data:text/x-bibtex;base64,QEFSVElDTEV7U2NoYWQyMDIwLWh0LAogIHRpdGxlID0ge0hvdyB0byBjYXBpdGFsaXplIG9uIGEgcHJpb3JpIGNvbnRyYXN0cyBpbiBsaW5lYXIgKG1peGVkKSBtb2RlbHM6IEEKICB0dXRvcmlhbH0sCiAgYXV0aG9yID0ge1NjaGFkLCBEYW5pZWwgSiBhbmQgVmFzaXNodGgsIFNocmF2YW4gYW5kIEhvaGVuc3RlaW4sIFN2ZW4gYW5kCiAgS2xpZWdsLCBSZWluaG9sZH0sCiAgam91cm5hbHRpdGxlID0ge0pvdXJuYWwgb2YgbWVtb3J5IGFuZCBsYW5ndWFnZX0sCiAgdm9sdW1lID0gezExMH0sCiAgcGFnZXMgPSB7MTA0MDM4fSwKICBkYXRlID0gezIwMjAtMDItMDF9LAogIGRvaSA9IHsxMC4xMDE2L2ouam1sLjIwMTkuMTA0MDM4fSwKICBpc3NuID0gezA3NDktNTk2WH0sCiAgYWJzdHJhY3QgPSB7RmFjdG9yaWFsIGV4cGVyaW1lbnRzIGluIHJlc2VhcmNoIG9uIG1lbW9yeSwgbGFuZ3VhZ2UsIGFuZCBpbgogIG90aGVyIGFyZWFzIGFyZSBvZnRlbiBhbmFseXplZCB1c2luZyBhbmFseXNpcyBvZiB2YXJpYW5jZSAoQU5PVkEpLiBIb3dldmVyLAogIGZvciBlZmZlY3RzIHdpdGggbW9yZSB0aGFuIG9uZSBudW1lcmF0b3IgZGVncmVlcyBvZiBmcmVlZG9tLCBlLmcuLCBmb3IKICBleHBlcmltZW50YWwgZmFjdG9ycyB3aXRoIG1vcmUgdGhhbiB0d28gbGV2ZWxzLCB0aGUgQU5PVkEgb21uaWJ1cyBGLXRlc3QgaXMKICBub3QgaW5mb3JtYXRpdmUgYWJvdXQgdGhlIHNvdXJjZSBvZiBhIG1haW4gZWZmZWN0IG9yIGludGVyYWN0aW9uLiBCZWNhdXNlCiAgcmVzZWFyY2hlcnMgdHlwaWNhbGx5IGhhdmUgc3BlY2lmaWMgaHlwb3RoZXNlcyBhYm91dCB3aGljaCBjb25kaXRpb24gbWVhbnMKICBkaWZmZXIgZnJvbSBlYWNoIG90aGVyLCBhIHByaW9yaSBjb250cmFzdHMgKGkuZS4sIGNvbXBhcmlzb25zIHBsYW5uZWQgYmVmb3JlCiAgdGhlIHNhbXBsZSBtZWFucyBhcmUga25vd24pIGJldHdlZW4gc3BlY2lmaWMgY29uZGl0aW9ucyBvciBjb21iaW5hdGlvbnMgb2YKICBjb25kaXRpb25zIGFyZSB0aGUgYXBwcm9wcmlhdGUgd2F5IHRvIHJlcHJlc2VudCBzdWNoIGh5cG90aGVzZXMgaW4gdGhlCiAgc3RhdGlzdGljYWwgbW9kZWwuIE1hbnkgcmVzZWFyY2hlcnMgaGF2ZSBwb2ludGVkIG91dCB0aGF0IGNvbnRyYXN0cyBzaG91bGQgYmUKICDigJx0ZXN0ZWQgaW5zdGVhZCBvZiwgcmF0aGVyIHRoYW4gYXMgYSBzdXBwbGVtZW50IHRvLCB0aGUgb3JkaW5hcnkg4oCYb21uaWJ1c+KAmSBGCiAgdGVzdOKAnSAoSGF5cywgMTk3MywgcC4gNjAxKS4gSW4gdGhpcyB0dXRvcmlhbCwgd2UgZXhwbGFpbiB0aGUgbWF0aGVtYXRpY3MKICB1bmRlcmx5aW5nIGRpZmZlcmVudCBraW5kcyBvZiBjb250cmFzdHMgKGkuZS4sIHRyZWF0bWVudCwgc3VtLCByZXBlYXRlZCwKICBwb2x5bm9taWFsLCBjdXN0b20sIG5lc3RlZCwgaW50ZXJhY3Rpb24gY29udHJhc3RzKSwgZGlzY3VzcyB0aGVpciBwcm9wZXJ0aWVzLAogIGFuZCBkZW1vbnN0cmF0ZSBob3cgdGhleSBhcmUgYXBwbGllZCBpbiB0aGUgUiBTeXN0ZW0gZm9yIFN0YXRpc3RpY2FsIENvbXB1dGluZwogIChSIENvcmUgVGVhbSwgMjAxOCkuIEluIHRoaXMgY29udGV4dCwgd2UgZXhwbGFpbiB0aGUgZ2VuZXJhbGl6ZWQgaW52ZXJzZSB3aGljaAogIGlzIG5lZWRlZCB0byBjb21wdXRlIHRoZSBjb2VmZmljaWVudHMgZm9yIGNvbnRyYXN0cyB0aGF0IHRlc3QgaHlwb3RoZXNlcyB0aGF0CiAgYXJlIG5vdCBjb3ZlcmVkIGJ5IHRoZSBkZWZhdWx0IHNldCBvZiBjb250cmFzdHMuIEEgZGV0YWlsZWQgdW5kZXJzdGFuZGluZyBvZgogIGNvbnRyYXN0IGNvZGluZyBpcyBjcnVjaWFsIGZvciBzdWNjZXNzZnVsIGFuZCBjb3JyZWN0IHNwZWNpZmljYXRpb24gaW4gbGluZWFyCiAgbW9kZWxzIChpbmNsdWRpbmcgbGluZWFyIG1peGVkIG1vZGVscykuIENvbnRyYXN0cyBkZWZpbmVkIGEgcHJpb3JpIHlpZWxkIGZhcgogIG1vcmUgdXNlZnVsIGNvbmZpcm1hdG9yeSB0ZXN0cyBvZiBleHBlcmltZW50YWwgaHlwb3RoZXNlcyB0aGFuIHN0YW5kYXJkCiAgb21uaWJ1cyBGLXRlc3RzLiBSZXByb2R1Y2libGUgY29kZSBpcyBhdmFpbGFibGUgZnJvbSBodHRwczovL29zZi5pby83dWtmNi8ufSwKICB1cmwgPSB7aHR0cHM6Ly93d3cuc2NpZW5jZWRpcmVjdC5jb20vc2NpZW5jZS9hcnRpY2xlL3BpaS9TMDc0OTU5NlgxOTMwMDY5NX0sCiAga2V5d29yZHMgPSB7Q29udHJhc3RzOyBOdWxsIGh5cG90aGVzaXMgc2lnbmlmaWNhbmNlIHRlc3Rpbmc7IExpbmVhciBtb2RlbHM7IEEKICBwcmlvcmkgaHlwb3RoZXNlcztCYXllc2lhbiBTdGF0aXN0aWNzO01BIENvZGluZ30KfQoKQEJPT0t7R2VsbWFuMjAyMC10ZywKICB0aXRsZSA9IHtSZWdyZXNzaW9uIGFuZCBPdGhlciBTdG9yaWVzfSwKICBhdXRob3IgPSB7R2VsbWFuLCBBbmRyZXcgYW5kIEhpbGwsIEplbm5pZmVyIGFuZCBWZWh0YXJpLCBBa2l9LAogIHB1Ymxpc2hlciA9IHtDYW1icmlkZ2UgVW5pdmVyc2l0eSBQcmVzc30sCiAgZGF0ZSA9IHsyMDIwLTA3LTIzfSwKICBkb2kgPSB7MTAuMTAxNy85NzgxMTM5MTYxODc5fSwKICBpc2JuID0gezk3ODExMzkxNjE4Nzl9LAogIGFic3RyYWN0ID0ge01vc3QgdGV4dGJvb2tzIG9uIHJlZ3Jlc3Npb24gZm9jdXMgb24gdGhlb3J5IGFuZCB0aGUgc2ltcGxlc3Qgb2YKICBleGFtcGxlcy4gUmVhbCBzdGF0aXN0aWNhbCBwcm9ibGVtcywgaG93ZXZlciwgYXJlIGNvbXBsZXggYW5kIHN1YnRsZS4gVGhpcyBpcwogIG5vdCBhIGJvb2sgYWJvdXQgdGhlIHRoZW9yeSBvZiByZWdyZXNzaW9uLiBJdCBpcyBhYm91dCB1c2luZyByZWdyZXNzaW9uIHRvCiAgc29sdmUgcmVhbCBwcm9ibGVtcyBvZiBjb21wYXJpc29uLCBlc3RpbWF0aW9uLCBwcmVkaWN0aW9uLCBhbmQgY2F1c2FsCiAgaW5mZXJlbmNlLiBVbmxpa2Ugb3RoZXIgYm9va3MsIGl0IGZvY3VzZXMgb24gcHJhY3RpY2FsIGlzc3VlcyBzdWNoIGFzIHNhbXBsZQogIHNpemUgYW5kIG1pc3NpbmcgZGF0YSBhbmQgYSB3aWRlIHJhbmdlIG9mIGdvYWxzIGFuZCB0ZWNobmlxdWVzLiBJdCBqdW1wcyByaWdodAogIGluIHRvIG1ldGhvZHMgYW5kIGNvbXB1dGVyIGNvZGUgeW91IGNhbiB1c2UgaW1tZWRpYXRlbHkuIFJlYWwgZXhhbXBsZXMsIHJlYWwKICBzdG9yaWVzIGZyb20gdGhlIGF1dGhvcnMnIGV4cGVyaWVuY2UgZGVtb25zdHJhdGUgd2hhdCByZWdyZXNzaW9uIGNhbiBkbyBhbmQKICBpdHMgbGltaXRhdGlvbnMsIHdpdGggcHJhY3RpY2FsIGFkdmljZSBmb3IgdW5kZXJzdGFuZGluZyBhc3N1bXB0aW9ucyBhbmQKICBpbXBsZW1lbnRpbmcgbWV0aG9kcyBmb3IgZXhwZXJpbWVudHMgYW5kIG9ic2VydmF0aW9uYWwgc3R1ZGllcy4gVGhleSBtYWtlIGEKICBzbW9vdGggdHJhbnNpdGlvbiB0byBsb2dpc3RpYyByZWdyZXNzaW9uIGFuZCBHTE0uIFRoZSBlbXBoYXNpcyBpcyBvbgogIGNvbXB1dGF0aW9uIGluIFIgYW5kIFN0YW4gcmF0aGVyIHRoYW4gZGVyaXZhdGlvbnMsIHdpdGggY29kZSBhdmFpbGFibGUgb25saW5lLgogIEdyYXBoaWNzIGFuZCBwcmVzZW50YXRpb24gYWlkIHVuZGVyc3RhbmRpbmcgb2YgdGhlIG1vZGVscyBhbmQgbW9kZWwgZml0dGluZy59LAogIHVybCA9IHtodHRwczovL3d3dy5jYW1icmlkZ2Uub3JnL2hpZ2hlcmVkdWNhdGlvbi9ib29rcy9yZWdyZXNzaW9uLWFuZC1vdGhlci1zdG9yaWVzL0REMjBERDZDOTA1NzExODU4MTA3NkU1NEU0MEMzNzJDfSwKICB1cmxkYXRlID0gezIwMjMtMDItMTR9Cn0KCkBBUlRJQ0xFe0xvcGV6LUxvcGV6MjAxNC1pdCwKICB0aXRsZSA9IHtFc3RpbWF0aW9uIG9mIHRoZSBwcmVkaWN0aXZlIHBvd2VyIG9mIHRoZSBtb2RlbCBpbiBtaXhlZC1lZmZlY3RzCiAgbWV0YS1yZWdyZXNzaW9uOiBBIHNpbXVsYXRpb24gc3R1ZHl9LAogIGF1dGhvciA9IHtMw7NwZXotTMOzcGV6LCBKb3PDqSBBbnRvbmlvIGFuZCBNYXLDrW4tTWFydMOtbmV6LCBGdWxnZW5jaW8gYW5kCiAgU8OhbmNoZXotTWVjYSwgSnVsaW8gYW5kIFZhbiBkZW4gTm9vcnRnYXRlLCBXaW0gYW5kIFZpZWNodGJhdWVyLCBXb2xmZ2FuZ30sCiAgam91cm5hbHRpdGxlID0ge1RoZSBCcml0aXNoIGpvdXJuYWwgb2YgbWF0aGVtYXRpY2FsIGFuZCBzdGF0aXN0aWNhbCBwc3ljaG9sb2d5fSwKICBwdWJsaXNoZXIgPSB7V2lsZXl9LAogIHZvbHVtZSA9IHs2N30sCiAgaXNzdWUgPSB7MX0sCiAgcGFnZXMgPSB7MzAtNDh9LAogIGRhdGUgPSB7MjAxNC0wMn0sCiAgZG9pID0gezEwLjExMTEvYm1zcC4xMjAwMn0sCiAgcG1pZCA9IHsyMzI5NzcwOX0sCiAgaXNzbiA9IHswMDA3LTExMDIsMjA0NC04MzE3fSwKICBhYnN0cmFjdCA9IHtTZXZlcmFsIG1ldGhvZHMgYXJlIGF2YWlsYWJsZSB0byBlc3RpbWF0ZSB0aGUgdG90YWwgYW5kIHJlc2lkdWFsCiAgYW1vdW50IG9mIGhldGVyb2dlbmVpdHkgaW4gbWV0YS1hbmFseXNpcywgbGVhZGluZyB0byBkaWZmZXJlbnQgYWx0ZXJuYXRpdmVzCiAgd2hlbiBlc3RpbWF0aW5nIHRoZSBwcmVkaWN0aXZlIHBvd2VyIGluIG1peGVkLWVmZmVjdHMgbWV0YS1yZWdyZXNzaW9uIG1vZGVscwogIHVzaW5nIHRoZSBmb3JtdWxhIHByb3Bvc2VkIGJ5IFJhdWRlbmJ1c2ggKDE5OTQsIDIwMDkpLiBJbiB0aGlzIHBhcGVyLCBhCiAgc2ltdWxhdGlvbiBzdHVkeSB3YXMgY29uZHVjdGVkIHRvIGNvbXBhcmUgdGhlIHBlcmZvcm1hbmNlIG9mIHNldmVuIGVzdGltYXRvcnMKICBvZiB0aGVzZSBwYXJhbWV0ZXJzIHVuZGVyIHZhcmlvdXMgcmVhbGlzdGljIHNjZW5hcmlvcyBpbiBwc3ljaG9sb2d5IGFuZAogIHJlbGF0ZWQgZmllbGRzLiBPdXIgcmVzdWx0cyBzdWdnZXN0IHRoYXQgdGhlIG51bWJlciBvZiBzdHVkaWVzIChrKSBleGVydHMgdGhlCiAgbW9zdCBpbXBvcnRhbnQgaW5mbHVlbmNlIG9uIHRoZSBhY2N1cmFjeSBvZiB0aGUgcmVzdWx0cywgYW5kIHRoYXQgcHJlY2lzZQogIGVzdGltYXRlcyBvZiB0aGUgaGV0ZXJvZ2VuZWl0eSB2YXJpYW5jZXMgYW5kIHRoZSBtb2RlbCBwcmVkaWN0aXZlIHBvd2VyIGNhbgogIG9ubHkgYmUgZXhwZWN0ZWQgd2l0aCBhdCBsZWFzdCAyMCBhbmQgNDAgc3R1ZGllcywgcmVzcGVjdGl2ZWx5LiBJbmNyZWFzZXMgaW4KICB0aGUgYXZlcmFnZSB3aXRoaW4tc3R1ZHkgc2FtcGxlIHNpemUgKE7CrykgYWxzbyBpbXByb3ZlZCB0aGUgcmVzdWx0cyBmb3IgYWxsCiAgZXN0aW1hdG9ycy4gU29tZSBkaWZmZXJlbmNlcyBhbW9uZyB0aGUgYWNjdXJhY3kgb2YgdGhlIGVzdGltYXRvcnMgd2VyZQogIG9ic2VydmVkLCBlc3BlY2lhbGx5IHVuZGVyIGFkdmVyc2UgKHNtYWxsIGsgYW5kIE7CrykgY29uZGl0aW9ucywgd2hpbGUgdGhlCiAgcmVzdWx0cyBmb3IgdGhlIGRpZmZlcmVudCBtZXRob2RzIHRlbmRlZCB0byBjb252ZXJnZW5jZSBmb3IgbW9yZSBvcHRpbWFsCiAgc2NlbmFyaW9zLn0sCiAgdXJsID0ge2h0dHBzOi8vYnBzcHN5Y2h1Yi5vbmxpbmVsaWJyYXJ5LndpbGV5LmNvbS9kb2kvYWJzLzEwLjExMTEvYm1zcC4xMjAwMn0sCiAgbGFuZ3VhZ2UgPSB7ZW59Cn0KCg==" download="refs_to_download.bib"> Download .bib file</a></button>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Gelman2020-tg" class="csl-entry" role="listitem">

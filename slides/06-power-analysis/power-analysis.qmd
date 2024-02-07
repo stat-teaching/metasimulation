@@ -287,16 +287,22 @@ The most informative approach is plotting the power curves for different values 
 
 You can use the `power_meta()` function:
 
-```{r}
-#| output: asis
-#| echo: false
-filor::print_fun(funs$power_meta)
+```r
+power_meta <- function(es, k, tau2 = 0, n1, n2 = NULL, alpha = 0.05){
+  if(is.null(n2)) n2 <- n1
+  zc <- qnorm(1 - alpha/2)
+  vt <- 1/n1 + 1/n2
+  ves <- (vt + tau2)/k
+  lambda <- es/sqrt(ves)
+  (1 - pnorm(zc - lambda)) + pnorm(-zc - lambda)
+}
 ```
 
 ## Analytical approach - Power curves
 
 ```{r}
 #| code-fold: true
+#| echo: true
 k <- c(5, 10, 30, 50, 100)
 es <- c(0.1, 0.3)
 tau2 <- c(0, 0.05, 0.1, 0.2)
@@ -325,6 +331,7 @@ With the analytical approach we can (quickly) do interesting stuff. For example,
 
 ```{r}
 #| code-fold: true
+#| echo: true
 # average meta k = 20, n = 30
 kavg <- 20
 navg <- 30
@@ -354,6 +361,8 @@ As long as $\tau^2 \neq 0$ we need more studies (even if the total sample size i
 With simulations we can fix or relax the previous assumptions. For example, let's compute the power for an EE model:
 
 ```{r}
+#| collapse: true
+#| echo: true
 k <- 10
 es <- 0.3
 tau2 <- 0
@@ -404,6 +413,7 @@ grid$power <- power
 
 ```{r}
 #| code-fold: true
+#| echo: true
 ggplot(grid, aes(x = factor(k), y = power, color = factor(tau2))) +
   geom_point() +
   geom_line(aes(group = factor(tau2))) +
@@ -420,18 +430,20 @@ ggplot(grid, aes(x = factor(k), y = power, color = factor(tau2))) +
 The power for a meta-regression can be easily computed by simulating the moderator effect. For example, let's simulate the effect of a binary predictor $x$.
 
 ```{r}
+#| echo: true
+#| collapse: true
 k <- seq(10, 100, 10)
 b0 <- 0.2 # average of group 1
 b1 <- 0.1 # difference between group 1 and 2
-tau2r <- 0.05 # residual tau2
+tau2r <- 0.2 # residual tau2
 nsim <- 1000
 power <- rep(NA, length(k))
 
 for(i in 1:length(k)){
-  es <- b0 + rnorm(k[i], 0, sqrt(tau2)) + b1 * rep(0:1, each = k[i]/2)
+  es <- b0 + b1 * rep(0:1, each = k[i]/2)
   pval <- rep(NA, nsim)
   for(j in 1:nsim){
-    n <- runif(k[i], 10, 100)
+    n <- round(runif(k[i], 10, 100))
     dat <- sim_studies(k[i], es, tau2r, n)
     fit <- rma(yi, vi, data = dat)
     pval[j] <- fit$pval
@@ -445,6 +457,8 @@ for(i in 1:length(k)){
 Then we can plot the results:
 
 ```{r}
+#| code-fold: true
+#| echo: true
 power <- data.frame(k = k, power = power)
 ggplot(power, aes(x = k, y = power)) +
   geom_line()
@@ -490,6 +504,9 @@ ht(dat)
 This is a simple **multilevel model** (pupils within classrooms or trials within participants). We can fit the model using `lme4::lmer()`:
 
 ```{r}
+#| echo: true
+#| collapse: true
+#| code-fold: false
 library(lme4)
 fit_lme <- lmer(y ~ group + (1|unit), data = dat)
 summary(fit_lme)
@@ -504,6 +521,7 @@ Let's do the same as a meta-analysis. Firstly we compute the effect sizes for ea
 #| echo: true
 #| message: false
 #| warning: false
+#| 
 datagg <- dat |> 
   group_by(unit, group) |> 
   summarise(m = mean(y),
@@ -525,6 +543,7 @@ ht(datagg)
 Then we can fit the model:
 
 ```{r}
+#| echo: true
 fit_rma <- rma(yi, vi, data = datagg)
 fit_rma
 ```
@@ -534,6 +553,7 @@ fit_rma
 Actually the results are very similar where the standard deviation of the intercepts of the `lme4` model is $\approx \tau$ and the `group` effect is the intercept of the `rma` model.
 
 ```{r}
+#| echo: true
 data.frame(
   b = c(fixef(fit_lme)[2], fit_rma$b),
   se = c(summary(fit_lme)$coefficients[2, 2], fit_rma$se),
@@ -549,6 +569,7 @@ Actually the two model are not exactly the same, especially when using only the 
 To note, aggregating data and then computing a standard (non-weighted) model (sometimes this is done with trial-level data) is wrong and should be avoided. Using meta-analysis is clear that aggregating without taking into account the cluster (e.g., study or subject) precision is misleading.
 
 ```{r}
+#| echo: true
 dataggl <- datagg |> 
   select(unit, m0, m1) |>
   pivot_longer(c(m0, m1), values_to = "y", names_to = "group")

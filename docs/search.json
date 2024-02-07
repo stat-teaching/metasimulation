@@ -39,7 +39,7 @@
     "href": "slides/06-power-analysis/power-analysis.html#power-by-simulations-1",
     "title": "Power analysis",
     "section": "Power by simulations",
-    "text": "Power by simulations\nLet’s see the previous example using simulations:\n\nnsim &lt;- 5000\np &lt;- rep(NA, nsim)\nfor(i in 1:nsim){\n    g1 &lt;- rnorm(n1, 0, 1)\n    g2 &lt;- rnorm(n2, d, 1)\n    p[i] &lt;- t.test(g1, g2)$p.value\n}\nmean(p &lt;= alpha)\n#&gt; [1] 0.4828\n\nThe estimated value is pretty close to the analytical value."
+    "text": "Power by simulations\nLet’s see the previous example using simulations:\n\nnsim &lt;- 5000\np &lt;- rep(NA, nsim)\nfor(i in 1:nsim){\n    g1 &lt;- rnorm(n1, 0, 1)\n    g2 &lt;- rnorm(n2, d, 1)\n    p[i] &lt;- t.test(g1, g2)$p.value\n}\nmean(p &lt;= alpha)\n#&gt; [1] 0.4798\n\nThe estimated value is pretty close to the analytical value."
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#what-about-meta-analysis",
@@ -88,28 +88,28 @@
     "href": "slides/06-power-analysis/power-analysis.html#analytical-approach---power-curves",
     "title": "Power analysis",
     "section": "Analytical approach - Power curves",
-    "text": "Analytical approach - Power curves\nThe most informative approach is plotting the power curves for different values of \\(\\tau^2\\), \\(\\sigma^2_k\\) and \\(\\theta\\) (or \\(\\mu_{\\theta}\\)).\nYou can use the power_meta() function:"
+    "text": "Analytical approach - Power curves\nThe most informative approach is plotting the power curves for different values of \\(\\tau^2\\), \\(\\sigma^2_k\\) and \\(\\theta\\) (or \\(\\mu_{\\theta}\\)).\nYou can use the power_meta() function:\npower_meta &lt;- function(es, k, tau2 = 0, n1, n2 = NULL, alpha = 0.05){\n  if(is.null(n2)) n2 &lt;- n1\n  zc &lt;- qnorm(1 - alpha/2)\n  vt &lt;- 1/n1 + 1/n2\n  ves &lt;- (vt + tau2)/k\n  lambda &lt;- es/sqrt(ves)\n  (1 - pnorm(zc - lambda)) + pnorm(-zc - lambda)\n}"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#analytical-approach---power-curves-1",
     "href": "slides/06-power-analysis/power-analysis.html#analytical-approach---power-curves-1",
     "title": "Power analysis",
     "section": "Analytical approach - Power curves",
-    "text": "Analytical approach - Power curves"
+    "text": "Analytical approach - Power curves\n\nCodek &lt;- c(5, 10, 30, 50, 100)\nes &lt;- c(0.1, 0.3)\ntau2 &lt;- c(0, 0.05, 0.1, 0.2)\nn &lt;- c(10, 30, 50, 100, 1000)\n\npower &lt;- expand_grid(es, k, tau2, n1 = n)\npower$power &lt;- power_meta(power$es, power$k, power$tau2, power$n1)\n\npower$es &lt;- factor(power$es, labels = latex2exp::TeX(sprintf(\"$\\\\mu_{\\\\theta} = %s$\", es)))\npower$tau2 &lt;- factor(power$tau2, labels = latex2exp::TeX(sprintf(\"$\\\\tau^2 = %s$\", tau2)))\n\nggplot(power, aes(x = factor(k), y = power, color = factor(n1))) +\n  geom_point() +\n  geom_line(aes(group = factor(n1))) +\n  facet_grid(es~tau2, labeller = label_parsed) +\n  xlab(\"Number of Studies (k)\") +\n  ylab(\"Power\") +\n  labs(\n    color = latex2exp::TeX(\"$n_1 = n_2$\")\n  )"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#analytical-approach---power-curves-2",
     "href": "slides/06-power-analysis/power-analysis.html#analytical-approach---power-curves-2",
     "title": "Power analysis",
     "section": "Analytical approach - Power curves",
-    "text": "Analytical approach - Power curves\nWith the analytical approach we can (quickly) do interesting stuff. For example, we fix the total \\(N = n_1 + n_2\\) for a series of \\(k\\) and check the power.\n\nAs long as \\(\\tau^2 \\neq 0\\) we need more studies (even if the total sample size is the same)."
+    "text": "Analytical approach - Power curves\nWith the analytical approach we can (quickly) do interesting stuff. For example, we fix the total \\(N = n_1 + n_2\\) for a series of \\(k\\) and check the power.\n\nCode# average meta k = 20, n = 30\nkavg &lt;- 20\nnavg &lt;- 30\nN &lt;- kavg * (navg*2)\nes &lt;- 0.3\ntau2 &lt;- c(0, 0.05, 0.1, 0.2)\nk &lt;- seq(10, 100, 10)\nn1 &lt;- n2 &lt;- round((N/k)/ 2)\n\nsim &lt;- data.frame(es, k, n1, n2)\nsim &lt;- expand_grid(sim, tau2 = tau2)\nsim$power &lt;- power_meta(sim$es, sim$k, sim$tau2, sim$n1, sim$n2)\nsim$N &lt;- with(sim, k * (n1 + n2))\n\nggplot(sim, aes(x = k, y = power, color = factor(tau2))) +\n  geom_line() +\n  ggtitle(latex2exp::TeX(\"Total N ($n_1 + n_2$) = 1200\")) +\n  labs(x = \"Number of Studies (k)\",\n       y = \"Power\",\n       color = latex2exp::TeX(\"$\\\\tau^2$\"))\n\n\nAs long as \\(\\tau^2 \\neq 0\\) we need more studies (even if the total sample size is the same)."
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#simulation-based-power",
     "href": "slides/06-power-analysis/power-analysis.html#simulation-based-power",
     "title": "Power analysis",
     "section": "Simulation-based power",
-    "text": "Simulation-based power\nWith simulations we can fix or relax the previous assumptions. For example, let’s compute the power for an EE model:\n\n#&gt; [1] 0.932\n\nThe value is similar to the analytical simulation. But we can improve it e.g. generating heterogeneous sample sizes."
+    "text": "Simulation-based power\nWith simulations we can fix or relax the previous assumptions. For example, let’s compute the power for an EE model:\n\nk &lt;- 10\nes &lt;- 0.3\ntau2 &lt;- 0\nn1 &lt;- n2 &lt;- rep(25, k)\nnsim &lt;- 1000 # more is better\npval &lt;- rep(NA, nsim)\n\nfor(i in 1:nsim){\n  dat &lt;- sim_studies(k, es, tau2, n1, n2)\n  fit &lt;- rma(yi, vi, data = dat, method = \"EE\")\n  pval[i] &lt;- fit$pval\n}\n\nmean(pval &lt;= 0.05)\n#&gt; [1] 0.924\n\nThe value is similar to the analytical simulation. But we can improve it e.g. generating heterogeneous sample sizes."
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#simulation-based-power-curve",
@@ -123,21 +123,21 @@
     "href": "slides/06-power-analysis/power-analysis.html#simulation-based-power-curve-1",
     "title": "Power analysis",
     "section": "Simulation-based power curve",
-    "text": "Simulation-based power curve"
+    "text": "Simulation-based power curve\n\nCodeggplot(grid, aes(x = factor(k), y = power, color = factor(tau2))) +\n  geom_point() +\n  geom_line(aes(group = factor(tau2))) +\n  labs(\n    y = \"Power\",\n    x = \"Number of studies (k)\",\n    color = latex2exp::TeX(\"$\\\\tau^2$\")\n  )"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#power-analysis-for-meta-regression",
     "href": "slides/06-power-analysis/power-analysis.html#power-analysis-for-meta-regression",
     "title": "Power analysis",
     "section": "Power analysis for meta-regression",
-    "text": "Power analysis for meta-regression\nThe power for a meta-regression can be easily computed by simulating the moderator effect. For example, let’s simulate the effect of a binary predictor \\(x\\)."
+    "text": "Power analysis for meta-regression\nThe power for a meta-regression can be easily computed by simulating the moderator effect. For example, let’s simulate the effect of a binary predictor \\(x\\).\n\nk &lt;- seq(10, 100, 10)\nb0 &lt;- 0.2 # average of group 1\nb1 &lt;- 0.1 # difference between group 1 and 2\ntau2r &lt;- 0.2 # residual tau2\nnsim &lt;- 1000\npower &lt;- rep(NA, length(k))\n\nfor(i in 1:length(k)){\n  es &lt;- b0 + b1 * rep(0:1, each = k[i]/2)\n  pval &lt;- rep(NA, nsim)\n  for(j in 1:nsim){\n    n &lt;- round(runif(k[i], 10, 100))\n    dat &lt;- sim_studies(k[i], es, tau2r, n)\n    fit &lt;- rma(yi, vi, data = dat)\n    pval[j] &lt;- fit$pval\n  }\n  power[i] &lt;- mean(pval &lt;= 0.05)\n}"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#power-analysis-for-meta-regression-1",
     "href": "slides/06-power-analysis/power-analysis.html#power-analysis-for-meta-regression-1",
     "title": "Power analysis",
     "section": "Power analysis for meta-regression",
-    "text": "Power analysis for meta-regression\nThen we can plot the results:"
+    "text": "Power analysis for meta-regression\nThen we can plot the results:\n\nCodepower &lt;- data.frame(k = k, power = power)\nggplot(power, aes(x = k, y = power)) +\n  geom_line()"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#multilab-studies-1",
@@ -151,14 +151,14 @@
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel model",
-    "text": "Meta-analysis as multilevel model\nAssuming that we have \\(k\\) studies with raw data available there is no need to aggregate, calculate the effect size and variances and then use an EE or RE model.\n\nk &lt;- 50\nes &lt;- 0.4\ntau2 &lt;- 0.1\nn &lt;- round(runif(k, 10, 100))\ndat &lt;- vector(mode = \"list\", k)\nthetai &lt;- rnorm(k, 0, sqrt(tau2))\n\nfor(i in 1:k){\n  g1 &lt;- rnorm(n[i], 0, 1)\n  g2 &lt;- rnorm(n[i], es + thetai[i], 1)\n  d &lt;- data.frame(id = 1:(n[i]*2), unit = i, y = c(g1, g2), group = rep(c(0, 1), each = n[i]))\n  dat[[i]] &lt;- d\n}\n\ndat &lt;- do.call(rbind, dat)\nht(dat)\n#&gt;      id unit           y group\n#&gt; 1     1    1  0.25351317     0\n#&gt; 2     2    1  2.21833569     0\n#&gt; 3     3    1 -1.59512076     0\n#&gt; 4     4    1 -0.57003152     0\n#&gt; 5     5    1  0.35994291     0\n#&gt; 5471 33   50  0.99274994     1\n#&gt; 5472 34   50  2.81048166     1\n#&gt; 5473 35   50  2.46494714     1\n#&gt; 5474 36   50  1.52578306     1\n#&gt; 5475 37   50  0.70916460     1\n#&gt; 5476 38   50 -0.07521999     1"
+    "text": "Meta-analysis as multilevel model\nAssuming that we have \\(k\\) studies with raw data available there is no need to aggregate, calculate the effect size and variances and then use an EE or RE model.\n\nk &lt;- 50\nes &lt;- 0.4\ntau2 &lt;- 0.1\nn &lt;- round(runif(k, 10, 100))\ndat &lt;- vector(mode = \"list\", k)\nthetai &lt;- rnorm(k, 0, sqrt(tau2))\n\nfor(i in 1:k){\n  g1 &lt;- rnorm(n[i], 0, 1)\n  g2 &lt;- rnorm(n[i], es + thetai[i], 1)\n  d &lt;- data.frame(id = 1:(n[i]*2), unit = i, y = c(g1, g2), group = rep(c(0, 1), each = n[i]))\n  dat[[i]] &lt;- d\n}\n\ndat &lt;- do.call(rbind, dat)\nht(dat)\n#&gt;      id unit          y group\n#&gt; 1     1    1  0.2893323     0\n#&gt; 2     2    1 -1.1718120     0\n#&gt; 3     3    1 -0.8300565     0\n#&gt; 4     4    1  0.1406313     0\n#&gt; 5     5    1  1.0616239     0\n#&gt; 5473 65   50  0.3235104     1\n#&gt; 5474 66   50  0.4872725     1\n#&gt; 5475 67   50 -0.5355670     1\n#&gt; 5476 68   50  2.4656131     1\n#&gt; 5477 69   50 -0.6286605     1\n#&gt; 5478 70   50  2.4208509     1"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-1",
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-1",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel model",
-    "text": "Meta-analysis as multilevel model\nThis is a simple multilevel model (pupils within classrooms or trials within participants). We can fit the model using lme4::lmer():\n\n#&gt; Linear mixed model fit by REML ['lmerMod']\n#&gt; Formula: y ~ group + (1 | unit)\n#&gt;    Data: dat\n#&gt; \n#&gt; REML criterion at convergence: 15851.7\n#&gt; \n#&gt; Scaled residuals: \n#&gt;     Min      1Q  Median      3Q     Max \n#&gt; -3.8783 -0.6644 -0.0152  0.6603  3.9740 \n#&gt; \n#&gt; Random effects:\n#&gt;  Groups   Name        Variance Std.Dev.\n#&gt;  unit     (Intercept) 0.01536  0.1239  \n#&gt;  Residual             1.04809  1.0238  \n#&gt; Number of obs: 5476, groups:  unit, 50\n#&gt; \n#&gt; Fixed effects:\n#&gt;             Estimate Std. Error t value\n#&gt; (Intercept) -0.01519    0.02698  -0.563\n#&gt; group        0.47306    0.02767  17.097\n#&gt; \n#&gt; Correlation of Fixed Effects:\n#&gt;       (Intr)\n#&gt; group -0.513"
+    "text": "Meta-analysis as multilevel model\nThis is a simple multilevel model (pupils within classrooms or trials within participants). We can fit the model using lme4::lmer():\n\nlibrary(lme4)\nfit_lme &lt;- lmer(y ~ group + (1|unit), data = dat)\nsummary(fit_lme)\n#&gt; Linear mixed model fit by REML ['lmerMod']\n#&gt; Formula: y ~ group + (1 | unit)\n#&gt;    Data: dat\n#&gt; \n#&gt; REML criterion at convergence: 15712.6\n#&gt; \n#&gt; Scaled residuals: \n#&gt;     Min      1Q  Median      3Q     Max \n#&gt; -3.4455 -0.6876  0.0186  0.6977  3.2117 \n#&gt; \n#&gt; Random effects:\n#&gt;  Groups   Name        Variance Std.Dev.\n#&gt;  unit     (Intercept) 0.04006  0.2002  \n#&gt;  Residual             1.01432  1.0071  \n#&gt; Number of obs: 5478, groups:  unit, 50\n#&gt; \n#&gt; Fixed effects:\n#&gt;              Estimate Std. Error t value\n#&gt; (Intercept) -0.003784   0.034715  -0.109\n#&gt; group        0.417518   0.027215  15.342\n#&gt; \n#&gt; Correlation of Fixed Effects:\n#&gt;       (Intr)\n#&gt; group -0.392"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-2",
@@ -172,28 +172,28 @@
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-3",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel model",
-    "text": "Meta-analysis as multilevel model\n\n#&gt; \n#&gt;    unit          m0        m1       sd0       sd1 n0 n1     yi     vi \n#&gt; 1     1  0.04832768 0.8352791 1.0415511 1.0081381 51 51 0.7870 0.0412 \n#&gt; 2     2  0.17514842 0.7970731 1.0065334 0.8038306 49 49 0.6219 0.0339 \n#&gt; 3     3 -0.26231701 0.2935666 1.0407124 1.1675311 23 23 0.5559 0.1064 \n#&gt; 4     4 -0.02154628 0.4011219 0.9582875 0.7732307 78 78 0.4227 0.0194 \n#&gt; 5     5 -0.00968915 0.1157841 1.1914665 0.7034426 33 33 0.1255 0.0580 \n#&gt; 45   45 -0.09326319 0.5462242 1.0407688 1.0040196 94 94 0.6395 0.0222 \n#&gt; 46   46 -0.16313667 0.8368845 1.0914930 1.0872035 95 95 1.0000 0.0250 \n#&gt; 47   47  0.01306647 0.1629511 1.1504861 1.1392431 49 49 0.1499 0.0535 \n#&gt; 48   48  0.05309306 0.7589418 1.1088198 1.0849408 97 97 0.7058 0.0248 \n#&gt; 49   49  0.03729666 0.4541249 1.0761246 0.5711910 23 23 0.4168 0.0645 \n#&gt; 50   50  0.13340769 0.9028684 0.9206645 0.8649275 19 19 0.7695 0.0840"
+    "text": "Meta-analysis as multilevel model\n\n#&gt; \n#&gt;    unit           m0          m1       sd0       sd1 n0 n1      yi     vi \n#&gt; 1     1 -0.182281099  0.67740970 0.9313053 0.8599736 32 32  0.8597 0.0502 \n#&gt; 2     2 -0.080684001  0.09258349 0.8352305 1.0518596 59 59  0.1733 0.0306 \n#&gt; 3     3 -0.194020177  0.04229138 1.0409077 0.9633482 80 80  0.2363 0.0251 \n#&gt; 4     4 -0.122323160  0.61829855 0.9724882 0.8976187 36 36  0.7406 0.0487 \n#&gt; 5     5  0.240849696  0.27411106 0.9550909 0.8178345 36 36  0.0333 0.0439 \n#&gt; 45   45  0.014118034 -0.16639800 1.1398257 0.9029696 81 81 -0.1805 0.0261 \n#&gt; 46   46  0.258466056  0.70023676 0.9593704 1.0152041 31 31  0.4418 0.0629 \n#&gt; 47   47 -0.108808858 -0.06605484 1.0886507 1.0221369 47 47  0.0428 0.0474 \n#&gt; 48   48 -0.101801658  1.06380067 0.9214148 1.0912795 27 27  1.1656 0.0756 \n#&gt; 49   49 -0.004267983  0.06425461 1.0686583 0.9415882 58 58  0.0685 0.0350 \n#&gt; 50   50 -0.108280467  0.36343002 0.9505833 1.2846007 35 35  0.4717 0.0730"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-4",
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-model-4",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel model",
-    "text": "Meta-analysis as multilevel model\nThen we can fit the model:\n\n#&gt; \n#&gt; Random-Effects Model (k = 50; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.0266 (SE = 0.0131)\n#&gt; tau (square root of estimated tau^2 value):      0.1631\n#&gt; I^2 (total heterogeneity / total variability):   41.61%\n#&gt; H^2 (total variability / sampling variability):  1.71\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 49) = 84.5366, p-val = 0.0012\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt;   0.4711  0.0370  12.7309  &lt;.0001  0.3986  0.5436  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Meta-analysis as multilevel model\nThen we can fit the model:\n\nfit_rma &lt;- rma(yi, vi, data = datagg)\nfit_rma\n#&gt; \n#&gt; Random-Effects Model (k = 50; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.1112 (SE = 0.0306)\n#&gt; tau (square root of estimated tau^2 value):      0.3335\n#&gt; I^2 (total heterogeneity / total variability):   75.80%\n#&gt; H^2 (total variability / sampling variability):  4.13\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 49) = 207.6604, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.4653  0.0553  8.4168  &lt;.0001  0.3570  0.5737  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-modeling",
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-modeling",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel modeling",
-    "text": "Meta-analysis as multilevel modeling\nActually the results are very similar where the standard deviation of the intercepts of the lme4 model is \\(\\approx \\tau\\) and the group effect is the intercept of the rma model.\n\n#&gt;               b        se       tau2   model\n#&gt; group 0.4730643 0.0276693 0.01536141    lme4\n#&gt;       0.4710951 0.0370040 0.02660848 metafor\n\nActually the two model are not exactly the same, especially when using only the aggregated data. See https://www.metafor-project.org/doku.php/tips:rma_vs_lm_lme_lmer."
+    "text": "Meta-analysis as multilevel modeling\nActually the results are very similar where the standard deviation of the intercepts of the lme4 model is \\(\\approx \\tau\\) and the group effect is the intercept of the rma model.\n\ndata.frame(\n  b = c(fixef(fit_lme)[2], fit_rma$b),\n  se = c(summary(fit_lme)$coefficients[2, 2], fit_rma$se),\n  tau2 = c(as.numeric(VarCorr(fit_lme)[[1]]), fit_rma$tau2),\n  model = c(\"lme4\", \"metafor\")\n)\n#&gt;               b         se       tau2   model\n#&gt; group 0.4175182 0.02721483 0.04006087    lme4\n#&gt;       0.4653258 0.05528509 0.11120165 metafor\n\nActually the two model are not exactly the same, especially when using only the aggregated data. See https://www.metafor-project.org/doku.php/tips:rma_vs_lm_lme_lmer."
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-modeling-1",
     "href": "slides/06-power-analysis/power-analysis.html#meta-analysis-as-multilevel-modeling-1",
     "title": "Power analysis",
     "section": "Meta-analysis as multilevel modeling",
-    "text": "Meta-analysis as multilevel modeling\nTo note, aggregating data and then computing a standard (non-weighted) model (sometimes this is done with trial-level data) is wrong and should be avoided. Using meta-analysis is clear that aggregating without taking into account the cluster (e.g., study or subject) precision is misleading.\n\n#&gt; Linear mixed model fit by REML ['lmerMod']\n#&gt; Formula: y ~ group + (1 | unit)\n#&gt;    Data: dataggl\n#&gt; \n#&gt; REML criterion at convergence: -6.2\n#&gt; \n#&gt; Scaled residuals: \n#&gt;     Min      1Q  Median      3Q     Max \n#&gt; -2.5291 -0.4831  0.0060  0.4325  3.7067 \n#&gt; \n#&gt; Random effects:\n#&gt;  Groups   Name        Variance Std.Dev.\n#&gt;  unit     (Intercept) 0.009927 0.09963 \n#&gt;  Residual             0.041790 0.20443 \n#&gt; Number of obs: 100, groups:  unit, 50\n#&gt; \n#&gt; Fixed effects:\n#&gt;             Estimate Std. Error t value\n#&gt; (Intercept) -0.02031    0.03216  -0.632\n#&gt; groupm1      0.47465    0.04089  11.609\n#&gt; \n#&gt; Correlation of Fixed Effects:\n#&gt;         (Intr)\n#&gt; groupm1 -0.636"
+    "text": "Meta-analysis as multilevel modeling\nTo note, aggregating data and then computing a standard (non-weighted) model (sometimes this is done with trial-level data) is wrong and should be avoided. Using meta-analysis is clear that aggregating without taking into account the cluster (e.g., study or subject) precision is misleading.\n\ndataggl &lt;- datagg |&gt; \n  select(unit, m0, m1) |&gt;\n  pivot_longer(c(m0, m1), values_to = \"y\", names_to = \"group\")\n\nsummary(lmer(y ~ group + (1|unit), data = dataggl))\n#&gt; Linear mixed model fit by REML ['lmerMod']\n#&gt; Formula: y ~ group + (1 | unit)\n#&gt;    Data: dataggl\n#&gt; \n#&gt; REML criterion at convergence: 47.9\n#&gt; \n#&gt; Scaled residuals: \n#&gt;      Min       1Q   Median       3Q      Max \n#&gt; -2.31836 -0.54276 -0.03706  0.61381  2.36896 \n#&gt; \n#&gt; Random effects:\n#&gt;  Groups   Name        Variance Std.Dev.\n#&gt;  unit     (Intercept) 0.01407  0.1186  \n#&gt;  Residual             0.07520  0.2742  \n#&gt; Number of obs: 100, groups:  unit, 50\n#&gt; \n#&gt; Fixed effects:\n#&gt;             Estimate Std. Error t value\n#&gt; (Intercept) -0.02872    0.04226  -0.680\n#&gt; groupm1      0.48411    0.05485   8.827\n#&gt; \n#&gt; Correlation of Fixed Effects:\n#&gt;         (Intr)\n#&gt; groupm1 -0.649"
   },
   {
     "objectID": "slides/06-power-analysis/power-analysis.html#mulitlab-sample-size-vs-unit",
@@ -277,21 +277,21 @@
     "href": "slides/04-meta-regression/meta-regression.html#simulating-the-x-effect",
     "title": "Meta-regression",
     "section": "Simulating the \\(X\\) effect",
-    "text": "Simulating the \\(X\\) effect\nTo simulate a meta-regression we just need to choose the parameters values (\\(\\beta_0\\) and \\(\\beta_1\\)) and implement Equation 1. Using treatment coding, \\(\\beta_0\\) is the effect size when \\(X = 0\\) (i.e., lab-based experiments) and \\(\\beta_1\\) is the difference between lab and online experiments.\n\n#&gt;        exp exp_dummy  es\n#&gt; 1      lab         0 0.3\n#&gt; 2      lab         0 0.3\n#&gt; 3      lab         0 0.3\n#&gt; 4      lab         0 0.3\n#&gt; 5      lab         0 0.3\n#&gt; 95  online         1 0.8\n#&gt; 96  online         1 0.8\n#&gt; 97  online         1 0.8\n#&gt; 98  online         1 0.8\n#&gt; 99  online         1 0.8\n#&gt; 100 online         1 0.8"
+    "text": "Simulating the \\(X\\) effect\nTo simulate a meta-regression we just need to choose the parameters values (\\(\\beta_0\\) and \\(\\beta_1\\)) and implement Equation 1. Using treatment coding, \\(\\beta_0\\) is the effect size when \\(X = 0\\) (i.e., lab-based experiments) and \\(\\beta_1\\) is the difference between lab and online experiments.\n\nb0 &lt;- 0.3 # lab-based effect size\nb1 &lt;- 0.5 # online - lab-based --&gt; online = b0 + b1\nexp_dummy &lt;- ifelse(exp == \"lab\", 0, 1) # dummy version\nes &lt;- b0 + b1 * exp_dummy\nht(data.frame(exp, exp_dummy, es))\n#&gt;        exp exp_dummy  es\n#&gt; 1      lab         0 0.3\n#&gt; 2      lab         0 0.3\n#&gt; 3      lab         0 0.3\n#&gt; 4      lab         0 0.3\n#&gt; 5      lab         0 0.3\n#&gt; 95  online         1 0.8\n#&gt; 96  online         1 0.8\n#&gt; 97  online         1 0.8\n#&gt; 98  online         1 0.8\n#&gt; 99  online         1 0.8\n#&gt; 100 online         1 0.8"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#simulating-the-x-effects",
     "href": "slides/04-meta-regression/meta-regression.html#simulating-the-x-effects",
     "title": "Meta-regression",
     "section": "Simulating the \\(X\\) effects",
-    "text": "Simulating the \\(X\\) effects\nNow we can use the sim_studies() function as usual. The difference is that es is no longer a single value but a vector (with different values according to the \\(X\\) level) and tau2 is \\(\\tau^2_r\\) (this the leftover heterogeneity after including the \\(X\\) effect)\n\n#&gt; \n#&gt;      id      yi     vi n1 n2    exp \n#&gt; 1     1  0.1114 0.0505 40 40    lab \n#&gt; 2     2 -0.1330 0.0624 35 35    lab \n#&gt; 3     3  0.3525 0.0632 37 37    lab \n#&gt; 4     4  0.3906 0.0428 51 51    lab \n#&gt; 5     5  0.3876 0.0504 42 42    lab \n#&gt; 95   95  0.5008 0.0495 39 39 online \n#&gt; 96   96  0.5525 0.0550 34 34 online \n#&gt; 97   97  0.8551 0.0402 42 42 online \n#&gt; 98   98  0.8025 0.0546 34 34 online \n#&gt; 99   99  1.1299 0.0512 37 37 online \n#&gt; 100 100  1.1799 0.0672 33 33 online"
+    "text": "Simulating the \\(X\\) effects\nNow we can use the sim_studies() function as usual. The difference is that es is no longer a single value but a vector (with different values according to the \\(X\\) level) and tau2 is \\(\\tau^2_r\\) (this the leftover heterogeneity after including the \\(X\\) effect)\n\ntau2r &lt;- 0.05 # residual heterogeneity\ndat &lt;- sim_studies(k = k, es = es, tau2 = tau2r, n1 = n, add = list(exp = exp))\nht(dat)\n#&gt; \n#&gt;      id      yi     vi n1 n2    exp \n#&gt; 1     1 -0.1088 0.0462 40 40    lab \n#&gt; 2     2  0.4318 0.0438 42 42    lab \n#&gt; 3     3 -0.0455 0.0365 41 41    lab \n#&gt; 4     4  0.6198 0.0495 26 26    lab \n#&gt; 5     5  0.8817 0.0406 45 45    lab \n#&gt; 95   95  0.2727 0.0539 38 38 online \n#&gt; 96   96  0.6494 0.0611 36 36 online \n#&gt; 97   97  0.6794 0.0534 33 33 online \n#&gt; 98   98  0.4407 0.0380 45 45 online \n#&gt; 99   99  0.4536 0.0469 37 37 online \n#&gt; 100 100  0.3602 0.0705 27 27 online"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#fitting-a-meta-regression-model",
     "href": "slides/04-meta-regression/meta-regression.html#fitting-a-meta-regression-model",
     "title": "Meta-regression",
     "section": "Fitting a meta-regression Model",
-    "text": "Fitting a meta-regression Model\nTo fit a meta-regression we still use the metafor::rma() function, adding the mods = ~ parameter with the model formula (same as the right-hand side of a y ~ x call in lm). The name of the predictor in the formula need to match a column of the data = dataframe.\n\n#&gt; \n#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt; -24.0549   48.1098   54.1098   61.8647   54.3652   \n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0465 (SE = 0.0138)\n#&gt; tau (square root of estimated tau^2 value):             0.2157\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 48.28%\n#&gt; H^2 (unaccounted variability / sampling variability):   1.93\n#&gt; R^2 (amount of heterogeneity accounted for):            58.02%\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 98) = 189.6112, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt      0.2408  0.0440  5.4704  &lt;.0001  0.1545  0.3271  *** \n#&gt; exponline    0.5170  0.0624  8.2855  &lt;.0001  0.3947  0.6393  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Fitting a meta-regression Model\nTo fit a meta-regression we still use the metafor::rma() function, adding the mods = ~ parameter with the model formula (same as the right-hand side of a y ~ x call in lm). The name of the predictor in the formula need to match a column of the data = dataframe.\n\nfit &lt;- rma(yi, vi, mods = ~ exp, data = dat, method = \"REML\")\nsummary(fit)\n#&gt; \n#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt; -21.8286   43.6573   49.6573   57.4122   49.9126   \n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0408 (SE = 0.0129)\n#&gt; tau (square root of estimated tau^2 value):             0.2021\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 45.43%\n#&gt; H^2 (unaccounted variability / sampling variability):   1.83\n#&gt; R^2 (amount of heterogeneity accounted for):            38.44%\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 98) = 179.6024, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt      0.3975  0.0424  9.3674  &lt;.0001  0.3143  0.4806  *** \n#&gt; exponline    0.3261  0.0603  5.4104  &lt;.0001  0.2080  0.4443  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#intepreting-a-meta-regression-model",
@@ -305,49 +305,56 @@
     "href": "slides/04-meta-regression/meta-regression.html#model-parameters",
     "title": "Meta-regression",
     "section": "Model parameters",
-    "text": "Model parameters\nintrcpt and exponline are the estimates of \\(\\beta_0\\) and \\(\\beta_1\\). The interpretation depends on the scale of the effect size and the contrast coding.\nWe can plot the model results using the metafor::regplot()1.\n\n\n\n\n\n\n\n\nThe functions is made for numerical variables thus is less appropriate for categorical variables"
+    "text": "Model parameters\nintrcpt and exponline are the estimates of \\(\\beta_0\\) and \\(\\beta_1\\). The interpretation depends on the scale of the effect size and the contrast coding.\nWe can plot the model results using the metafor::regplot()1.\n\nregplot(fit)\n\n\n\n\n\n\n\nThe functions is made for numerical variables thus is less appropriate for categorical variables"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#omnibus-moderator-test",
     "href": "slides/04-meta-regression/meta-regression.html#omnibus-moderator-test",
     "title": "Meta-regression",
     "section": "Omnibus Moderator Test",
-    "text": "Omnibus Moderator Test\nThe Test of Moderators section report the so-called omnibus test for model coeffiecients. Is a simultaneous test for 1 or more coefficients where \\(H_0: \\beta_j = 0\\).\nIn this case, coefficient 2 means that we are testing only the 2nd coefficient \\(\\beta_1\\). By default, the intercept is ignored. In fact, the exponline line and the omnibus test are the same (the \\(\\chi^2\\) is just the \\(z^2\\))\n\n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001\n#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt      0.2408  0.0440  5.4704  &lt;.0001  0.1545  0.3271  *** \n#&gt; exponline    0.5170  0.0624  8.2855  &lt;.0001  0.3947  0.6393  ***"
+    "text": "Omnibus Moderator Test\nThe Test of Moderators section report the so-called omnibus test for model coeffiecients. Is a simultaneous test for 1 or more coefficients where \\(H_0: \\beta_j = 0\\).\nIn this case, coefficient 2 means that we are testing only the 2nd coefficient \\(\\beta_1\\). By default, the intercept is ignored. In fact, the exponline line and the omnibus test are the same (the \\(\\chi^2\\) is just the \\(z^2\\))\n\n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001\n#&gt;            estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt      0.3975  0.0424  9.3674  &lt;.0001  0.3143  0.4806  *** \n#&gt; exponline    0.3261  0.0603  5.4104  &lt;.0001  0.2080  0.4443  ***"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht",
     "href": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht",
     "title": "Meta-regression",
     "section": "General Linear Hypotheses Testing (GLHT)",
-    "text": "General Linear Hypotheses Testing (GLHT)\nWe can also test any combination of parameters. For example we could test if lab-based experiments and online experiments are both different from 0. This is the same as fitting a model without the intercept1 thus estimating the cell means (see Schad et al. 2020).\n\n# now we are testing two coefficients\nfit_no_int &lt;- rma(yi, vi, mods = ~ 0 + exp, data = dat)\nfit_no_int\n#&gt; \n#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0465 (SE = 0.0138)\n#&gt; tau (square root of estimated tau^2 value):             0.2157\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 48.28%\n#&gt; H^2 (unaccounted variability / sampling variability):   1.93\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 98) = 189.6112, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficients 1:2):\n#&gt; QM(df = 2) = 323.5856, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;            estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt; explab       0.2408  0.0440   5.4704  &lt;.0001  0.1545  0.3271  *** \n#&gt; exponline    0.7578  0.0442  17.1365  &lt;.0001  0.6711  0.8444  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nsee https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept on removing the intercept"
+    "text": "General Linear Hypotheses Testing (GLHT)\nWe can also test any combination of parameters. For example we could test if lab-based experiments and online experiments are both different from 0. This is the same as fitting a model without the intercept1 thus estimating the cell means (see Schad et al. 2020).\n\n# now we are testing two coefficients\nfit_no_int &lt;- rma(yi, vi, mods = ~ 0 + exp, data = dat)\n\nsee https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept on removing the intercept"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-1",
     "href": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-1",
     "title": "Meta-regression",
     "section": "General Linear Hypotheses Testing (GLHT)",
-    "text": "General Linear Hypotheses Testing (GLHT)\nA more elegant way is by using the GLHT framework. Basically we provide a contrast matrix expressing linear combinations of model parameters to be tested. In our case \\(\\text{lab} = \\beta_0 = 0\\) and \\(\\text{online} = \\beta_0 + \\beta_1 = 0\\).\nPractically, the matrix formulation is the following:\n\\[\n\\begin{pmatrix}  \n1 & 0 \\\\\n1 & 1\n\\end{pmatrix}\n\\begin{pmatrix}  \n\\beta_0\\\\\n\\beta_1\n\\end{pmatrix}\n=\n\\begin{pmatrix}  \n0\\\\\n0\n\\end{pmatrix}\n\\]\nIn R:\n\nC &lt;- rbind(c(1, 0), c(1, 1))\nB &lt;- coef(fit)\nC %*% B # same as coef(fit)[1] and coef(fit)[1] +  coef(fit)[2]\n#&gt;           [,1]\n#&gt; [1,] 0.2407981\n#&gt; [2,] 0.7577632"
+    "text": "General Linear Hypotheses Testing (GLHT)\n\nfit_no_int\n#&gt; \n#&gt; Mixed-Effects Model (k = 100; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0408 (SE = 0.0129)\n#&gt; tau (square root of estimated tau^2 value):             0.2021\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 45.43%\n#&gt; H^2 (unaccounted variability / sampling variability):   1.83\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 98) = 179.6024, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficients 1:2):\n#&gt; QM(df = 2) = 373.4033, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;            estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt; explab       0.3975  0.0424   9.3674  &lt;.0001  0.3143  0.4806  *** \n#&gt; exponline    0.7236  0.0428  16.9013  &lt;.0001  0.6397  0.8075  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-2",
     "href": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-2",
     "title": "Meta-regression",
     "section": "General Linear Hypotheses Testing (GLHT)",
-    "text": "General Linear Hypotheses Testing (GLHT)\nWe can use the anova() function providing the model and the hypothesis matrix.\n\nanova(fit) # the default\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 68.6500, p-val &lt; .0001\nanova(fit, X = C)\n#&gt; \n#&gt; Hypotheses:                           \n#&gt; 1:             intrcpt = 0 \n#&gt; 2: intrcpt + exponline = 0 \n#&gt; \n#&gt; Results:\n#&gt;    estimate     se    zval   pval \n#&gt; 1:   0.2408 0.0440  5.4704 &lt;.0001 \n#&gt; 2:   0.7578 0.0442 17.1365 &lt;.0001 \n#&gt; \n#&gt; Omnibus Test of Hypotheses:\n#&gt; QM(df = 2) = 323.5856, p-val &lt; .0001\n\nNotice that is the same as the model without the intercept."
+    "text": "General Linear Hypotheses Testing (GLHT)\nA more elegant way is by using the GLHT framework. Basically we provide a contrast matrix expressing linear combinations of model parameters to be tested. In our case \\(\\text{lab} = \\beta_0 = 0\\) and \\(\\text{online} = \\beta_0 + \\beta_1 = 0\\).\nPractically, the matrix formulation is the following:\n\\[\n\\begin{pmatrix}  \n1 & 0 \\\\\n1 & 1\n\\end{pmatrix}\n\\begin{pmatrix}  \n\\beta_0\\\\\n\\beta_1\n\\end{pmatrix}\n=\n\\begin{pmatrix}  \n0\\\\\n0\n\\end{pmatrix}\n\\]\nIn R:\n\nC &lt;- rbind(c(1, 0), c(1, 1))\nB &lt;- coef(fit)\nC %*% B # same as coef(fit)[1] and coef(fit)[1] +  coef(fit)[2]\n#&gt;           [,1]\n#&gt; [1,] 0.3974823\n#&gt; [2,] 0.7236168"
+  },
+  {
+    "objectID": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-3",
+    "href": "slides/04-meta-regression/meta-regression.html#general-linear-hypotheses-testing-glht-3",
+    "title": "Meta-regression",
+    "section": "General Linear Hypotheses Testing (GLHT)",
+    "text": "General Linear Hypotheses Testing (GLHT)\nWe can use the anova() function providing the model and the hypothesis matrix.\n\nanova(fit) # the default\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 29.2725, p-val &lt; .0001\nanova(fit, X = C)\n#&gt; \n#&gt; Hypotheses:                           \n#&gt; 1:             intrcpt = 0 \n#&gt; 2: intrcpt + exponline = 0 \n#&gt; \n#&gt; Results:\n#&gt;    estimate     se    zval   pval \n#&gt; 1:   0.3975 0.0424  9.3674 &lt;.0001 \n#&gt; 2:   0.7236 0.0428 16.9013 &lt;.0001 \n#&gt; \n#&gt; Omnibus Test of Hypotheses:\n#&gt; QM(df = 2) = 373.4033, p-val &lt; .0001\n\nNotice that is the same as the model without the intercept."
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#likelihood-ratio-test-lrt",
     "href": "slides/04-meta-regression/meta-regression.html#likelihood-ratio-test-lrt",
     "title": "Meta-regression",
     "section": "Likelihood Ratio Test (LRT)",
-    "text": "Likelihood Ratio Test (LRT)\nAs in standard regression modelling, we can also compare models using LRT. The anova() function will compute the LRT when two (nested) models are provided. In this case we compared a null (intercept-only) model with the model including the predictor.\n\n# the null model\nfit0 &lt;- rma(yi, vi, data = dat, method = \"REML\")\nanova(fit0, fit, refit = TRUE) # refit = TRUE because LRT with REML is not meaningful, using ML instead\n#&gt; \n#&gt;         df      AIC      BIC     AICc   logLik     LRT   pval       QE  tau^2 \n#&gt; Full     3  53.1066  60.9222  53.3566 -23.5533                189.6112 0.0447 \n#&gt; Reduced  2 104.9762 110.1866 105.0999 -50.4881 53.8696 &lt;.0001 319.7111 0.1092 \n#&gt;              R^2 \n#&gt; Full             \n#&gt; Reduced 59.0925%"
+    "text": "Likelihood Ratio Test (LRT)\nAs in standard regression modelling, we can also compare models using LRT. The anova() function will compute the LRT when two (nested) models are provided. In this case we compared a null (intercept-only) model with the model including the predictor.\n\n# the null model\nfit0 &lt;- rma(yi, vi, data = dat, method = \"REML\")\nanova(fit0, fit, refit = TRUE) # refit = TRUE because LRT with REML is not meaningful, using ML instead\n#&gt; \n#&gt;         df     AIC     BIC    AICc   logLik     LRT   pval       QE  tau^2 \n#&gt; Full     3 48.5151 56.3306 48.7651 -21.2575                179.6024 0.0390 \n#&gt; Reduced  2 72.7633 77.9737 72.8870 -34.3817 26.2482 &lt;.0001 232.4328 0.0652 \n#&gt;              R^2 \n#&gt; Full             \n#&gt; Reduced 40.1114%"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#r2",
     "href": "slides/04-meta-regression/meta-regression.html#r2",
     "title": "Meta-regression",
     "section": "\\(R^2\\)",
-    "text": "\\(R^2\\)\nThe \\(R^2\\) value reported in the model output is not calculated as in standard regression analysis.\n\\[\nR^2 = 1 - \\frac{\\tau^2_r}{\\tau^2}\n\\]\nBasically is the percentage of heterogeneity reduction from the intercept-only model to the model including predictors.\nIn R:\n\n#&gt; [1] 58.01751\n#&gt; [1] 58.01751"
+    "text": "\\(R^2\\)\nThe \\(R^2\\) value reported in the model output is not calculated as in standard regression analysis.\n\\[\nR^2 = 1 - \\frac{\\tau^2_r}{\\tau^2}\n\\]\nBasically is the percentage of heterogeneity reduction from the intercept-only model to the model including predictors.\nIn R:\n\n(1 - fit$tau2/fit0$tau2)*100\n#&gt; [1] 38.43963\nfit$R2\n#&gt; [1] 38.43963"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#r2-1",
@@ -382,7 +389,7 @@
     "href": "slides/04-meta-regression/meta-regression.html#parametrize-beta_0-2",
     "title": "Meta-regression",
     "section": "Parametrize \\(\\beta_0\\)\n",
-    "text": "Parametrize \\(\\beta_0\\)\n\nUsing different parametrizations will only affect the estimation (and the interpretation) of \\(\\beta_0\\). Other parameters and indexes will be the same.\n\nk &lt;- 100\nb0 &lt;- 0.2 # effect size when age 0\nb1 &lt;- 0.05 # slope (random for now)\nage &lt;- round(runif(k, 20, 50)) # sampling from uniform distribution\ntau2r &lt;- 0.05\nn &lt;- 10 + rpois(k, 30 - 10)\n\nes &lt;- b0 + b1 * age # raw\n\nage0 &lt;- age - mean(age)\nage20 &lt;- age - 20\n\ndat &lt;- sim_studies(k = k, es = es, tau2 = tau2r, n1 = n, add = list(age = age, age0 = age0, age20 = age20))\n\nfit &lt;- rma(yi, vi, mods = ~ age, data = dat)\nfit0 &lt;- rma(yi, vi, mods = ~ age0, data = dat)\nfit20 &lt;- rma(yi, vi, mods = ~ age20, data = dat)\n\n# showing the intercept\ncompare_rma(fit, fit0, fit20, extra_params = \"R2\") |&gt; \n  round(3)\n#&gt; fit: rma(yi = yi, vi = vi, mods = ~age, data = dat)\n#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)\n#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)\n#&gt;                fit   fit0  fit20\n#&gt; b (intrcpt)  0.108  1.918  1.157\n#&gt; se           0.122  0.031  0.059\n#&gt; zval         0.888 61.058 19.682\n#&gt; pval         0.375  0.000  0.000\n#&gt; ci.lb       -0.131  1.856  1.041\n#&gt; ci.ub        0.348  1.980  1.272\n#&gt; R2          87.687 87.687 87.687\n#&gt; I2          33.594 33.594 33.594\n#&gt; tau2         0.033  0.033  0.033\n\n  # showing the intercept\ncompare_rma(fit, fit0, fit20, b = \"age\", extra_params = \"R2\") |&gt; \n  round(3)\n#&gt; fit: rma(yi = yi, vi = vi, mods = ~age, data = dat)\n#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)\n#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)\n#&gt;            fit   fit0  fit20\n#&gt; b (age)  0.052  0.052  0.052\n#&gt; se       0.003  0.003  0.003\n#&gt; zval    15.356 15.356 15.356\n#&gt; pval     0.000  0.000  0.000\n#&gt; ci.lb    0.046  0.046  0.046\n#&gt; ci.ub    0.059  0.059  0.059\n#&gt; R2      87.687 87.687 87.687\n#&gt; I2      33.594 33.594 33.594\n#&gt; tau2     0.033  0.033  0.033"
+    "text": "Parametrize \\(\\beta_0\\)\n\nUsing different parametrizations will only affect the estimation (and the interpretation) of \\(\\beta_0\\). Other parameters and indexes will be the same.\n\nk &lt;- 100\nb0 &lt;- 0.2 # effect size when age 0\nb1 &lt;- 0.05 # slope (random for now)\nage &lt;- round(runif(k, 20, 50)) # sampling from uniform distribution\ntau2r &lt;- 0.05\nn &lt;- 10 + rpois(k, 30 - 10)\n\nes &lt;- b0 + b1 * age # raw\n\nage0 &lt;- age - mean(age)\nage20 &lt;- age - 20\n\ndat &lt;- sim_studies(k = k, es = es, tau2 = tau2r, n1 = n, add = list(age = age, age0 = age0, age20 = age20))\n\nfit &lt;- rma(yi, vi, mods = ~ age, data = dat)\nfit0 &lt;- rma(yi, vi, mods = ~ age0, data = dat)\nfit20 &lt;- rma(yi, vi, mods = ~ age20, data = dat)\n\n# showing the intercept\ncompare_rma(fit, fit0, fit20, extra_params = \"R2\") |&gt; \n  round(3)\n#&gt; fit: rma(yi = yi, vi = vi, mods = ~age, data = dat)\n#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)\n#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)\n#&gt;                fit   fit0  fit20\n#&gt; b (intrcpt)  0.277  1.981  1.255\n#&gt; se           0.140  0.033  0.067\n#&gt; zval         1.988 59.335 18.784\n#&gt; pval         0.047  0.000  0.000\n#&gt; ci.lb        0.004  1.916  1.124\n#&gt; ci.ub        0.551  2.047  1.386\n#&gt; R2          78.951 78.951 78.951\n#&gt; I2          42.044 42.044 42.044\n#&gt; tau2         0.046  0.046  0.046\n\n  # showing the intercept\ncompare_rma(fit, fit0, fit20, b = \"age\", extra_params = \"R2\") |&gt; \n  round(3)\n#&gt; fit: rma(yi = yi, vi = vi, mods = ~age, data = dat)\n#&gt; fit0: rma(yi = yi, vi = vi, mods = ~age0, data = dat)\n#&gt; fit20: rma(yi = yi, vi = vi, mods = ~age20, data = dat)\n#&gt;            fit   fit0  fit20\n#&gt; b (age)  0.049  0.049  0.049\n#&gt; se       0.004  0.004  0.004\n#&gt; zval    12.604 12.604 12.604\n#&gt; pval     0.000  0.000  0.000\n#&gt; ci.lb    0.041  0.041  0.041\n#&gt; ci.ub    0.056  0.056  0.056\n#&gt; R2      78.951 78.951 78.951\n#&gt; I2      42.044 42.044 42.044\n#&gt; tau2     0.046  0.046  0.046"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#choosing-beta_1",
@@ -396,7 +403,7 @@
     "href": "slides/04-meta-regression/meta-regression.html#beta_1-by-simulations",
     "title": "Meta-regression",
     "section": "\n\\(\\beta_1\\) by simulations",
-    "text": "\\(\\beta_1\\) by simulations\nA strategy could be to simulate from the generative model a large number of studies and see the expected range of effect size (Gelman, Hill, and Vehtari 2020, chap. 5 and p. 97). A large number of unplausible values suggest that the chosen \\(\\beta_1\\) is probably not appropriate.\n\nk &lt;- 1e3\nn &lt;- 30\ntau2 &lt;- 0\nx &lt;- runif(k, 20, 50) # age\nb0 &lt;- 0.1\nb1 &lt;- c(0.001, 0.05, 0.2)\nesl &lt;- lapply(b1, function(b) b0 + b*x)\ndatl &lt;- lapply(esl, function(es) sim_studies(k = k, es = es, tau2 = tau2, n1 = n, add = list(x = x)))\nnames(datl) &lt;- b1\ndat &lt;- dplyr::bind_rows(datl, .id = \"b1\")\nht(dat)\n#&gt; \n#&gt;         b1   id      yi     vi n1 n2        x \n#&gt; 1    0.001    1  0.1386 0.0777 30 30 36.64461 \n#&gt; 2    0.001    2 -0.0254 0.0571 30 30 47.51239 \n#&gt; 3    0.001    3  0.1603 0.0691 30 30 28.72855 \n#&gt; 4    0.001    4  0.5369 0.0793 30 30 32.02046 \n#&gt; 5    0.001    5 -0.6785 0.0687 30 30 48.38014 \n#&gt; 2995   0.2  995  6.4789 0.0642 30 30 33.85572 \n#&gt; 2996   0.2  996  7.0514 0.0529 30 30 34.38240 \n#&gt; 2997   0.2  997  3.9459 0.0813 30 30 20.07518 \n#&gt; 2998   0.2  998  6.8888 0.0652 30 30 35.04802 \n#&gt; 2999   0.2  999  6.8392 0.0755 30 30 33.53124 \n#&gt; 3000   0.2 1000  9.2417 0.0677 30 30 47.20710"
+    "text": "\\(\\beta_1\\) by simulations\nA strategy could be to simulate from the generative model a large number of studies and see the expected range of effect size (Gelman, Hill, and Vehtari 2020, chap. 5 and p. 97). A large number of unplausible values suggest that the chosen \\(\\beta_1\\) is probably not appropriate.\n\nk &lt;- 1e3\nn &lt;- 30\ntau2 &lt;- 0\nx &lt;- runif(k, 20, 50) # age\nb0 &lt;- 0.1\nb1 &lt;- c(0.001, 0.05, 0.2)\nesl &lt;- lapply(b1, function(b) b0 + b*x)\ndatl &lt;- lapply(esl, function(es) sim_studies(k = k, es = es, tau2 = tau2, n1 = n, add = list(x = x)))\nnames(datl) &lt;- b1\ndat &lt;- dplyr::bind_rows(datl, .id = \"b1\")\nht(dat)\n#&gt; \n#&gt;         b1   id      yi     vi n1 n2        x \n#&gt; 1    0.001    1  0.0298 0.0631 30 30 41.04808 \n#&gt; 2    0.001    2  0.2132 0.0508 30 30 42.46508 \n#&gt; 3    0.001    3 -0.0071 0.0631 30 30 38.81188 \n#&gt; 4    0.001    4 -0.0116 0.1049 30 30 30.88555 \n#&gt; 5    0.001    5 -0.0313 0.0568 30 30 22.62966 \n#&gt; 2995   0.2  995 10.0363 0.0625 30 30 47.41694 \n#&gt; 2996   0.2  996  6.9607 0.0720 30 30 35.56750 \n#&gt; 2997   0.2  997  6.8963 0.0517 30 30 33.82691 \n#&gt; 2998   0.2  998  4.8710 0.0503 30 30 25.03220 \n#&gt; 2999   0.2  999  4.5953 0.0649 30 30 22.85928 \n#&gt; 3000   0.2 1000  8.8629 0.0694 30 30 45.29689"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#beta_1-by-simulations-1",
@@ -417,7 +424,7 @@
     "href": "slides/04-meta-regression/meta-regression.html#fixing-r2-1",
     "title": "Meta-regression",
     "section": "Fixing \\(R^2\\)\n",
-    "text": "Fixing \\(R^2\\)\n\nWe can check the simulation approach:\n\nk &lt;- 1e3\n1 - tau2r/tau2\n#&gt; [1] 0.4\nx &lt;- rnorm(k)\nes &lt;- b0 + b1 * x\ndat &lt;- sim_studies(k, es, tau2r, n1 = 1e3, add = list(x = x))\nfit &lt;- rma(yi, vi, data = dat, mods = ~x)\nsummary(fit)\n#&gt; \n#&gt; Mixed-Effects Model (k = 1000; tau^2 estimator: REML)\n#&gt; \n#&gt;    logLik   deviance        AIC        BIC       AICc   \n#&gt; -567.3723  1134.7447  1140.7447  1155.4619  1140.7688   \n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.1805 (SE = 0.0082)\n#&gt; tau (square root of estimated tau^2 value):             0.4249\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 98.90%\n#&gt; H^2 (unaccounted variability / sampling variability):   91.31\n#&gt; R^2 (amount of heterogeneity accounted for):            42.71%\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 998) = 91327.1884, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 737.6183, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;          estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt    0.1084  0.0135   8.0214  &lt;.0001  0.0819  0.1349  *** \n#&gt; x          0.3617  0.0133  27.1591  &lt;.0001  0.3356  0.3878  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Fixing \\(R^2\\)\n\nWe can check the simulation approach:\n\nk &lt;- 1e3\n1 - tau2r/tau2\n#&gt; [1] 0.4\nx &lt;- rnorm(k)\nes &lt;- b0 + b1 * x\ndat &lt;- sim_studies(k, es, tau2r, n1 = 1e3, add = list(x = x))\nfit &lt;- rma(yi, vi, data = dat, mods = ~x)\nsummary(fit)\n#&gt; \n#&gt; Mixed-Effects Model (k = 1000; tau^2 estimator: REML)\n#&gt; \n#&gt;    logLik   deviance        AIC        BIC       AICc   \n#&gt; -530.7334  1061.4667  1067.4667  1082.1840  1067.4909   \n#&gt; \n#&gt; tau^2 (estimated amount of residual heterogeneity):     0.1676 (SE = 0.0076)\n#&gt; tau (square root of estimated tau^2 value):             0.4094\n#&gt; I^2 (residual heterogeneity / unaccounted variability): 98.82%\n#&gt; H^2 (unaccounted variability / sampling variability):   85.06\n#&gt; R^2 (amount of heterogeneity accounted for):            39.90%\n#&gt; \n#&gt; Test for Residual Heterogeneity:\n#&gt; QE(df = 998) = 84936.6718, p-val &lt; .0001\n#&gt; \n#&gt; Test of Moderators (coefficient 2):\n#&gt; QM(df = 1) = 656.5223, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt;          estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt; intrcpt    0.1007  0.0130   7.7308  &lt;.0001  0.0752  0.1262  *** \n#&gt; x          0.3275  0.0128  25.6227  &lt;.0001  0.3024  0.3525  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/04-meta-regression/meta-regression.html#r2-using-simulations",
@@ -453,6 +460,13 @@
     "title": "Introduction to Meta-Analysis",
     "section": "Meta-analysis and Systematic Review",
     "text": "Meta-analysis and Systematic Review\nUsually a meta-analysis work follows these steps:\n\n\nIdentify the research question: is the treatment x effective?, Does the experimental effect y exist?\n\nDefine inclusion/exclusion criteria: From the research question (1), keep only e.g., randomized controlled trials, studies with healthy participants, etc.\n\nSystematically search for studies: Analyze the literature to find all relevant studies\n\nExtract relevant information: Read, extract and organize relevant information e.g., sample size, treatment type, age, etc.\n\nSummarize the results: Create a narrative (flowcharts, tables, etc.) summary of included studies. This is the Systematic review part.\n\nChoose an effect size: Choose a way to standardize the effect across included studies\n\nMeta-analysis model: Choose and implement a meta-analysis model\nInterpret and report results"
+  },
+  {
+    "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#before-the-fun-part",
+    "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#before-the-fun-part",
+    "title": "Introduction to Meta-Analysis",
+    "section": "Before the fun part…",
+    "text": "Before the fun part…\n\n\nWe are dealing only with the statistical part. The study selection, data extraction, studies evaluation etc. is another story\nThe quality of the meta-analysis is the quality of included studies"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#unstandardized-effect-sizes",
@@ -529,21 +543,21 @@
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---umd",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating a single study - UMD",
-    "text": "Simulating a single study - UMD\nTo simulate a single study using a UMD we need to generate data according to the appropriate model. Here we have a difference between two groups. We can assume that the two groups comes from a normal distribution where group 1 \\(g_1 \\sim \\mathcal{N}(0, 1)\\) and group 2 \\(g_2 \\sim \\mathcal{N}(D, 1)\\) where \\(D\\) is the effect size. Then using Equations 2, 3 we can estimate the effect size and the variance.\n\nD &lt;- 1  # effect size\nn &lt;- 50 # sample size\ng1 &lt;- rnorm(n, mean = 0, sd = 1)\ng2 &lt;- rnorm(n, mean = D, sd = 1)\n\n# effect size\nmean(g2) - mean(g1)\n#&gt; [1] 0.7230639\n\n# variance\nvar(g1)/n + var(g2)/n\n#&gt; [1] 0.03975529"
+    "text": "Simulating a single study - UMD\nTo simulate a single study using a UMD we need to generate data according to the appropriate model. Here we have a difference between two groups. We can assume that the two groups comes from a normal distribution where group 1 \\(g_1 \\sim \\mathcal{N}(0, 1)\\) and group 2 \\(g_2 \\sim \\mathcal{N}(D, 1)\\) where \\(D\\) is the effect size. Then using Equations 2, 3 we can estimate the effect size and the variance.\n\nD &lt;- 1  # effect size\nn &lt;- 50 # sample size\ng1 &lt;- rnorm(n, mean = 0, sd = 1)\ng2 &lt;- rnorm(n, mean = D, sd = 1)\n\n# effect size\nmean(g2) - mean(g1)\n#&gt; [1] 1.17167\n\n# variance\nvar(g1)/n + var(g2)/n\n#&gt; [1] 0.05124246"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---umd-1",
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---umd-1",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating a single study - UMD",
-    "text": "Simulating a single study - UMD\nFor simplicity we can wrap everything within a function:\n\n# default sd = 1\nsim_umd &lt;- function(n1, n2 = NULL, D, sd = 1){\n  if(is.null(n2)) n2 &lt;- n1 # same to n1 if null \n  g1 &lt;- rnorm(n1, mean = 0, sd = sd)\n  g2 &lt;- rnorm(n2, mean = D, sd = sd)\n  yi &lt;- mean(g2) - mean(g1)\n  vi &lt;- var(g1)/n1 + var(g2)/n2\n  data.frame(yi, vi)\n}\n\nsim_umd(100, D = 0.5)\n#&gt;          yi         vi\n#&gt; 1 0.3541436 0.01977615\nsim_umd(50, D = 0.1)\n#&gt;           yi         vi\n#&gt; 1 0.04009586 0.03548816"
+    "text": "Simulating a single study - UMD\nFor simplicity we can wrap everything within a function:\n\n# default sd = 1\nsim_umd &lt;- function(n1, n2 = NULL, D, sd = 1){\n  if(is.null(n2)) n2 &lt;- n1 # same to n1 if null \n  g1 &lt;- rnorm(n1, mean = 0, sd = sd)\n  g2 &lt;- rnorm(n2, mean = D, sd = sd)\n  yi &lt;- mean(g2) - mean(g1)\n  vi &lt;- var(g1)/n1 + var(g2)/n2\n  data.frame(yi, vi)\n}\n\nsim_umd(100, D = 0.5)\n#&gt;          yi         vi\n#&gt; 1 0.7514419 0.02152775\nsim_umd(50, D = 0.1)\n#&gt;           yi         vi\n#&gt; 1 -0.1518401 0.04384679"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---umd-2",
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---umd-2",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating a single study - UMD",
-    "text": "Simulating a single study - UMD\nWe can also generate a large number of studies and check the distribution of effect size and sampling variances. Note that the real \\(D = 1\\) and the real variance \\(V_D = 1/50 + 1/50 = 0.04\\)\n\nstudies &lt;- replicate(1000, sim_umd(n1 = 50, D = 1), simplify = FALSE) # simplify = FALSE return a list\nstudies &lt;- do.call(rbind, studies) # to dataframe\nhead(studies)\n\n#&gt;          yi         vi\n#&gt; 1 1.2324889 0.04765695\n#&gt; 2 0.8783156 0.04946772\n#&gt; 3 0.9322944 0.04464114\n#&gt; 4 1.0089275 0.04884973\n#&gt; 5 1.0454451 0.06256715\n#&gt; 6 1.0781383 0.03647883"
+    "text": "Simulating a single study - UMD\nWe can also generate a large number of studies and check the distribution of effect size and sampling variances. Note that the real \\(D = 1\\) and the real variance \\(V_D = 1/50 + 1/50 = 0.04\\)\n\nstudies &lt;- replicate(1000, sim_umd(n1 = 50, D = 1), simplify = FALSE) # simplify = FALSE return a list\nstudies &lt;- do.call(rbind, studies) # to dataframe\nhead(studies)\n\n#&gt;         yi         vi\n#&gt; 1 1.022529 0.03624869\n#&gt; 2 1.299403 0.03773793\n#&gt; 3 1.311345 0.04071511\n#&gt; 4 1.186370 0.04869345\n#&gt; 5 1.272829 0.03067824\n#&gt; 6 1.024730 0.03448273"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#sec-umd-sampling-distribution",
@@ -606,7 +620,7 @@
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-a-single-study---pearson-rho-5",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating a single study - Pearson \\(\\rho\\)\n",
-    "text": "Simulating a single study - Pearson \\(\\rho\\)\n\n\nsim_r(100, 0.5)\n#&gt;          yi         vi        r         vr\n#&gt; 1 0.5157097 0.01030928 0.474382 0.00606632\nsim_r(50, 0.8)\n#&gt;         yi        vi         r          vr\n#&gt; 1 1.154219 0.0212766 0.8191468 0.002208979\n\n# also here the sampling distributions\nstudies &lt;- replicate(1000, sim_r(50, 0.7), simplify = FALSE)\nstudies &lt;- do.call(rbind, studies)\nsummary(studies)\n#&gt;        yi               vi                r                vr          \n#&gt;  Min.   :0.2762   Min.   :0.02128   Min.   :0.2693   Min.   :0.001297  \n#&gt;  1st Qu.:0.7795   1st Qu.:0.02128   1st Qu.:0.6524   1st Qu.:0.003975  \n#&gt;  Median :0.8775   Median :0.02128   Median :0.7052   Median :0.005158  \n#&gt;  Mean   :0.8721   Mean   :0.02128   Mean   :0.6951   Mean   :0.005538  \n#&gt;  3rd Qu.:0.9671   3rd Qu.:0.02128   3rd Qu.:0.7474   3rd Qu.:0.006732  \n#&gt;  Max.   :1.3121   Max.   :0.02128   Max.   :0.8648   Max.   :0.017555"
+    "text": "Simulating a single study - Pearson \\(\\rho\\)\n\n\nsim_r(100, 0.5)\n#&gt;          yi         vi         r          vr\n#&gt; 1 0.5295713 0.01030928 0.4850533 0.005907088\nsim_r(50, 0.8)\n#&gt;         yi        vi         r          vr\n#&gt; 1 1.053749 0.0212766 0.7832596 0.003048686\n\n# also here the sampling distributions\nstudies &lt;- replicate(1000, sim_r(50, 0.7), simplify = FALSE)\nstudies &lt;- do.call(rbind, studies)\nsummary(studies)\n#&gt;        yi               vi                r                vr          \n#&gt;  Min.   :0.3897   Min.   :0.02128   Min.   :0.3711   Min.   :0.001078  \n#&gt;  1st Qu.:0.7880   1st Qu.:0.02128   1st Qu.:0.6573   1st Qu.:0.003831  \n#&gt;  Median :0.8802   Median :0.02128   Median :0.7065   Median :0.005119  \n#&gt;  Mean   :0.8824   Mean   :0.02128   Mean   :0.7006   Mean   :0.005382  \n#&gt;  3rd Qu.:0.9794   3rd Qu.:0.02128   3rd Qu.:0.7528   3rd Qu.:0.006584  \n#&gt;  Max.   :1.3652   Max.   :0.02128   Max.   :0.8776   Max.   :0.015174"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#more-on-effect-sizes",
@@ -634,14 +648,14 @@
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-from-sampling-distributions-extra-2",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating from sampling distributions [#extra]",
-    "text": "Simulating from sampling distributions [#extra]"
+    "text": "Simulating from sampling distributions [#extra]\nWe can again put everything within a function:\nsim_k_umd &lt;- function(k, D, n1, n2 = NULL){\n  if(is.null(n2)) n2 &lt;- n1\n  yi &lt;- rnorm(k, D, sqrt(1/n1 + 1/n2))\n  vi &lt;- (rchisq(k, n1 + n2 - 2) / (n1 + n2 - 2)) * (1/n1 + 1/n2)\n  data.frame(yi, vi)\n}"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-from-sampling-distributions-extra-3",
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-from-sampling-distributions-extra-3",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating from sampling distributions [#extra]",
-    "text": "Simulating from sampling distributions [#extra]\n\nsim_k_umd(k = 10, D = 0.5, n1 = 50)\n#&gt;           yi         vi\n#&gt; 1  0.3460315 0.03923051\n#&gt; 2  0.3504835 0.02986473\n#&gt; 3  0.7170081 0.03699552\n#&gt; 4  0.8983855 0.03887867\n#&gt; 5  0.4421066 0.04717938\n#&gt; 6  0.3080571 0.02615308\n#&gt; 7  0.5303050 0.03172290\n#&gt; 8  0.7152342 0.03387656\n#&gt; 9  0.5377599 0.03969165\n#&gt; 10 0.6297485 0.04765138"
+    "text": "Simulating from sampling distributions [#extra]\n\nsim_k_umd(k = 10, D = 0.5, n1 = 50)\n#&gt;             yi         vi\n#&gt; 1  0.441673639 0.03465664\n#&gt; 2  0.007023467 0.03956105\n#&gt; 3  0.777497664 0.03361501\n#&gt; 4  0.331056159 0.02802565\n#&gt; 5  0.534304746 0.04043977\n#&gt; 6  0.416041978 0.03970752\n#&gt; 7  0.605978689 0.04123184\n#&gt; 8  0.798596509 0.04485353\n#&gt; 9  0.063068832 0.04414264\n#&gt; 10 0.272322780 0.03005496"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-from-sampling-distributions-extra-4",
@@ -655,7 +669,7 @@
     "href": "slides/02-intro-meta-analysis/intro-meta-analysis.html#simulating-from-sampling-distributions-extra-5",
     "title": "Introduction to Meta-Analysis",
     "section": "Simulating from sampling distributions [#extra]",
-    "text": "Simulating from sampling distributions [#extra]\nThe actual advantage is in terms of computational speed. To simulate \\(k = 10\\) studies for 1000 times (similar to a standard Monte Carlo simulation):\n\nbench &lt;- microbenchmark::microbenchmark(\n  sampling = sim_k_umd(k = 10, n1 = 50, D = 1),\n  participant = replicate(10, sim_umd(n1 = 50, D = 1)),\n  times = 1000 \n)\n\n(bench &lt;- summary(bench))\n#&gt;          expr    min      lq      mean median      uq    max neval cld\n#&gt; 1    sampling  209.0  223.90  278.0305  238.3  255.40 4110.4  1000  a \n#&gt; 2 participant 2738.4 2873.25 3401.6251 2990.6 3694.85 8249.0  1000   b\n\nbench$mean[2] / bench$mean[1] # faster\n#&gt; [1] 12.23472"
+    "text": "Simulating from sampling distributions [#extra]\nThe actual advantage is in terms of computational speed. To simulate \\(k = 10\\) studies for 1000 times (similar to a standard Monte Carlo simulation):\n\nbench &lt;- microbenchmark::microbenchmark(\n  sampling = sim_k_umd(k = 10, n1 = 50, D = 1),\n  participant = replicate(10, sim_umd(n1 = 50, D = 1)),\n  times = 1000 \n)\n\n(bench &lt;- summary(bench))\n#&gt;          expr     min       lq      mean   median       uq      max neval cld\n#&gt; 1    sampling  76.670  78.2280   79.9311  79.0890   80.237  181.917  1000  a \n#&gt; 2 participant 980.105 990.8675 1035.0935 996.8535 1005.300 4041.862  1000   b\n\nbench$mean[2] / bench$mean[1] # faster\n#&gt; [1] 12.94982"
   },
   {
     "objectID": "slides/02-intro-meta-analysis/intro-meta-analysis.html#references-download-.bib-file",
@@ -698,13 +712,6 @@
     "title": "Introduction to the workshop",
     "section": "Disclaimer",
     "text": "Disclaimer\n\nWe are using a lot of (R) code. When talking about code there is no a unique solution or method. My approach is not the best. If your code works, everything good 😄\n\nIf we have time, we can discuss about best practice in writing code in terms of efficiency, organization and clarity 😎\n\nAlso for statistics related topics, there are often multiple options to solve a problem. If you know other alternatives beyond the proposed topics, we can discuss it 😉"
-  },
-  {
-    "objectID": "slides/00-intro/workshop-intro.html#references-download-.bib-file",
-    "href": "slides/00-intro/workshop-intro.html#references-download-.bib-file",
-    "title": "Introduction to the workshop",
-    "section": "References  Download .bib file\n",
-    "text": "References  Download .bib file"
   },
   {
     "objectID": "about.html",
@@ -774,14 +781,14 @@
     "href": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#cool-but-why",
     "title": "Monte Carlo Simulations",
     "section": "Cool! but why?",
-    "text": "Cool! but why?\nWithout looking at the formula, let’s simply try to simulate a t-test where we know the two populations have different variance and also simulate different sample size between the two groups:"
+    "text": "Cool! but why?\nWithout looking at the formula, let’s simply try to simulate a t-test where we know the two populations have different variance and also simulate different sample size between the two groups:\n\nnsim &lt;- 1e4\n\nn0 &lt;- 30\nn1 &lt;- 20\nm0 &lt;- 0\nm1 &lt;- 0\nsratio &lt;- 3\n\nequal_t &lt;- vector(mode = \"list\", length = nsim)\nunequal_t &lt;- vector(mode = \"list\", length = nsim)\n\nfor(i in 1:nsim){\n  g0 &lt;- rnorm(n0, m0, 1)  \n  g1 &lt;- rnorm(n1, m0, sratio)\n  equal_t[[i]] &lt;- t.test(g0, g1, var.equal = TRUE)\n  unequal_t[[i]] &lt;- t.test(g0, g1, var.equal = FALSE)\n}"
   },
   {
     "objectID": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#cool-but-why-1",
     "href": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#cool-but-why-1",
     "title": "Monte Carlo Simulations",
     "section": "Cool! but why?",
-    "text": "Cool! but why?\n\n#&gt; [1] 0.0975\n#&gt; [1] 0.0476\n\nThe probability of making type-1 error is almost two times higher when using the standard t test"
+    "text": "Cool! but why?\n\np_equal &lt;- sapply(equal_t, function(x) x$p.value)\np_unequal &lt;- sapply(unequal_t, function(x) x$p.value)\n\nmean(p_equal &lt;= 0.05)\nmean(p_unequal &lt;= 0.05)\n\n\n#&gt; [1] 0.0975\n#&gt; [1] 0.0476\n\nThe probability of making type-1 error is almost two times higher when using the standard t test"
   },
   {
     "objectID": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#cool-but-why-2",
@@ -805,13 +812,6 @@
     "text": "General MCS strategy\nIn general, the following workflow can be useful when preparing a simulation:\n\nDefine the data-generation process usually starting from the model equation\nFind the fixed parameters e.g., mean of group 1, etc.\nFind the R functions to generate data given 1 and 2\nRepeat the simulation several times\nCheck the recovery of simulated parameters\nCompute the metrics that are useful for the simulation e.g., power, type1 error, etc."
   },
   {
-    "objectID": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#references-download-.bib-file",
-    "href": "slides/01-monte-carlo-simulations/monte-carlo-simulations.html#references-download-.bib-file",
-    "title": "Monte Carlo Simulations",
-    "section": "References  Download .bib file\n",
-    "text": "References  Download .bib file"
-  },
-  {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#notation",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#notation",
     "title": "Meta-analysis Models",
@@ -830,7 +830,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulation-setup-2",
     "title": "Meta-analysis Models",
     "section": "Simulation setup",
-    "text": "Simulation setup\nA more general, clear and realistic approach to simulate data is by generating \\(k\\) studies with same/different sample sizes and (later) true effect sizes.\n\nk &lt;- 10 # number of studies\nn1 &lt;- n2 &lt;- 10 + rpois(k, 30 - 10) # sample size from poisson distribution with lambda 40 and minimum 10\nD &lt;- 0.5 # effect size\n\nyi &lt;- rep(NA, k)\nvi &lt;- rep(NA, k)\n  \nfor(i in 1:k){\n  g1 &lt;- rnorm(n1[i], 0, 1)\n  g2 &lt;- rnorm(n2[i], D, 1)\n  yi[i] &lt;- mean(g2) - mean(g1)\n  vi[i] &lt;- var(g1)/n1[i] + var(g2)/n2[i]\n}\n  \nsim &lt;- data.frame(id = 1:k, yi, vi)\n\nhead(sim)\n#&gt;   id         yi         vi\n#&gt; 1  1  0.4378059 0.03923595\n#&gt; 2  2  0.9297779 0.05841354\n#&gt; 3  3 -0.1313321 0.07501271\n#&gt; 4  4  0.3465024 0.09547210\n#&gt; 5  5  0.5029728 0.05942748\n#&gt; 6  6  0.4497768 0.08466673"
+    "text": "Simulation setup\nA more general, clear and realistic approach to simulate data is by generating \\(k\\) studies with same/different sample sizes and (later) true effect sizes.\n\nk &lt;- 10 # number of studies\nn1 &lt;- n2 &lt;- 10 + rpois(k, 30 - 10) # sample size from poisson distribution with lambda 40 and minimum 10\nD &lt;- 0.5 # effect size\n\nyi &lt;- rep(NA, k)\nvi &lt;- rep(NA, k)\n  \nfor(i in 1:k){\n  g1 &lt;- rnorm(n1[i], 0, 1)\n  g2 &lt;- rnorm(n2[i], D, 1)\n  yi[i] &lt;- mean(g2) - mean(g1)\n  vi[i] &lt;- var(g1)/n1[i] + var(g2)/n2[i]\n}\n  \nsim &lt;- data.frame(id = 1:k, yi, vi)\n\nhead(sim)\n#&gt;   id        yi         vi\n#&gt; 1  1 0.5870416 0.06168715\n#&gt; 2  2 0.5712280 0.05370536\n#&gt; 3  3 0.8393588 0.07603554\n#&gt; 4  4 0.5252720 0.05726858\n#&gt; 5  5 0.2733414 0.07370605\n#&gt; 6  6 0.9057978 0.09869817"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#simulation-setup-3",
@@ -844,21 +844,28 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulation-setup---disclaimer",
     "title": "Meta-analysis Models",
     "section": "Simulation setup - Disclaimer",
-    "text": "Simulation setup - Disclaimer\nThe proposed simulation approach using a for loop and separated vectors. For the purposed of the workshop this is the best option. In real-world meta-analysis simulations you can choose a more functional approach starting from a simulation grid as data.frame and mapping the simulation functions.\nFor some examples see:\n\nGambarota and Altoè (2023)\nwww.jepusto.com/simulating-correlated-smds"
+    "text": "Simulation setup - Disclaimer\nThe proposed simulation approach using a for loop and separated vectors. For the purpose of the workshop this is the best option. In real-world meta-analysis simulations you can choose a more functional approach starting from a simulation grid as data.frame and mapping the simulation functions.\nFor some examples see:\n\nGambarota and Altoè (2023)\nwww.jepusto.com/simulating-correlated-smds"
+  },
+  {
+    "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#simulation-setup---disclaimer-1",
+    "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulation-setup---disclaimer-1",
+    "title": "Meta-analysis Models",
+    "section": "Simulation setup - Disclaimer",
+    "text": "Simulation setup - Disclaimer\nFor a more extended overview of the simulation setup we have an entire paper. Supplementary materials (github.com/shared-research/simulating-meta-analysis) contains also more examples for complex (multilevel and multivariate models.)"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#combining-studies-1",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#combining-studies-1",
     "title": "Meta-analysis Models",
     "section": "Combining studies",
-    "text": "Combining studies\nLet’s imagine to have \\(k = 10\\) studies, a \\(D = 0.5\\) and heterogeneous sample sizes in each study.\n\nk &lt;- 10\nD &lt;- 0.5\nn &lt;- 10 + rpois(k, lambda = 20) \ndat &lt;- sim_studies(k = k, es = D, n1 = n)\nhead(dat)\n#&gt; \n#&gt;   id     yi     vi n1 n2 \n#&gt; 1  1 0.8319 0.0734 29 29 \n#&gt; 2  2 0.5009 0.0501 28 28 \n#&gt; 3  3 0.3937 0.0560 33 33 \n#&gt; 4  4 0.4665 0.0823 22 22 \n#&gt; 5  5 0.2819 0.0754 21 21 \n#&gt; 6  6 1.2067 0.0951 27 27\n\n\nWhat is the best way to combine the studies?"
+    "text": "Combining studies\nLet’s imagine to have \\(k = 10\\) studies, a \\(D = 0.5\\) and heterogeneous sample sizes in each study.\n\nk &lt;- 10\nD &lt;- 0.5\nn &lt;- 10 + rpois(k, lambda = 20) \ndat &lt;- sim_studies(k = k, es = D, n1 = n)\nhead(dat)\n#&gt; \n#&gt;   id     yi     vi n1 n2 \n#&gt; 1  1 0.6468 0.0583 38 38 \n#&gt; 2  2 0.1193 0.0604 33 33 \n#&gt; 3  3 0.3122 0.0406 34 34 \n#&gt; 4  4 0.1772 0.0665 39 39 \n#&gt; 5  5 0.3192 0.0614 36 36 \n#&gt; 6  6 0.3858 0.0603 28 28\n\n\nWhat is the best way to combine the studies?"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#combining-studies-2",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#combining-studies-2",
     "title": "Meta-analysis Models",
     "section": "Combining studies",
-    "text": "Combining studies\nWe can take the average effect size and considering it as a huge study. This can be considered the best way to combine the effects.\n\\[\n\\hat{D} = \\frac{\\sum^{k}_{i = 1} D_i}{k}\n\\]\n\nmean(dat$yi)\n#&gt; [1] 0.5672026\n\n\nIt is appropriate? What do you think? Are we missing something?"
+    "text": "Combining studies\nWe can take the average effect size and considering it as a huge study. This can be considered the best way to combine the effects.\n\\[\n\\hat{D} = \\frac{\\sum^{k}_{i = 1} D_i}{k}\n\\]\n\nmean(dat$yi)\n#&gt; [1] 0.2958671\n\n\nIt is appropriate? What do you think? Are we missing something?"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#weighting-studies",
@@ -872,7 +879,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#weighting-studies-1",
     "title": "Meta-analysis Models",
     "section": "Weighting studies",
-    "text": "Weighting studies\nWe need to find a value (called weight \\(w_i\\)) that allows assigning more trust to a study because it provide more information.\n\nThe simplest weights are just the sample size, but in practice we use the so-called inverse-variance weighting. We use the (inverse) of the sampling variance of the effect size to weight each study.\n\n\nThe basic version of a meta-analysis is just a weighted average:\n\\[\n\\overline D_w = \\frac{\\sum^k_{i = 1}{w_iD_i}}{\\sum^k_{i = 1}{w_i}}\n\\]\n\n\n\nwi &lt;- 1/dat$vi\nsum(dat$yi * wi) / sum(wi)\n#&gt; [1] 0.5473616\n# weighted.mean(dat$yi, wi)"
+    "text": "Weighting studies\nWe need to find a value (called weight \\(w_i\\)) that allows assigning more trust to a study because it provide more information.\n\nThe simplest weights are just the sample size, but in practice we use the so-called inverse-variance weighting. We use the (inverse) of the sampling variance of the effect size to weight each study.\n\n\nThe basic version of a meta-analysis is just a weighted average:\n\\[\n\\overline D_w = \\frac{\\sum^k_{i = 1}{w_iD_i}}{\\sum^k_{i = 1}{w_i}}\n\\]\n\n\n\nwi &lt;- 1/dat$vi\nsum(dat$yi * wi) / sum(wi)\n#&gt; [1] 0.3033368\n# weighted.mean(dat$yi, wi)"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#weighting-studies-2",
@@ -928,7 +935,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#fitting-an-ee-model",
     "title": "Meta-analysis Models",
     "section": "Fitting an EE model",
-    "text": "Fitting an EE model\nThe model can be fitted using the metafor::rma() function, with method = \"EE\"1.\n\n#&gt; \n#&gt; Equal-Effects Model (k = 15)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt;  -1.8216   15.3742    5.6432    6.3513    5.9509   \n#&gt; \n#&gt; I^2 (total heterogeneity / total variability):   8.94%\n#&gt; H^2 (total variability / sampling variability):  1.10\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 14) = 15.3742, p-val = 0.3531\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.3798  0.0684  5.5537  &lt;.0001  0.2458  0.5138  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nThere is a confusion about the fixed-effects vs fixed-effect (no s) and equal-effects models. See https://wviechtb.github.io/metafor/reference/misc-models.html"
+    "text": "Fitting an EE model\nThe model can be fitted using the metafor::rma() function, with method = \"EE\"1.\n\ntheta &lt;- 0.5\nk &lt;- 15\nn &lt;- 10 + rpois(k, 30 - 10)\ndat &lt;- sim_studies(k = k, es = theta, n1 = n)\nfit &lt;- rma(yi, vi, data = dat, method = \"EE\")\nsummary(fit)\n#&gt; \n#&gt; Equal-Effects Model (k = 15)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt;   0.9742   13.6722    0.0517    0.7597    0.3594   \n#&gt; \n#&gt; I^2 (total heterogeneity / total variability):   0.00%\n#&gt; H^2 (total variability / sampling variability):  0.98\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 14) = 13.6722, p-val = 0.4744\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.4224  0.0608  6.9472  &lt;.0001  0.3032  0.5415  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nThere is a confusion about the fixed-effects vs fixed-effect (no s) and equal-effects models. See https://wviechtb.github.io/metafor/reference/misc-models.html"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#interpreting-an-ee-model",
@@ -942,14 +949,14 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#interpreting-an-ee-model-1",
     "title": "Meta-analysis Models",
     "section": "Interpreting an EE model",
-    "text": "Interpreting an EE model"
+    "text": "Interpreting an EE model\n\nplot(fit) # general plots"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#interpreting-an-ee-model-2",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#interpreting-an-ee-model-2",
     "title": "Meta-analysis Models",
     "section": "Interpreting an EE Model",
-    "text": "Interpreting an EE Model\nThe main function for plotting model results is the forest() function that produce the forest plot."
+    "text": "Interpreting an EE Model\nThe main function for plotting model results is the forest() function that produce the forest plot.\n\nforest(fit)"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#interpreting-an-ee-model-3",
@@ -963,7 +970,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#ee-model-as-a-weighted-average",
     "title": "Meta-analysis Models",
     "section": "EE model as a weighted Average",
-    "text": "EE model as a weighted Average\nFormally \\(\\theta\\) is estimated as (see Borenstein et al. 2009, 66)\n\\[\n\\hat{\\theta} = \\frac{\\sum^k_{i = 1}{w_iy_i}}{\\sum^k_{i = 1}{w_i}}; \\;\\;\\; w_i = \\frac{1}{\\sigma^2_i}\n\\]\n\\[\nSE_{\\theta} = \\frac{1}{\\sum^k_{i = 1}{w_i}}\n\\]\n\nwi &lt;- 1/dat$vi\ntheta_hat &lt;- with(dat, sum(yi * wi)/sum(wi))\nse_theta_hat &lt;- sqrt(1/sum(wi))\nc(theta = theta_hat, se = se_theta_hat, z = theta_hat / se_theta_hat)\n#&gt;      theta         se          z \n#&gt; 0.37977974 0.06838334 5.55368810"
+    "text": "EE model as a weighted Average\nFormally \\(\\theta\\) is estimated as (see Borenstein et al. 2009, 66)\n\\[\n\\hat{\\theta} = \\frac{\\sum^k_{i = 1}{w_iy_i}}{\\sum^k_{i = 1}{w_i}}; \\;\\;\\; w_i = \\frac{1}{\\sigma^2_i}\n\\]\n\\[\nSE_{\\theta} = \\frac{1}{\\sum^k_{i = 1}{w_i}}\n\\]\n\nwi &lt;- 1/dat$vi\ntheta_hat &lt;- with(dat, sum(yi * wi)/sum(wi))\nse_theta_hat &lt;- sqrt(1/sum(wi))\nc(theta = theta_hat, se = se_theta_hat, z = theta_hat / se_theta_hat)\n#&gt;      theta         se          z \n#&gt; 0.42235618 0.06079533 6.94718085"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#are-the-ee-assumptions-realistic",
@@ -1012,14 +1019,14 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model",
     "title": "Meta-analysis Models",
     "section": "Simulating a RE Model",
-    "text": "Simulating a RE Model\nTo simulate the RE model we simply need to include \\(\\tau^2\\) in the EE model simulation.\n\nk &lt;- 15 # number of studies\nmu &lt;- 0.5 # average effect\ntau2 &lt;- 0.1 # heterogeneity\nn &lt;- 10 + rpois(k, 30 - 10) # sample size\ndeltai &lt;- rnorm(k, 0, sqrt(tau2)) # random-effects\nthetai &lt;- mu + deltai # true study effect\n\ndat &lt;- sim_studies(k = k, es = thetai, n1 = n)\n\nhead(dat)\n#&gt; \n#&gt;   id      yi     vi n1 n2 \n#&gt; 1  1  0.4744 0.0700 30 30 \n#&gt; 2  2  0.5973 0.0587 32 32 \n#&gt; 3  3  0.5678 0.0920 28 28 \n#&gt; 4  4 -0.1278 0.0594 31 31 \n#&gt; 5  5  0.5915 0.0780 33 33 \n#&gt; 6  6  0.1417 0.0935 22 22"
+    "text": "Simulating a RE Model\nTo simulate the RE model we simply need to include \\(\\tau^2\\) in the EE model simulation.\n\nk &lt;- 15 # number of studies\nmu &lt;- 0.5 # average effect\ntau2 &lt;- 0.1 # heterogeneity\nn &lt;- 10 + rpois(k, 30 - 10) # sample size\ndeltai &lt;- rnorm(k, 0, sqrt(tau2)) # random-effects\nthetai &lt;- mu + deltai # true study effect\n\ndat &lt;- sim_studies(k = k, es = thetai, n1 = n)\n\nhead(dat)\n#&gt; \n#&gt;   id      yi     vi n1 n2 \n#&gt; 1  1  0.2408 0.0623 30 30 \n#&gt; 2  2  0.3343 0.0671 24 24 \n#&gt; 3  3 -0.2468 0.0526 37 37 \n#&gt; 4  4  0.1003 0.0894 26 26 \n#&gt; 5  5  0.4047 0.0551 31 31 \n#&gt; 6  6  0.6333 0.0466 38 38"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model-1",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model-1",
     "title": "Meta-analysis Models",
     "section": "Simulating a RE model",
-    "text": "Simulating a RE model\nAgain, we can put everything within a function expanding the previous sim_studies() by including \\(\\tau^2\\):"
+    "text": "Simulating a RE model\nAgain, we can put everything within a function expanding the previous sim_studies() by including \\(\\tau^2\\):\nsim_studies &lt;- function(k, es, tau2 = 0, n1, n2 = NULL, add = NULL){\n  if(length(n1) == 1) n1 &lt;- rep(n1, k)\n  if(is.null(n2)) n2 &lt;- n1\n  if(length(es) == 1) es &lt;- rep(es, k)\n  \n  yi &lt;- rep(NA, k)\n  vi &lt;- rep(NA, k)\n  \n  # random effects\n  deltai &lt;- rnorm(k, 0, sqrt(tau2))\n  \n  for(i in 1:k){\n    g1 &lt;- rnorm(n1[i], 0, 1)\n    g2 &lt;- rnorm(n2[i], es[i] + deltai[i], 1)\n    yi[i] &lt;- mean(g2) - mean(g1)\n    vi[i] &lt;- var(g1)/n1[i] + var(g2)/n2[i]\n  }\n  \n  sim &lt;- data.frame(id = 1:k, yi, vi, n1 = n1, n2 = n2)\n  \n  if(!is.null(add)){\n    sim &lt;- cbind(sim, add)\n  }\n  \n  # convert to escalc for using metafor methods\n  sim &lt;- metafor::escalc(yi = yi, vi = vi, data = sim)\n  \n  return(sim)\n}"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model-2",
@@ -1033,7 +1040,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model-3",
     "title": "Meta-analysis Models",
     "section": "Simulating a RE model",
-    "text": "Simulating a RE model\nTo see the actual impact of \\(\\tau^2\\) we can follow the same approach of Slide 3.5 thus using a large \\(n\\). The sampling variance vi of each study is basically 0.\n\n# ... other parameters as before\nn &lt;- 1e4\ndeltai &lt;- rnorm(k, 0, sqrt(tau2)) # random-effects\nthetai &lt;- mu + deltai # true study effect\ndat &lt;- sim_studies(k = k, es = thetai, n1 = n)\n# or equivalently \n# dat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\n\nhead(dat)\n#&gt; \n#&gt;   id      yi     vi    n1    n2 \n#&gt; 1  1  0.1485 0.0002 10000 10000 \n#&gt; 2  2  0.4897 0.0002 10000 10000 \n#&gt; 3  3 -0.2400 0.0002 10000 10000 \n#&gt; 4  4  0.2305 0.0002 10000 10000 \n#&gt; 5  5  0.3771 0.0002 10000 10000 \n#&gt; 6  6  0.4781 0.0002 10000 10000"
+    "text": "Simulating a RE model\nTo see the actual impact of \\(\\tau^2\\) we can follow the same approach of Slide 3.5 thus using a large \\(n\\). The sampling variance vi of each study is basically 0.\n\n# ... other parameters as before\nn &lt;- 1e4\ndeltai &lt;- rnorm(k, 0, sqrt(tau2)) # random-effects\nthetai &lt;- mu + deltai # true study effect\ndat &lt;- sim_studies(k = k, es = thetai, n1 = n)\n# or equivalently \n# dat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\n\nhead(dat)\n#&gt; \n#&gt;   id     yi     vi    n1    n2 \n#&gt; 1  1 0.1920 0.0002 10000 10000 \n#&gt; 2  2 0.7367 0.0002 10000 10000 \n#&gt; 3  3 0.1277 0.0002 10000 10000 \n#&gt; 4  4 0.6683 0.0002 10000 10000 \n#&gt; 5  5 1.0573 0.0002 10000 10000 \n#&gt; 6  6 0.3381 0.0002 10000 10000"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#simulating-a-re-model-4",
@@ -1054,28 +1061,28 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#fitting-a-re-model",
     "title": "Meta-analysis Models",
     "section": "Fitting a RE model",
-    "text": "Fitting a RE model\nIn R we can use the metafor::rma() function using the method = \"REML\".\n\n#&gt; \n#&gt; Random-Effects Model (k = 15; tau^2 estimator: REML)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt;  -0.5383    1.0766    5.0766    6.3547    6.1675   \n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.0630 (SE = 0.0239)\n#&gt; tau (square root of estimated tau^2 value):      0.2511\n#&gt; I^2 (total heterogeneity / total variability):   99.68%\n#&gt; H^2 (total variability / sampling variability):  316.39\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 14) = 4459.8553, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.3879  0.0649  5.9752  &lt;.0001  0.2607  0.5152  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Fitting a RE model\nIn R we can use the metafor::rma() function using the method = \"REML\".\n\nfit &lt;- rma(yi, vi, data = dat, method = \"REML\")\nsummary(fit)\n#&gt; \n#&gt; Random-Effects Model (k = 15; tau^2 estimator: REML)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt;  -6.0191   12.0382   16.0382   17.3163   17.1291   \n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.1381 (SE = 0.0523)\n#&gt; tau (square root of estimated tau^2 value):      0.3717\n#&gt; I^2 (total heterogeneity / total variability):   99.86%\n#&gt; H^2 (total variability / sampling variability):  694.46\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 14) = 9696.8022, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.4132  0.0960  4.3027  &lt;.0001  0.2250  0.6014  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#intepreting-the-re-model",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#intepreting-the-re-model",
     "title": "Meta-analysis Models",
     "section": "Intepreting the RE model",
-    "text": "Intepreting the RE model\nThe model output is quite similar to the EE model and also the intepretation is similar.\nThe only extra section is tau^2/tau that is the estimation of the between-study heterogeneity."
+    "text": "Intepreting the RE model\nThe model output is quite similar to the EE model and also the intepretation is similar.\nThe only extra section is tau^2/tau that is the estimation of the between-study heterogeneity.\n\n#&gt; \n#&gt; Random-Effects Model (k = 15; tau^2 estimator: REML)\n#&gt; \n#&gt;   logLik  deviance       AIC       BIC      AICc   \n#&gt;  -6.0191   12.0382   16.0382   17.3163   17.1291   \n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.1381 (SE = 0.0523)\n#&gt; tau (square root of estimated tau^2 value):      0.3717\n#&gt; I^2 (total heterogeneity / total variability):   99.86%\n#&gt; H^2 (total variability / sampling variability):  694.46\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 14) = 9696.8022, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval   ci.lb   ci.ub      \n#&gt;   0.4132  0.0960  4.3027  &lt;.0001  0.2250  0.6014  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#estimating-tau2",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#estimating-tau2",
     "title": "Meta-analysis Models",
     "section": "Estimating \\(\\tau^2\\)\n",
-    "text": "Estimating \\(\\tau^2\\)\n\nWe used method = \"REML\" but there are actually several estimators for \\(\\tau^2\\). Viechtbauer (2005), Veroniki et al. (2016) and Brannick et al. (2019) provided a comprehensive overview of different estimators.\niframe hete"
+    "text": "Estimating \\(\\tau^2\\)\n\nWe used method = \"REML\" but there are actually several estimators for \\(\\tau^2\\). Viechtbauer (2005), (Veroniki2016-zs?), Brannick et al. (2019) and Langan, Higgins, and Simmonds (2017) provided a comprehensive overview of 16 different estimators."
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#estimating-tau2-1",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#estimating-tau2-1",
     "title": "Meta-analysis Models",
     "section": "Estimating \\(\\tau^2\\)\n",
-    "text": "Estimating \\(\\tau^2\\)\n\nThe Restricted Maximum Likelihood (REML) estimator is considered one of the best. We can compare the results using the all_rma() custom function that tests all the estimators1.\n\nfitl &lt;- all_rma(fit)\nround(filor::compare_rma(fitlist = fitl), 3)\n#&gt;           DL     HE     HS    HSk     SJ     ML   REML     EB     PM    PMM\n#&gt; b      0.388  0.388  0.388  0.388  0.388  0.388  0.388  0.388  0.388  0.388\n#&gt; se     0.065  0.065  0.063  0.065  0.065  0.063  0.065  0.065  0.065  0.067\n#&gt; zval   5.955  5.975  6.164  5.955  5.976  6.185  5.975  5.975  5.975  5.832\n#&gt; pval   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000\n#&gt; ci.lb  0.260  0.261  0.265  0.260  0.261  0.265  0.261  0.261  0.261  0.258\n#&gt; ci.ub  0.516  0.515  0.511  0.516  0.515  0.511  0.515  0.515  0.515  0.518\n#&gt; I2    99.686 99.684 99.664 99.686 99.684 99.661 99.684 99.684 99.684 99.699\n#&gt; tau2   0.063  0.063  0.059  0.063  0.063  0.059  0.063  0.063  0.063  0.066\n\nThe filor::compare_rma() function is similar to the car::compareCoefs() function"
+    "text": "Estimating \\(\\tau^2\\)\n\nThe Restricted Maximum Likelihood (REML) estimator is considered one of the best. We can compare the results using the all_rma() custom function that tests all the estimators1.\n\nfitl &lt;- all_rma(fit)\nround(filor::compare_rma(fitlist = fitl), 3)\n#&gt;           DL     HE     HS    HSk     SJ     ML   REML     EB     PM    PMM\n#&gt; b      0.413  0.413  0.413  0.413  0.413  0.413  0.413  0.413  0.413  0.413\n#&gt; se     0.096  0.096  0.093  0.096  0.096  0.093  0.096  0.096  0.096  0.098\n#&gt; zval   4.308  4.303  4.460  4.308  4.303  4.454  4.303  4.303  4.303  4.200\n#&gt; pval   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000\n#&gt; ci.lb  0.225  0.225  0.232  0.225  0.225  0.231  0.225  0.225  0.225  0.220\n#&gt; ci.ub  0.601  0.601  0.595  0.601  0.601  0.595  0.601  0.601  0.601  0.606\n#&gt; I2    99.856 99.856 99.845 99.856 99.856 99.846 99.856 99.856 99.856 99.863\n#&gt; tau2   0.138  0.138  0.129  0.138  0.138  0.129  0.138  0.138  0.138  0.145\n\nThe filor::compare_rma() function is similar to the car::compareCoefs() function"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#intepreting-heterogeneity-tau2",
@@ -1089,7 +1096,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#intepreting-tau2",
     "title": "Meta-analysis Models",
     "section": "Intepreting \\(\\tau^2\\)\n",
-    "text": "Intepreting \\(\\tau^2\\)\n\nAs in the previus plot we can assume \\(n = \\infty\\) and generate true effects from Equation 4. In this way we understand the impact of assuming (or estimating) a certain \\(\\tau^2\\).\nFor example, a \\(\\tau = 0.2\\) and a \\(\\mu_{\\theta} = 0.5\\), 50% of the true effects ranged between:\n\nD &lt;- 0.5\nyis &lt;- D + rnorm(1e5, 0, 0.2)\nquantile(yis, c(0.75, 0.25))\n#&gt;       75%       25% \n#&gt; 0.6363933 0.3663519"
+    "text": "Intepreting \\(\\tau^2\\)\n\nAs in the previus plot we can assume \\(n = \\infty\\) and generate true effects from Equation 4. In this way we understand the impact of assuming (or estimating) a certain \\(\\tau^2\\).\nFor example, a \\(\\tau = 0.2\\) and a \\(\\mu_{\\theta} = 0.5\\), 50% of the true effects ranged between:\n\nD &lt;- 0.5\nyis &lt;- D + rnorm(1e5, 0, 0.2)\nquantile(yis, c(0.75, 0.25))\n#&gt;       75%       25% \n#&gt; 0.6341963 0.3643200"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#the-q-statistics",
@@ -1152,7 +1159,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#what-about-tildev-1",
     "title": "Meta-analysis Models",
     "section": "What about \\(\\tilde{v}\\)?",
-    "text": "What about \\(\\tilde{v}\\)?\nIn the hypothetical case where \\(\\sigma^2_1 = \\dots = \\sigma^2_k\\), \\(\\tilde{v}\\) is just \\(\\sigma^2\\). This fact is commonly used to calculate the statistical power analytically (Borenstein et al. 2009, chap. 29).\n\nvtilde &lt;- function(wi){\n  k &lt;- length(wi)\n  (k - 1) * sum(wi) / (sum(wi)^2 - sum(wi^2))\n}\n\nk &lt;- 20\n\n# same vi\nvi &lt;- rep((1/30 + 1/30), k)\nhead(vi)\n#&gt; [1] 0.06666667 0.06666667 0.06666667 0.06666667 0.06666667 0.06666667\nvtilde(1/vi)\n#&gt; [1] 0.06666667\n\n# heterogeneous vi\nn &lt;- 10 + rpois(k, 30 - 10)\nvi &lt;- sim_vi(k = k, n1 = n)\nvtilde(1/vi)\n#&gt; [1] 0.06266246"
+    "text": "What about \\(\\tilde{v}\\)?\nIn the hypothetical case where \\(\\sigma^2_1 = \\dots = \\sigma^2_k\\), \\(\\tilde{v}\\) is just \\(\\sigma^2\\). This fact is commonly used to calculate the statistical power analytically (Borenstein et al. 2009, chap. 29).\n\nvtilde &lt;- function(wi){\n  k &lt;- length(wi)\n  (k - 1) * sum(wi) / (sum(wi)^2 - sum(wi^2))\n}\n\nk &lt;- 20\n\n# same vi\nvi &lt;- rep((1/30 + 1/30), k)\nhead(vi)\n#&gt; [1] 0.06666667 0.06666667 0.06666667 0.06666667 0.06666667 0.06666667\nvtilde(1/vi)\n#&gt; [1] 0.06666667\n\n# heterogeneous vi\nn &lt;- 10 + rpois(k, 30 - 10)\nvi &lt;- sim_vi(k = k, n1 = n)\nvtilde(1/vi)\n#&gt; [1] 0.06067894"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#what-about-tildev-2",
@@ -1173,7 +1180,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#h2-1",
     "title": "Meta-analysis Models",
     "section": "\\(H^2\\)",
-    "text": "\\(H^2\\)\nWhen we are fitting a RE model, the \\(I^2\\) and \\(H^2\\) equations are slightly different (Higgins and Thompson 2002)1.\n\nk &lt;- 100\nmu &lt;- 0.5\ntau2 &lt;- 0.1\nn &lt;- 30\n\ndat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\nfit_re &lt;- rma(yi, vi, data = dat, method = \"REML\")\nfit_ee &lt;- rma(yi, vi, data = dat, method = \"EE\")\n\n# H2 with EE model\n\ntheta_ee &lt;- fit_ee$b[[1]] # weighted.mean(dat$yi, 1/dat$vi)\nwi &lt;- 1/dat$vi\nQ &lt;- with(dat, sum((1/vi)*(yi - theta_ee)^2))\nc(Q, fit_ee$QE) # same\n#&gt; [1] 224.5983 224.5983\n\nc(H2 = fit_ee$QE / (fit_ee$k - fit_ee$p), H2_model = fit_ee$H2) # same\n#&gt;       H2 H2_model \n#&gt; 2.268669 2.268669\n\n# H2 with RE model\n\nvt &lt;- vtilde(1/dat$vi)\nc(H2 = fit_re$tau2 / vt + 1, H2_model = fit_re$H2) # same\n#&gt;       H2 H2_model \n#&gt; 2.261768 2.261768\n\nsee also the metafor source code https://github.com/cran/metafor/blob/994d26a65455fac90760ad6a004ec1eaca5856b1/R/rma.uni.r#L2459C30-L2459C30"
+    "text": "\\(H^2\\)\nWhen we are fitting a RE model, the \\(I^2\\) and \\(H^2\\) equations are slightly different (Higgins and Thompson 2002). See also the metafor source code.\n\nk &lt;- 100\nmu &lt;- 0.5\ntau2 &lt;- 0.1\nn &lt;- 30\n\ndat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\nfit_re &lt;- rma(yi, vi, data = dat, method = \"REML\")\nfit_ee &lt;- rma(yi, vi, data = dat, method = \"EE\")\n\n# H2 with EE model\n\ntheta_ee &lt;- fit_ee$b[[1]] # weighted.mean(dat$yi, 1/dat$vi)\nwi &lt;- 1/dat$vi\nQ &lt;- with(dat, sum((1/vi)*(yi - theta_ee)^2))\nc(Q, fit_ee$QE) # same\n#&gt; [1] 279.0393 279.0393\n\nc(H2 = fit_ee$QE / (fit_ee$k - fit_ee$p), H2_model = fit_ee$H2) # same\n#&gt;       H2 H2_model \n#&gt; 2.818579 2.818579\n\n# H2 with RE model\n\nvt &lt;- vtilde(1/dat$vi)\nc(H2 = fit_re$tau2 / vt + 1, H2_model = fit_re$H2) # same\n#&gt;       H2 H2_model \n#&gt; 2.797465 2.797465"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#confidence-intervals",
@@ -1187,7 +1194,7 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#confidence-intervals-1",
     "title": "Meta-analysis Models",
     "section": "Confidence Intervals",
-    "text": "Confidence Intervals\n\nk &lt;- 30\nn &lt;- 30\ntau2 &lt;- 0.05\nmu &lt;- 0.5\nnsim &lt;- 5e3\n\n# true parameters (see Borenstein, 2009; Chapter 29)\nvt &lt;- 1/n + 1/n\nvs &lt;- (vt + tau2)/ k\nse &lt;- sqrt(vs)\n\nmui &lt;- rep(NA, nsim)\n\nfor(i in 1:nsim){\n  dat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\n  fit &lt;- rma(yi, vi, data = dat)\n  mui[i] &lt;- coef(fit)[1]\n}\n\n# standard error\nc(simulated = sd(mui), analytical = fit$se)\n#&gt;  simulated analytical \n#&gt; 0.06363308 0.06417368\n\n# confidence interval\nrbind(\n  \"simulated\"  = quantile(mui, c(0.05, 0.975)),\n  \"analytical\" = c(\"2.5%\" = fit$ci.lb, \"97.5%\" = fit$ci.ub)\n)\n#&gt;                   5%     97.5%\n#&gt; simulated  0.3938230 0.6236432\n#&gt; analytical 0.4245134 0.6760696"
+    "text": "Confidence Intervals\n\nk &lt;- 30\nn &lt;- 30\ntau2 &lt;- 0.05\nmu &lt;- 0.5\nnsim &lt;- 5e3\n\n# true parameters (see Borenstein, 2009; Chapter 29)\nvt &lt;- 1/n + 1/n\nvs &lt;- (vt + tau2)/ k\nse &lt;- sqrt(vs)\n\nmui &lt;- rep(NA, nsim)\n\nfor(i in 1:nsim){\n  dat &lt;- sim_studies(k = k, es = mu, tau2 = tau2, n1 = n)\n  fit &lt;- rma(yi, vi, data = dat)\n  mui[i] &lt;- coef(fit)[1]\n}\n\n# standard error\nc(simulated = sd(mui), analytical = fit$se)\n#&gt;  simulated analytical \n#&gt; 0.06239326 0.06287405\n\n# confidence interval\nrbind(\n  \"simulated\"  = quantile(mui, c(0.05, 0.975)),\n  \"analytical\" = c(\"2.5%\" = fit$ci.lb, \"97.5%\" = fit$ci.ub)\n)\n#&gt;                   5%     97.5%\n#&gt; simulated  0.3972089 0.6222421\n#&gt; analytical 0.3034138 0.5498756"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#confidence-intervals-2",
@@ -1236,14 +1243,14 @@
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#pi-in-meta-analysis-1",
     "title": "Meta-analysis Models",
     "section": "PI in meta-analysis",
-    "text": "PI in meta-analysis\nIn R the PI can be calculated using predict(). By default the model assume a standard normal distribution thus using \\(z\\) scores. To use the Riley, Higgins, and Deeks (2011) approach (\\(t\\) distribution) the model need to be fitted using test = \"t\".\n\nk &lt;- 100\ndat &lt;- sim_studies(k = k, es = 0.5, tau2 = 0.1, n1 = 30)\nfit_z &lt;- rma(yi, vi, data = dat, test = \"z\") # test = \"z\" is the default\npredict(fit_z) # notice pi.ub/pi.lb vs ci.ub/ci.lb\n#&gt; \n#&gt;    pred     se  ci.lb  ci.ub   pi.lb  pi.ub \n#&gt;  0.4766 0.0410 0.3963 0.5570 -0.1581 1.1114\n# manually\nfit_z$b[[1]] + qnorm(c(0.025, 0.975)) * sqrt(fit_z$se^2 + fit_z$tau2)\n#&gt; [1] -0.1581267  1.1113777\n\nfit_t &lt;- rma(yi, vi, data = dat, test = \"t\")\npredict(fit_t) # notice pi.ub/pi.lb vs ci.ub/ci.lb\n#&gt; \n#&gt;    pred     se  ci.lb  ci.ub   pi.lb  pi.ub \n#&gt;  0.4766 0.0410 0.3953 0.5580 -0.1660 1.1192\n# manually\nfit_z$b[[1]] + qt(c(0.025, 0.975), k - 2) * sqrt(fit_t$se^2 + fit_t$tau2)\n#&gt; [1] -0.1660623  1.1193133"
+    "text": "PI in meta-analysis\nIn R the PI can be calculated using predict(). By default the model assume a standard normal distribution thus using \\(z\\) scores. To use the Riley, Higgins, and Deeks (2011) approach (\\(t\\) distribution) the model need to be fitted using test = \"t\".\n\nk &lt;- 100\ndat &lt;- sim_studies(k = k, es = 0.5, tau2 = 0.1, n1 = 30)\nfit_z &lt;- rma(yi, vi, data = dat, test = \"z\") # test = \"z\" is the default\npredict(fit_z) # notice pi.ub/pi.lb vs ci.ub/ci.lb\n#&gt; \n#&gt;    pred     se  ci.lb  ci.ub  pi.lb  pi.ub \n#&gt;  0.4927 0.0351 0.4239 0.5615 0.0137 0.9717\n# manually\nfit_z$b[[1]] + qnorm(c(0.025, 0.975)) * sqrt(fit_z$se^2 + fit_z$tau2)\n#&gt; [1] 0.01365251 0.97168920\n\nfit_t &lt;- rma(yi, vi, data = dat, test = \"t\")\npredict(fit_t) # notice pi.ub/pi.lb vs ci.ub/ci.lb\n#&gt; \n#&gt;    pred     se  ci.lb  ci.ub  pi.lb  pi.ub \n#&gt;  0.4927 0.0351 0.4230 0.5623 0.0077 0.9776\n# manually\nfit_z$b[[1]] + qt(c(0.025, 0.975), k - 2) * sqrt(fit_t$se^2 + fit_t$tau2)\n#&gt; [1] 0.007663823 0.977677890"
   },
   {
     "objectID": "slides/03-meta-analysis-models/meta-analysis-models.html#references-download-.bib-file",
     "href": "slides/03-meta-analysis-models/meta-analysis-models.html#references-download-.bib-file",
     "title": "Meta-analysis Models",
     "section": "References  Download .bib file\n",
-    "text": "References  Download .bib file\n\n\n\nBorenstein, Michael, Larry V Hedges, Julian P T Higgins, and Hannah R Rothstein. 2009. “Introduction to Meta-Analysis.” https://doi.org/10.1002/9780470743386.\n\n\nBrannick, Michael T, Sean M Potter, Bryan Benitez, and Scott B Morris. 2019. “Bias and Precision of Alternate Estimators in Meta-Analysis: Benefits of Blending Schmidt-Hunter and Hedges Approaches.” Organizational Research Methods 22 (April): 490–514. https://doi.org/10.1177/1094428117741966.\n\n\nGambarota, Filippo, and Gianmarco Altoè. 2023. “Understanding Meta-Analysis Through Data Simulation with Applications to Power Analysis.” Advances in Methods and Practices in Psychological Science, March. https://doi.org/10.1177/25152459231209330.\n\n\nHarrer, Mathias, Pim Cuijpers, Toshi Furukawa, and David Ebert. 2021. Doing Meta-Analysis with r: A Hands-on Guide. 1st ed. London, England: CRC Press.\n\n\nHedges, Larry V, and Jacob M Schauer. 2019. “Statistical Analyses for Studying Replication: Meta-Analytic Perspectives.” Psychological Methods 24 (October): 557–70. https://doi.org/10.1037/met0000189.\n\n\nHiggins, Julian P T, and Simon G Thompson. 2002. “Quantifying Heterogeneity in a Meta-Analysis.” Statistics in Medicine 21 (June): 1539–58. https://doi.org/10.1002/sim.1186.\n\n\nIntHout, Joanna, John P A Ioannidis, Maroeska M Rovers, and Jelle J Goeman. 2016. “Plea for Routinely Presenting Prediction Intervals in Meta-Analysis.” BMJ Open 6 (July): e010247. https://doi.org/10.1136/bmjopen-2015-010247.\n\n\nRiley, Richard D, Julian P T Higgins, and Jonathan J Deeks. 2011. “Interpretation of Random Effects Meta-Analyses.” BMJ 342 (February): d549. https://doi.org/10.1136/bmj.d549.\n\n\nVeroniki, Areti Angeliki, Dan Jackson, Wolfgang Viechtbauer, Ralf Bender, Jack Bowden, Guido Knapp, Oliver Kuss, Julian P T Higgins, Dean Langan, and Georgia Salanti. 2016. “Methods to Estimate the Between-Study Variance and Its Uncertainty in Meta-Analysis.” Research Synthesis Methods 7 (March): 55–79. https://doi.org/10.1002/jrsm.1164.\n\n\nViechtbauer, Wolfgang. 2005. “Bias and Efficiency of Meta-Analytic Variance Estimators in the Random-Effects Model.” Journal of Educational and Behavioral Statistics: A Quarterly Publication Sponsored by the American Educational Research Association and the American Statistical Association 30 (September): 261–93. https://doi.org/10.3102/10769986030003261."
+    "text": "References  Download .bib file\n\n\n\nBorenstein, Michael, Larry V Hedges, Julian P T Higgins, and Hannah R Rothstein. 2009. “Introduction to Meta-Analysis.” https://doi.org/10.1002/9780470743386.\n\n\nBrannick, Michael T, Sean M Potter, Bryan Benitez, and Scott B Morris. 2019. “Bias and Precision of Alternate Estimators in Meta-Analysis: Benefits of Blending Schmidt-Hunter and Hedges Approaches.” Organizational Research Methods 22 (April): 490–514. https://doi.org/10.1177/1094428117741966.\n\n\nGambarota, Filippo, and Gianmarco Altoè. 2023. “Understanding Meta-Analysis Through Data Simulation with Applications to Power Analysis.” Advances in Methods and Practices in Psychological Science, March. https://doi.org/10.1177/25152459231209330.\n\n\nHarrer, Mathias, Pim Cuijpers, Toshi Furukawa, and David Ebert. 2021. Doing Meta-Analysis with r: A Hands-on Guide. 1st ed. London, England: CRC Press.\n\n\nHedges, Larry V, and Jacob M Schauer. 2019. “Statistical Analyses for Studying Replication: Meta-Analytic Perspectives.” Psychological Methods 24 (October): 557–70. https://doi.org/10.1037/met0000189.\n\n\nHiggins, Julian P T, and Simon G Thompson. 2002. “Quantifying Heterogeneity in a Meta-Analysis.” Statistics in Medicine 21 (June): 1539–58. https://doi.org/10.1002/sim.1186.\n\n\nIntHout, Joanna, John P A Ioannidis, Maroeska M Rovers, and Jelle J Goeman. 2016. “Plea for Routinely Presenting Prediction Intervals in Meta-Analysis.” BMJ Open 6 (July): e010247. https://doi.org/10.1136/bmjopen-2015-010247.\n\n\nLangan, Dean, Julian P T Higgins, and Mark Simmonds. 2017. “Comparative Performance of Heterogeneity Variance Estimators in Meta-Analysis: A Review of Simulation Studies.” Research Synthesis Methods 8 (June): 181–98. https://doi.org/10.1002/jrsm.1198.\n\n\nRiley, Richard D, Julian P T Higgins, and Jonathan J Deeks. 2011. “Interpretation of Random Effects Meta-Analyses.” BMJ 342 (February): d549. https://doi.org/10.1136/bmj.d549.\n\n\nViechtbauer, Wolfgang. 2005. “Bias and Efficiency of Meta-Analytic Variance Estimators in the Random-Effects Model.” Journal of Educational and Behavioral Statistics: A Quarterly Publication Sponsored by the American Educational Research Association and the American Statistical Association 30 (September): 261–93. https://doi.org/10.3102/10769986030003261."
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#publication-bias-pb-1",
@@ -1285,25 +1292,32 @@
     "href": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-2",
     "title": "Publication Bias",
     "section": "PB under an EE model",
-    "text": "PB under an EE model\nThen, let’s assume that our publishing system is very strict (extreme). You can publish only if \\(p \\leq 0.05\\) on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that \\(P(1|p \\leq 0.05) = 1\\) and \\(P(1|p \\leq 0.05) = 0\\).\n\n#&gt; fit: rma(yi = yi, vi = vi, data = dat_un, method = \"EE\")\n#&gt; fit_pb: rma(yi = yi, vi = vi, data = dat_pb, method = \"EE\")\n#&gt;                fit fit_pb\n#&gt; b (intrcpt)  0.289  0.436\n#&gt; se           0.009  0.008\n#&gt; zval        32.003 51.811\n#&gt; pval         0.000  0.000\n#&gt; ci.lb        0.271  0.420\n#&gt; ci.ub        0.307  0.453\n#&gt; I2           0.955  0.000\n#&gt; tau2         0.000  0.000"
+    "text": "PB under an EE model\nThen, let’s assume that our publishing system is very strict (extreme). You can publish only if \\(p \\leq 0.05\\) on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that \\(P(1|p \\leq 0.05) = 1\\) and \\(P(1|p \\leq 0.05) = 0\\).\n\n# selecting\nsign &lt;- dat$pval1 &lt;= 0.05 & dat$zi &gt; 0\ndat_pb &lt;- dat[sign, ]\ndat_un &lt;- dat[sample(1:nrow(dat), sum(sign)), ]\n\n# fitting EE model for the full vs selected (ignore k differences)\nfit &lt;- rma(yi, vi, method = \"EE\", data = dat_un)\nfit_pb &lt;- rma(yi, vi, method = \"EE\", data = dat_pb)"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-3",
     "href": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-3",
     "title": "Publication Bias",
     "section": "PB under an EE model",
-    "text": "PB under an EE model\nThe situation is even worse when we simulate a null effect. This strict selection results in committing type-1 error:\n\n#&gt; fit0: rma(yi = yi, vi = vi, data = dat_un0, method = \"EE\")\n#&gt; fit_pb0: rma(yi = yi, vi = vi, data = dat_pb0, method = \"EE\")\n#&gt;               fit0 fit_pb0\n#&gt; b (intrcpt) -0.006   0.363\n#&gt; se           0.027   0.026\n#&gt; zval        -0.220  14.015\n#&gt; pval         0.826   0.000\n#&gt; ci.lb       -0.059   0.312\n#&gt; ci.ub        0.047   0.414\n#&gt; I2           0.000   0.000\n#&gt; tau2         0.000   0.000"
+    "text": "PB under an EE model\nThen, let’s assume that our publishing system is very strict (extreme). You can publish only if \\(p \\leq 0.05\\) on the expected direction. Then the true population of effect sizes will be truncated. Essentially we are assuming that \\(P(1|p \\leq 0.05) = 1\\) and \\(P(1|p \\leq 0.05) = 0\\).\n\n#&gt; fit: rma(yi = yi, vi = vi, data = dat_un, method = \"EE\")\n#&gt; fit_pb: rma(yi = yi, vi = vi, data = dat_pb, method = \"EE\")\n#&gt;                fit fit_pb\n#&gt; b (intrcpt)  0.289  0.436\n#&gt; se           0.009  0.008\n#&gt; zval        32.003 51.811\n#&gt; pval         0.000  0.000\n#&gt; ci.lb        0.271  0.420\n#&gt; ci.ub        0.307  0.453\n#&gt; I2           0.955  0.000\n#&gt; tau2         0.000  0.000"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-4",
     "href": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-4",
     "title": "Publication Bias",
     "section": "PB under an EE model",
-    "text": "PB under an EE model\nAssuming to pick a very precise (\\(n = 1000\\)) and a very unprecise (\\(n = 20\\)) study, which one is more likely to have an effect size close to the true value?\n\nThe precise study has a lower \\(\\epsilon_i\\) thus is closer to \\(\\theta\\). This relationship create a very insightful visual representation.\n\n\nWhat could be the shape of the plot when plotting the precision (e.g., the sample size or the inverse of the variance) as a function of the effect size?"
+    "text": "PB under an EE model\nThe situation is even worse when we simulate a null effect. This strict selection results in committing type-1 error:\n\n#&gt; fit0: rma(yi = yi, vi = vi, data = dat_un0, method = \"EE\")\n#&gt; fit_pb0: rma(yi = yi, vi = vi, data = dat_pb0, method = \"EE\")\n#&gt;               fit0 fit_pb0\n#&gt; b (intrcpt) -0.006   0.363\n#&gt; se           0.027   0.026\n#&gt; zval        -0.220  14.015\n#&gt; pval         0.826   0.000\n#&gt; ci.lb       -0.059   0.312\n#&gt; ci.ub        0.047   0.414\n#&gt; I2           0.000   0.000\n#&gt; tau2         0.000   0.000"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-5",
     "href": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-5",
+    "title": "Publication Bias",
+    "section": "PB under an EE model",
+    "text": "PB under an EE model\nAssuming to pick a very precise (\\(n = 1000\\)) and a very unprecise (\\(n = 20\\)) study, which one is more likely to have an effect size close to the true value?\n\nThe precise study has a lower \\(\\epsilon_i\\) thus is closer to \\(\\theta\\). This relationship create a very insightful visual representation.\n\n\nWhat could be the shape of the plot when plotting the precision (e.g., the sample size or the inverse of the variance) as a function of the effect size?"
+  },
+  {
+    "objectID": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-6",
+    "href": "slides/05-publication-bias/publication-bias.html#pb-under-an-ee-model-6",
     "title": "Publication Bias",
     "section": "PB under an EE model",
     "text": "PB under an EE model"
@@ -1404,14 +1418,14 @@
     "href": "slides/05-publication-bias/publication-bias.html#why-the-funnel-plot-can-be-misleading-3",
     "title": "Publication Bias",
     "section": "Why the funnel plot can be misleading?",
-    "text": "Why the funnel plot can be misleading?\nAlso the methods to detect/correct for PB are committing a false alarm:\n\n#&gt; \n#&gt; Regression Test for Funnel Plot Asymmetry\n#&gt; \n#&gt; Model:     mixed-effects meta-regression model\n#&gt; Predictor: standard error\n#&gt; \n#&gt; Test for Funnel Plot Asymmetry: z =  6.2569, p &lt; .0001\n#&gt; Limit Estimate (as sei -&gt; 0):   b = -0.2067 (CI: -0.3460, -0.0675)"
+    "text": "Why the funnel plot can be misleading?\nAlso the methods to detect/correct for PB are committing a false alarm:\n\nregtest(fit)\n#&gt; \n#&gt; Regression Test for Funnel Plot Asymmetry\n#&gt; \n#&gt; Model:     mixed-effects meta-regression model\n#&gt; Predictor: standard error\n#&gt; \n#&gt; Test for Funnel Plot Asymmetry: z =  6.2569, p &lt; .0001\n#&gt; Limit Estimate (as sei -&gt; 0):   b = -0.2067 (CI: -0.3460, -0.0675)"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#why-the-funnel-plot-can-be-misleading-4",
     "href": "slides/05-publication-bias/publication-bias.html#why-the-funnel-plot-can-be-misleading-4",
     "title": "Publication Bias",
     "section": "Why the funnel plot can be misleading?",
-    "text": "Why the funnel plot can be misleading?\nAlso the methods to detect/correct for PB are committing a false alarm:\n\n#&gt; \n#&gt; Estimated number of missing studies on the left side: 32 (SE = 6.3553)\n#&gt; \n#&gt; Random-Effects Model (k = 132; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.2183 (SE = 0.0337)\n#&gt; tau (square root of estimated tau^2 value):      0.4672\n#&gt; I^2 (total heterogeneity / total variability):   86.77%\n#&gt; H^2 (total variability / sampling variability):  7.56\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 131) = 639.7238, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval    ci.lb   ci.ub    \n#&gt;   0.0281  0.0457  0.6142  0.5391  -0.0615  0.1177    \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Why the funnel plot can be misleading?\nAlso the methods to detect/correct for PB are committing a false alarm:\n\ntrimfill(fit)\n#&gt; \n#&gt; Estimated number of missing studies on the left side: 32 (SE = 6.3553)\n#&gt; \n#&gt; Random-Effects Model (k = 132; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.2183 (SE = 0.0337)\n#&gt; tau (square root of estimated tau^2 value):      0.4672\n#&gt; I^2 (total heterogeneity / total variability):   86.77%\n#&gt; H^2 (total variability / sampling variability):  7.56\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 131) = 639.7238, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se    zval    pval    ci.lb   ci.ub    \n#&gt;   0.0281  0.0457  0.6142  0.5391  -0.0615  0.1177    \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#why-the-funnel-plot-can-be-misleading-5",
@@ -1516,7 +1530,7 @@
     "href": "slides/05-publication-bias/publication-bias.html#simulating-data-with-pb-2",
     "title": "Publication Bias",
     "section": "Simulating data with PB",
-    "text": "Simulating data with PB\nLet’s see the model result:\n\n#&gt; \n#&gt; Random-Effects Model (k = 500; tau^2 estimator: REML)\n#&gt; \n#&gt; tau^2 (estimated amount of total heterogeneity): 0.0196 (SE = 0.0034)\n#&gt; tau (square root of estimated tau^2 value):      0.1399\n#&gt; I^2 (total heterogeneity / total variability):   36.21%\n#&gt; H^2 (total variability / sampling variability):  1.57\n#&gt; \n#&gt; Test for Heterogeneity:\n#&gt; Q(df = 499) = 763.8133, p-val &lt; .0001\n#&gt; \n#&gt; Model Results:\n#&gt; \n#&gt; estimate      se     zval    pval   ci.lb   ci.ub      \n#&gt;   0.3742  0.0107  35.0279  &lt;.0001  0.3533  0.3951  *** \n#&gt; \n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
+    "text": "Simulating data with PB\nLet’s see the model result:"
   },
   {
     "objectID": "slides/05-publication-bias/publication-bias.html#simulating-data-with-pb-3",
